@@ -12,24 +12,33 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class GameRoomDesignBase extends BorderPane {
     
     protected  boolean isX = true;
-    protected char[][] matrix ;
+    protected char[][] matrix ;  // remove it later
     protected int player1Cases[];
     protected int player2Cases[];
-    static int diagonalLeft = 0;
-    static int diagonalRight = 1;
-    static int col0 = 2;
-    static int col1 = 3;
-    static int col2 = 4;
-    static int row0 = 5;
-    static int row1 = 6;
-    static int row2 = 7;
+    protected int playerCases[][];
+    int []winnerData;
+    final int diagonalLeft = 0;
+    final int diagonalRight = 1;
+    final int col0 = 2;
+    final int col1 = 3;
+    final int col2 = 4;
+    final int row0 = 5;
+    final int row1 = 6;
+    final int row2 = 7;
+    protected final Label[][] boxArray; // array that hold the 9 labels
+    protected final boolean[][] boxEnabled; // array that hold enablle or disable to labels
+    int player1ScoreCount = 0;
+    int player2ScoreCount = 0;
+    int movesCount = 0; // sum of moves 
     protected final AnchorPane topAncherPane;
     protected final FlowPane Player1View;
+    
     //protected final ImageView menuIcon;
    // protected final ImageView player1Image;
     protected final FlowPane player1NameAndScoreView;
@@ -71,6 +80,10 @@ public class GameRoomDesignBase extends BorderPane {
         matrix = new char[3][3];
         player1Cases = new int[8];
         player2Cases = new int[8];
+        boxArray = new Label[3][3];
+        boxEnabled = new boolean[3][3];
+        playerCases = new int [2][8];
+        winnerData = new int[2];
         topAncherPane = new AnchorPane();
         Player1View = new FlowPane();
        // menuIcon = new ImageView();
@@ -109,7 +122,6 @@ public class GameRoomDesignBase extends BorderPane {
         box12 = new Label();
         box01 = new Label();
         box02 = new Label();
-        try{
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -186,7 +198,7 @@ public class GameRoomDesignBase extends BorderPane {
         dash.setTextFill(javafx.scene.paint.Color.valueOf("#5a5a5a"));
         dash.setFont(new Font("Arial Bold", 50.0));
 
-        player2SessionScore.setText("1");
+        player2SessionScore.setText("0");
         player2SessionScore.setTextFill(javafx.scene.paint.Color.valueOf("#5a5a5a"));
         player2SessionScore.setFont(new Font("Arial Bold", 50.0));
 
@@ -290,325 +302,73 @@ public class GameRoomDesignBase extends BorderPane {
         box00.setText(" ");
         box00.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box00.setFont(new Font("Arial Bold", 100.0));
-        box00.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box00.getText()==" ")
-                {
-                    if(isX)
-                    {
-                         box00.setText("X");
-                         matrix[0][0]= 'X';
-                         player1Cases[diagonalLeft]++;
-                         player1Cases[col0]++;
-                         player1Cases[row0]++;
-                    }
-                    else
-                    {
-                        box00.setText("O");
-                        matrix[0][0]= 'O';
-                         player2Cases[diagonalLeft]++;
-                         player2Cases[col0]++;
-                         player2Cases[row0]++;
-                    }
-                    isX=!isX;
-                    if(player1Cases[diagonalLeft]==3 || player1Cases[col0]==3 ||player1Cases[row0]==3)
-                    {
-                        player1SessionScore.setText("1000");
-                    }
-                    
-                    if(player2Cases[diagonalLeft]==3 || player2Cases[col0]==3 ||player2Cases[row0]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                    System.out.println(player1Cases[diagonalLeft]);
-                }
-            }
-        });
         
-         box01.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box01.getText()==" ")
-                {
-                    if(isX)
-                    {
-                         box01.setText("X");
-                         matrix[0][1]= 'X';
-                         player1Cases[col1]++;
-                         player1Cases[row0]++;
+        
+        
+        
+          boxArray[0][0] = box00;
+        boxArray[0][1] = box01;
+        boxArray[0][2] = box02;
+        boxArray[1][0] = box10;
+        boxArray[1][1] = box11;
+        boxArray[1][2] = box12;
+        boxArray[2][0] = box20;
+        boxArray[2][1] = box21;
+        boxArray[2][2] = box22;
+        
+         for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+               final int finalI = i;
+               final int finalJ = j;
+                boxEnabled[i][j] = true;
+                
+                boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+     
+                        if(boxEnabled[finalI][finalJ]){
+                            
+                            if(isX)
+                            {
+                                 boxArray[finalI][finalJ].setText("X");                                 
+                            }else
+                            {
+                                 boxArray[finalI][finalJ].setText("O");
+                            }
+                            updateCases(finalI, finalJ);
+                            movesCount++;
+                            if(movesCount>=5)
+                             {
+                              winnerData= checkWinner();
+                                if(winnerData[0]== 0)
+                                {
+                                    player1ScoreCount++;
+                                    disableLabels();
+                                    celebrateWinner(winnerData[1]);
+                                    updateScore();
+                                  
+                                }else
+                                {
+                                    if(winnerData[0]== 1)
+                                    {
+                                        player2ScoreCount++;
+                                        disableLabels();
+                                        celebrateWinner(winnerData[1]);
+                                        updateScore();
+                                    }
+                                }
+                            }
+                            isX=!isX;
+                            boxEnabled[finalI][finalJ] = false;
+                        }
                     }
-                    else
-                    {
-                        box01.setText("O");
-                        matrix[0][1]= 'O';
-                        player2Cases[col1]++;
-                        player2Cases[row0]++;
-
-                    }
-                    isX=!isX;
-                    if(player1Cases[col1]==3 || player1Cases[row0]==3)
-                    {
-                        player1SessionScore.setText("1000");
-                    }
-                    if( player2Cases[col1]==3 ||player2Cases[row0]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                }
+                });
             }
-        });
-         
-          box02.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box02.getText()==" ")
-                 {
-                    if(isX)
-                    {
-                         box02.setText("X");
-                         matrix[0][2]= 'X';
-                         player1Cases[col2]++;
-                         player1Cases[row0]++;
-                         player1Cases[diagonalRight]++;
-
-                    }
-                    else
-                    {
-                        box02.setText("O");
-                        matrix[0][2]= 'O';
-                        player2Cases[col2]++;
-                         player2Cases[row0]++;
-                         player2Cases[diagonalRight]++;
-
-                    }
-                    isX=!isX;
-                    if(player1Cases[col2]==3 ||player1Cases[row0]==3||player1Cases[diagonalRight]==3)
-                    {
-                        player1SessionScore.setText("1000");
-                    }
-                    if( player2Cases[col2]==3 ||player2Cases[row0]==3 || player2Cases[diagonalRight]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                }
-            }
-        });
-          
-           box10.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box10.getText()==" ")
-                 {
-                    if(isX)
-                    {
-                         box10.setText("X");
-                         matrix[1][0]= 'X';
-                         player1Cases[col0]++;
-                         player1Cases[row1]++;
-
-                    }
-                    else
-                    {
-                        box10.setText("O");
-                        matrix[1][0]= 'O';
-                        player2Cases[col0]++;
-                         player2Cases[row1]++;
-
-                    }
-                    isX=!isX;
-                    
-                     if(player1Cases[col0]==3 ||player1Cases[row1]==3)
-                    {
-                        player1SessionScore.setText("1000");
-                    }
-                    if( player2Cases[col0]==3 ||player2Cases[row1]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                }
-            }
-        });
-          
-          box11.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box11.getText()==" ")
-                 {
-                    if(isX)
-                    {
-                         box11.setText("X");
-                         matrix[1][1]= 'X';
-                         player1Cases[col1]++;
-                         player1Cases[row1]++;
-                         player1Cases[diagonalLeft]++;
-                         player1Cases[diagonalRight]++;
-
-
-                    }
-                    else
-                    {
-                        box11.setText("O");
-                        matrix[1][1]= 'O';
-                        player2Cases[col1]++;
-                         player2Cases[row1]++;
-                         player2Cases[diagonalLeft]++;
-                         player2Cases[diagonalRight]++;
-                    }
-                    isX=!isX;
-                    
-                     if(player1Cases[col1]==3 ||player1Cases[row1]==3||player1Cases[diagonalLeft]==3||
-                         player1Cases[diagonalRight]==3)
-                    {
-                        player1SessionScore.setText("1000");
-                    }
-                    if( player2Cases[col2]==3 ||player2Cases[row0]==3||player2Cases[diagonalLeft]==3||
-                         player2Cases[diagonalRight]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                }
-            }
-        }); 
-          
-           box12.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box12.getText()==" ")
-                 {
-                    if(isX)
-                    {
-                         box12.setText("X");
-                         matrix[1][2]= 'X';
-                         player1Cases[col2]++;
-                         player1Cases[row1]++;
-                         
-                    }
-                    else
-                    {
-                        box12.setText("O");
-                        matrix[1][1]= 'O';
-                        player2Cases[col2]++;
-                         player2Cases[row1]++;
-                         
-                    }
-                    isX=!isX;
-                    
-                     if(player1Cases[col2]==3 ||player1Cases[row1]==3)
-                    {
-                        player1SessionScore.setText("1000");
-                    }
-                    if( player2Cases[col2]==3 ||player2Cases[row1]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                }
-            }
-        });
-           
-            box20.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box20.getText()==" ")
-                 {
-                    if(isX)
-                    {
-                         box20.setText("X");
-                         matrix[2][0]= 'X';
-                         player1Cases[col0]++;
-                         player1Cases[row2]++;
-                         player1Cases[diagonalRight]++;
-                         
-                    }
-                    else
-                    {
-                        box20.setText("O");
-                        matrix[2][0]= 'O';
-                        player2Cases[col0]++;
-                         player2Cases[row2]++;
-                         player2Cases[diagonalRight]++;
-                        
-                    }
-                    isX=!isX;
-                     if(player1Cases[col0]==3 ||player1Cases[row2]==3|| player1Cases[diagonalRight]==3)
-                    {
-                        player1SessionScore.setText("1000");
-                    }
-                    if( player2Cases[col0]==3 ||player2Cases[row2]==3|| player2Cases[diagonalRight]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                }
-            }
-        });
-            
-             box21.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box21.getText()==" ")
-                 {
-                    if(isX)
-                    {
-                         box21.setText("X");
-                         matrix[2][1]= 'X';
-                         player1Cases[row2]++;
-                         player1Cases[col1]++;
-                         
-                    }
-                    else
-                    {
-                        box21.setText("O");
-                        matrix[2][1]= 'X';
-                        player2Cases[row2]++;
-                         player2Cases[col1]++;
-                    }
-                    isX=!isX;
-                     if(player1Cases[col1]==3 ||player1Cases[row2]==3)
-                    {
-                        player1SessionScore.setText("1000");
-                    }
-                    if( player2Cases[col1]==3 ||player2Cases[row2]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                }
-            }
-        });
-            
-             box22.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                if(box22.getText()==" ")
-                 {
-                    if(isX)
-                    {
-                         box22.setText("X");
-                         matrix[2][2]= 'X';
-                         player1Cases[diagonalLeft]++;
-                         player1Cases[col2]++;
-                         player1Cases[row2]++;
-                    }
-                    else
-                    {
-                        box22.setText("O");
-                        matrix[2][2]= 'O';
-                         player2Cases[col2]++;
-                         player2Cases[row2]++;
-                         player2Cases[diagonalLeft]++;
-                        
-                    }
-                    isX=!isX;
-                     if(player1Cases[col2]==3 ||player1Cases[row2]==3 || player1Cases[diagonalLeft]==3)
-                    {
-                       player1SessionScore.setText("1000");
-                    }
-                    if( player2Cases[col2]==3 ||player2Cases[row2]==3|| player2Cases[diagonalLeft]==3)
-                    {
-                        player2SessionScore.setText("1000");
-                    }
-                }
-            }
-        });
+        }
+    
+    
+        
+ 
         GridPane.setColumnIndex(box22, 2);
         GridPane.setHalignment(box22, javafx.geometry.HPos.CENTER);
         GridPane.setRowIndex(box22, 2);
@@ -739,10 +499,104 @@ public class GameRoomDesignBase extends BorderPane {
         gameView.getChildren().add(box01);
         gameView.getChildren().add(box02);
 
-    }catch(Exception ex)
-    {
-        ex.printStackTrace();
+    
     }
+    
+    void updateCases(int finalI,int finalJ){           
+        int x = isX?0:1;
+        System.out.println(x);
+        if(finalI == finalJ)
+            playerCases[x][diagonalLeft]++;
+         if(finalI + finalJ == 2)
+            playerCases[x][diagonalRight]++;
+         if(finalI == 0)
+            playerCases[x][row0]++;
+         if(finalI == 1)
+            playerCases[x][row1]++;
+         if(finalI == 2)
+            playerCases[x][row2]++;
+         if(finalJ == 0)
+            playerCases[x][col0]++;
+         if(finalJ == 1)
+            playerCases[x][col1]++;
+         if(finalJ == 2)
+            playerCases[x][col2]++;
+        
+    }
+    
+    void updateScore()
+    {
+        System.out.println(player1ScoreCount);
+        player1SessionScore.setText(player1ScoreCount+"");
+        player2SessionScore.setText(player2ScoreCount+"");
+    }
+    int[] checkWinner()
+    {
+        int winner[] = {-1,0};
+        for (int i=0;i<2;i++)
+        {
+            for(int j=0;j<8;j++)
+            {
+                if(playerCases[i][j]==3)
+                {
+                    winner[0] = i;
+                    winner[1] = j;
+                    return winner;
+                }
+            }
+        }
+        return winner;
+    }
+    
+    
+    void celebrateWinner(int c){
+        System.out.println("celebrate"+ c);
+        switch(c){
+         case diagonalLeft:
+          for(int i=0; i<3; i++)
+          for(int j=0; j<3; j++)
+           if(i==j)
+            boxArray[i][j].setTextFill(Color.PINK);
+          break;
+         case diagonalRight:
+          for(int i=0; i<3; i++)
+          for(int j=0; j<3; j++)
+           if(i+j == 2)
+            boxArray[i][j].setTextFill(Color.PINK);
+          break;
+         case row0:
+          for(int i=0; i<3; i++)
+           boxArray[0][i].setTextFill(Color.PINK);
+          break;
+         case row1:
+          for(int i=0; i<3; i++)
+           boxArray[1][i].setTextFill(Color.PINK);
+          break;
+         case row2:
+          for(int i=0; i<3; i++)
+           boxArray[2][i].setTextFill(Color.PINK);
+          break;
+         case col0:
+          for(int i=0; i<3; i++)
+           boxArray[i][0].setTextFill(Color.PINK);
+          break;
+         case col1:
+          for(int i=0; i<3; i++)
+           boxArray[i][1].setTextFill(Color.PINK);
+          break;
+         case col2:
+          for(int i=0; i<3; i++)
+           boxArray[i][2].setTextFill(Color.PINK);
+          break;
+         default:
+          break;
+        }
+    }  
+
+    
+    void disableLabels()
+    {
+       
     }
 
 }
