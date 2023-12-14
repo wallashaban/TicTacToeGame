@@ -21,7 +21,7 @@ public class PlayAgainDialogBase extends Pane {
     protected final Label labelRequestMessage;
     protected final Button btnOk;
 
-    public PlayAgainDialogBase(Response response) {
+    public PlayAgainDialogBase(MessageController message) {
 
         imageView = new ImageView();
         rectangle = new Rectangle();
@@ -69,7 +69,7 @@ public class PlayAgainDialogBase extends Pane {
         btnReplay.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                response.setResponse(1);
+                message.setResponse(1);
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.close();
             }
@@ -86,7 +86,7 @@ public class PlayAgainDialogBase extends Pane {
         btnNotNow.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                response.setResponse(0);
+                message.setResponse(0);
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.close();
             }
@@ -113,7 +113,7 @@ public class PlayAgainDialogBase extends Pane {
         btnOk.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                response.setResponse(2);
+                message.setResponse(2);
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.close();
             }

@@ -2,6 +2,8 @@ package tictactoegame;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class GameRoomDesignBase extends BorderPane {
     
@@ -36,6 +39,7 @@ public class GameRoomDesignBase extends BorderPane {
     int player1ScoreCount = 0;
     int player2ScoreCount = 0;
     int movesCount = 0; // sum of moves 
+    MessageController message;
     protected final AnchorPane topAncherPane;
     protected final FlowPane Player1View;
     
@@ -77,9 +81,8 @@ public class GameRoomDesignBase extends BorderPane {
     protected final Label box02;
 
     public GameRoomDesignBase() {
+        message = new MessageController();
         matrix = new char[3][3];
-        player1Cases = new int[8];
-        player2Cases = new int[8];
         boxArray = new Label[3][3];
         boxEnabled = new boolean[3][3];
         playerCases = new int [2][8];
@@ -496,7 +499,6 @@ public class GameRoomDesignBase extends BorderPane {
     
     void updateCases(int finalI,int finalJ){           
         int x = isX?0:1;
-        System.out.println(x);
         if(finalI == finalJ)
             playerCases[x][diagonalLeft]++;
          if(finalI + finalJ == 2)
@@ -517,7 +519,6 @@ public class GameRoomDesignBase extends BorderPane {
     
     void updateScore()
     {
-        System.out.println(player1ScoreCount);
         player1SessionScore.setText(player1ScoreCount+"");
         player2SessionScore.setText(player2ScoreCount+"");
     }
@@ -541,7 +542,6 @@ public class GameRoomDesignBase extends BorderPane {
     
     
     void celebrateWinner(int c) {
-        System.out.println("celebrate" + c);
         switch (c) {
             case diagonalLeft:
                 for (int i = 0; i < 3; i++) {
@@ -594,6 +594,8 @@ public class GameRoomDesignBase extends BorderPane {
             default:
                 break;
         }
+        showDialog();
+        resetGame();
     }
     void disableLabels()
     {
@@ -601,6 +603,42 @@ public class GameRoomDesignBase extends BorderPane {
             for(int j=0; j<3; j++)
                 boxEnabled[i][j] = false;
 
+    }
+    private void showDialog(){
+        message = new MessageController();
+        Parent parent = new PlayAgainDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+        
+    }
+    private void resetGame(){
+        switch(message.getResponse()){
+            case 2:
+                isX = true;
+                for(int i=0; i<3; i++){
+                    for(int j=0; j<3; j++){
+                        boxEnabled[i][j] = true;
+                        boxArray[i][j].setText(" ");
+                        boxArray[i][j].setTextFill(Color.BLACK);
+                    }
+                }   
+                for (int i=0;i<2;i++)
+                {
+                    for(int j=0;j<8;j++)
+                    {
+                        playerCases[i][j] = 0;
+                    }
+                }
+                break;
+            case 1:
+                break;
+            case 0:
+                break;
+            default:
+                break;               
+        }
     }
 
 }
