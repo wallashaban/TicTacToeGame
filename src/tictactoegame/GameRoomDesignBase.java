@@ -2,6 +2,8 @@ package tictactoegame;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class GameRoomDesignBase extends BorderPane {
     
@@ -36,16 +39,17 @@ public class GameRoomDesignBase extends BorderPane {
     int player1ScoreCount = 0;
     int player2ScoreCount = 0;
     int movesCount = 0; // sum of moves 
+    MessageController message;
     protected final AnchorPane topAncherPane;
     protected final FlowPane Player1View;
     
-    //protected final ImageView menuIcon;
-   // protected final ImageView player1Image;
+    protected final ImageView menuIcon;
+    protected final ImageView player1Image;
     protected final FlowPane player1NameAndScoreView;
     protected final Label player1Name;
-    //protected final FlowPane scoreAndStarImageView;
+    protected final FlowPane scoreAndStarImageView;
     protected  Label Player1Score;
-    //protected final ImageView starImage;
+    protected final ImageView starImage;
     protected final Label player1Sign;
     protected final FlowPane sessionScore;
     protected final Label player1SessionScore;
@@ -57,8 +61,8 @@ public class GameRoomDesignBase extends BorderPane {
     protected final Label player2Name;
     protected final FlowPane player2ScoreAndStarView;
     protected  Label player2Score;
-   // protected final ImageView Star2Image;
-   // protected final ImageView player2Image;
+    protected final ImageView Star2Image;
+    protected final ImageView player2Image;
     protected final GridPane gameView;
     protected final ColumnConstraints columnConstraints;
     protected final ColumnConstraints columnConstraints0;
@@ -77,22 +81,21 @@ public class GameRoomDesignBase extends BorderPane {
     protected final Label box02;
 
     public GameRoomDesignBase() {
+        message = new MessageController();
         matrix = new char[3][3];
-        player1Cases = new int[8];
-        player2Cases = new int[8];
         boxArray = new Label[3][3];
         boxEnabled = new boolean[3][3];
         playerCases = new int [2][8];
         winnerData = new int[2];
         topAncherPane = new AnchorPane();
         Player1View = new FlowPane();
-       // menuIcon = new ImageView();
-       // player1Image = new ImageView();
+        menuIcon = new ImageView();
+        player1Image = new ImageView();
         player1NameAndScoreView = new FlowPane();
         player1Name = new Label();
-       // scoreAndStarImageView = new FlowPane();
+        scoreAndStarImageView = new FlowPane();
         Player1Score = new Label();
-       // starImage = new ImageView();
+        starImage = new ImageView();
         player1Sign = new Label();
         sessionScore = new FlowPane();
         player1SessionScore = new Label();
@@ -104,8 +107,8 @@ public class GameRoomDesignBase extends BorderPane {
         player2Name = new Label();
         player2ScoreAndStarView = new FlowPane();
         player2Score = new Label();
-       // Star2Image = new ImageView();
-       // player2Image = new ImageView();
+        Star2Image = new ImageView();
+        player2Image = new ImageView();
         gameView = new GridPane();
         columnConstraints = new ColumnConstraints();
         columnConstraints0 = new ColumnConstraints();
@@ -126,8 +129,8 @@ public class GameRoomDesignBase extends BorderPane {
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(600.0);
-        setPrefWidth(800.0);
+        setPrefHeight(1024.0);
+        setPrefWidth(1440.0);
         setStyle("-fx-background-color: ffffff;");
 
         BorderPane.setAlignment(topAncherPane, javafx.geometry.Pos.CENTER);
@@ -139,18 +142,18 @@ public class GameRoomDesignBase extends BorderPane {
         Player1View.setPrefHeight(160.0);
         Player1View.setPrefWidth(556.0);
 
-       // menuIcon.setFitHeight(96.0);
-       // menuIcon.setFitWidth(96.0);
-       // menuIcon.setPickOnBounds(true);
-       // menuIcon.setPreserveRatio(true);
-     //   menuIcon.setImage(new Image(getClass().getResource("images/menu.png").toExternalForm()));
+        menuIcon.setFitHeight(96.0);
+        menuIcon.setFitWidth(96.0);
+        menuIcon.setPickOnBounds(true);
+        menuIcon.setPreserveRatio(true);
+//        menuIcon.setImage(new Image(getClass().getResource("images/menu.png").toExternalForm()));
 
-       // player1Image.setFitHeight(100.0);
-       // player1Image.setFitWidth(100.0);
-       // player1Image.setPickOnBounds(true);
-       // player1Image.setPreserveRatio(true);
-      //  player1Image.setImage(new Image(getClass().getResource("images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
-        //FlowPane.setMargin(player1Image, new Insets(0.0, 0.0, 0.0, 10.0));
+        player1Image.setFitHeight(100.0);
+        player1Image.setFitWidth(100.0);
+        player1Image.setPickOnBounds(true);
+        player1Image.setPreserveRatio(true);
+//        player1Image.setImage(new Image(getClass().getResource("images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
+        FlowPane.setMargin(player1Image, new Insets(0.0, 0.0, 0.0, 10.0));
 
         player1NameAndScoreView.setOrientation(javafx.geometry.Orientation.VERTICAL);
         player1NameAndScoreView.setPrefHeight(138.0);
@@ -161,20 +164,20 @@ public class GameRoomDesignBase extends BorderPane {
         player1Name.setFont(new Font("Arial Bold", 36.0));
         FlowPane.setMargin(player1Name, new Insets(44.0, 0.0, 0.0, 0.0));
 
-        //scoreAndStarImageView.setPrefHeight(52.0);
-        //scoreAndStarImageView.setPrefWidth(289.0);
-        //scoreAndStarImageView.setPrefWrapLength(0.0);
+        scoreAndStarImageView.setPrefHeight(52.0);
+        scoreAndStarImageView.setPrefWidth(289.0);
+        scoreAndStarImageView.setPrefWrapLength(0.0);
 
         Player1Score.setGraphicTextGap(0.0);
         Player1Score.setText("690");
         Player1Score.setFont(new Font("Arial Black", 24.0));
 
-        //starImage.setFitHeight(52.0);
-        //starImage.setFitWidth(52.0);
-        //starImage.setPickOnBounds(true);
-        //starImage.setPreserveRatio(true);
-        //FlowPane.setMargin(starImage, new Insets(0.0, 0.0, 0.0, 10.0));
-       // starImage.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
+        starImage.setFitHeight(52.0);
+        starImage.setFitWidth(52.0);
+        starImage.setPickOnBounds(true);
+        starImage.setPreserveRatio(true);
+        FlowPane.setMargin(starImage, new Insets(0.0, 0.0, 0.0, 10.0));
+//        starImage.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
         FlowPane.setMargin(player1NameAndScoreView, new Insets(0.0, 0.0, 0.0, 5.0));
 
         player1Sign.setText("O");
@@ -242,22 +245,22 @@ public class GameRoomDesignBase extends BorderPane {
         player2Score.setTextAlignment(javafx.scene.text.TextAlignment.RIGHT);
         player2Score.setFont(new Font("Arial Black", 24.0));
 
-//        Star2Image.setFitHeight(52.0);
-//        Star2Image.setFitWidth(52.0);
-//        Star2Image.setPickOnBounds(true);
-//        Star2Image.setPreserveRatio(true);
-//        FlowPane.setMargin(Star2Image, new Insets(0.0, 0.0, 0.0, 10.0));
-        //Star2Image.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
+        Star2Image.setFitHeight(52.0);
+        Star2Image.setFitWidth(52.0);
+        Star2Image.setPickOnBounds(true);
+        Star2Image.setPreserveRatio(true);
+        FlowPane.setMargin(Star2Image, new Insets(0.0, 0.0, 0.0, 10.0));
+//        Star2Image.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
         FlowPane.setMargin(player2ScoreAndStarView, new Insets(0.0));
         FlowPane.setMargin(player2NameAndScoreView, new Insets(0.0));
 
-//        player2Image.setFitHeight(100.0);
-//        player2Image.setFitWidth(100.0);
-//        player2Image.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
-//        player2Image.setPickOnBounds(true);
-//        player2Image.setPreserveRatio(true);
-        //player2Image.setImage(new Image(getClass().getResource("images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
-        //FlowPane.setMargin(player2Image, new Insets(0.0, 0.0, 0.0, 5.0));
+        player2Image.setFitHeight(100.0);
+        player2Image.setFitWidth(100.0);
+        player2Image.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        player2Image.setPickOnBounds(true);
+        player2Image.setPreserveRatio(true);
+//        player2Image.setImage(new Image(getClass().getResource("images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
+        FlowPane.setMargin(player2Image, new Insets(0.0, 0.0, 0.0, 5.0));
         setTop(topAncherPane);
 
         BorderPane.setAlignment(gameView, javafx.geometry.Pos.CENTER);
@@ -303,10 +306,7 @@ public class GameRoomDesignBase extends BorderPane {
         box00.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box00.setFont(new Font("Arial Bold", 100.0));
         
-        
-        
-        
-          boxArray[0][0] = box00;
+        boxArray[0][0] = box00;
         boxArray[0][1] = box01;
         boxArray[0][2] = box02;
         boxArray[1][0] = box10;
@@ -327,7 +327,6 @@ public class GameRoomDesignBase extends BorderPane {
                     public void handle(MouseEvent event) {
      
                         if(boxEnabled[finalI][finalJ]){
-                            
                             if(isX)
                             {
                                  boxArray[finalI][finalJ].setText("X");                                 
@@ -365,9 +364,7 @@ public class GameRoomDesignBase extends BorderPane {
                 });
             }
         }
-    
-    
-        
+
  
         GridPane.setColumnIndex(box22, 2);
         GridPane.setHalignment(box22, javafx.geometry.HPos.CENTER);
@@ -462,12 +459,12 @@ public class GameRoomDesignBase extends BorderPane {
         box02.setFont(new Font("Arial Bold", 100.0));
         setCenter(gameView);
 
-//        Player1View.getChildren().add(menuIcon);
-//        Player1View.getChildren().add(player1Image);
-//        player1NameAndScoreView.getChildren().add(player1Name);
-//        scoreAndStarImageView.getChildren().add(Player1Score);
-//        scoreAndStarImageView.getChildren().add(starImage);
-       // player1NameAndScoreView.getChildren().add(scoreAndStarImageView);
+        Player1View.getChildren().add(menuIcon);
+        Player1View.getChildren().add(player1Image);
+        player1NameAndScoreView.getChildren().add(player1Name);
+        scoreAndStarImageView.getChildren().add(Player1Score);
+        scoreAndStarImageView.getChildren().add(starImage);
+        player1NameAndScoreView.getChildren().add(scoreAndStarImageView);
         Player1View.getChildren().add(player1NameAndScoreView);
         Player1View.getChildren().add(player1Sign);
         topAncherPane.getChildren().add(Player1View);
@@ -478,10 +475,10 @@ public class GameRoomDesignBase extends BorderPane {
         Player2View.getChildren().add(player2Sign);
         player2NameAndScoreView.getChildren().add(player2Name);
         player2ScoreAndStarView.getChildren().add(player2Score);
-       // player2ScoreAndStarView.getChildren().add(Star2Image);
+        player2ScoreAndStarView.getChildren().add(Star2Image);
         player2NameAndScoreView.getChildren().add(player2ScoreAndStarView);
         Player2View.getChildren().add(player2NameAndScoreView);
-       // Player2View.getChildren().add(player2Image);
+        Player2View.getChildren().add(player2Image);
         topAncherPane.getChildren().add(Player2View);
         gameView.getColumnConstraints().add(columnConstraints);
         gameView.getColumnConstraints().add(columnConstraints0);
@@ -498,13 +495,10 @@ public class GameRoomDesignBase extends BorderPane {
         gameView.getChildren().add(box12);
         gameView.getChildren().add(box01);
         gameView.getChildren().add(box02);
-
-    
     }
     
     void updateCases(int finalI,int finalJ){           
         int x = isX?0:1;
-        System.out.println(x);
         if(finalI == finalJ)
             playerCases[x][diagonalLeft]++;
          if(finalI + finalJ == 2)
@@ -521,12 +515,10 @@ public class GameRoomDesignBase extends BorderPane {
             playerCases[x][col1]++;
          if(finalJ == 2)
             playerCases[x][col2]++;
-        
     }
     
     void updateScore()
     {
-        System.out.println(player1ScoreCount);
         player1SessionScore.setText(player1ScoreCount+"");
         player2SessionScore.setText(player2ScoreCount+"");
     }
@@ -549,54 +541,104 @@ public class GameRoomDesignBase extends BorderPane {
     }
     
     
-    void celebrateWinner(int c){
-        System.out.println("celebrate"+ c);
-        switch(c){
-         case diagonalLeft:
-          for(int i=0; i<3; i++)
-          for(int j=0; j<3; j++)
-           if(i==j)
-            boxArray[i][j].setTextFill(Color.PINK);
-          break;
-         case diagonalRight:
-          for(int i=0; i<3; i++)
-          for(int j=0; j<3; j++)
-           if(i+j == 2)
-            boxArray[i][j].setTextFill(Color.PINK);
-          break;
-         case row0:
-          for(int i=0; i<3; i++)
-           boxArray[0][i].setTextFill(Color.PINK);
-          break;
-         case row1:
-          for(int i=0; i<3; i++)
-           boxArray[1][i].setTextFill(Color.PINK);
-          break;
-         case row2:
-          for(int i=0; i<3; i++)
-           boxArray[2][i].setTextFill(Color.PINK);
-          break;
-         case col0:
-          for(int i=0; i<3; i++)
-           boxArray[i][0].setTextFill(Color.PINK);
-          break;
-         case col1:
-          for(int i=0; i<3; i++)
-           boxArray[i][1].setTextFill(Color.PINK);
-          break;
-         case col2:
-          for(int i=0; i<3; i++)
-           boxArray[i][2].setTextFill(Color.PINK);
-          break;
-         default:
-          break;
+    void celebrateWinner(int c) {
+        switch (c) {
+            case diagonalLeft:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (i == j) {
+                            boxArray[i][j].setTextFill(Color.PINK);
+                        }
+                    }
+                }
+                break;
+            case diagonalRight:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (i + j == 2) {
+                            boxArray[i][j].setTextFill(Color.PINK);
+                        }
+                    }
+                }
+                break;
+            case row0:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[0][i].setTextFill(Color.PINK);
+                }
+                break;
+            case row1:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[1][i].setTextFill(Color.PINK);
+                }
+                break;
+            case row2:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[2][i].setTextFill(Color.PINK);
+                }
+                break;
+            case col0:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[i][0].setTextFill(Color.PINK);
+                }
+                break;
+            case col1:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[i][1].setTextFill(Color.PINK);
+                }
+                break;
+            case col2:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[i][2].setTextFill(Color.PINK);
+                }
+                break;
+            default:
+                break;
         }
-    }  
-
-    
+        showDialog();
+        resetGame();
+    }
     void disableLabels()
     {
-       
+        for(int i=0; i<3; i++)
+            for(int j=0; j<3; j++)
+                boxEnabled[i][j] = false;
+
+    }
+    private void showDialog(){
+        message = new MessageController();
+        Parent parent = new PlayAgainDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+        
+    }
+    private void resetGame(){
+        switch(message.getResponse()){
+            case 2:
+                isX = true;
+                for(int i=0; i<3; i++){
+                    for(int j=0; j<3; j++){
+                        boxEnabled[i][j] = true;
+                        boxArray[i][j].setText(" ");
+                        boxArray[i][j].setTextFill(Color.BLACK);
+                    }
+                }   
+                for (int i=0;i<2;i++)
+                {
+                    for(int j=0;j<8;j++)
+                    {
+                        playerCases[i][j] = 0;
+                    }
+                }
+                break;
+            case 1:
+                break;
+            case 0:
+                break;
+            default:
+                break;               
+        }
     }
 
 }

@@ -26,9 +26,15 @@ public class TicTacToeGame extends Application {
         
        // Parent root = FXMLLoader.load(getClass().getResource("GameRoomDesign.fxml"));
 //         BorderPane rootb = new BorderPane();
+//        gameRoomDesignBase teb= new gameRoomDesignBase();
+//        rootb.getChildren().add(teb);
+//        Scene scene = new Scene(rootb, 720, 720);
+//        Scene scene = new Scene(rootb, 720, 720);
+//         BorderPane rootb = new BorderPane();
 //        GameRoomDesignBase teb= new GameRoomDesignBase();
 //        rootb.getChildren().add(teb);
         Scene scene = new Scene(root);
+
          
         stage.setTitle("Text Editor app");
         stage.setScene(scene);
