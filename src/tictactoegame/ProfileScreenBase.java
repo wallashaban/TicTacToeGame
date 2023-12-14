@@ -25,7 +25,7 @@ public class ProfileScreenBase extends AnchorPane {
     protected final Text textUsername;
     protected final Text textEmail;
     protected final Text textScore;
-    protected final ImageView imageView;
+    protected final ImageView imgLogo;
 
     public ProfileScreenBase() {
 
@@ -42,7 +42,7 @@ public class ProfileScreenBase extends AnchorPane {
         textUsername = new Text();
         textEmail = new Text();
         textScore = new Text();
-        imageView = new ImageView();
+        imgLogo = new ImageView();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -153,13 +153,13 @@ public class ProfileScreenBase extends AnchorPane {
         textScore.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         textScore.setWrappingWidth(174.00000393390656);
 
-        imageView.setFitHeight(114.0);
-        imageView.setFitWidth(128.0);
-        imageView.setLayoutX(14.0);
-        imageView.setLayoutY(14.0);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-//        imageView.setImage(new Image(getClass().getResource("/images/logo.png").toExternalForm()));
+        imgLogo.setFitHeight(114.0);
+        imgLogo.setFitWidth(128.0);
+        imgLogo.setLayoutX(14.0);
+        imgLogo.setLayoutY(14.0);
+        imgLogo.setPickOnBounds(true);
+        imgLogo.setPreserveRatio(true);
+//        imgLogo.setImage(new Image(getClass().getResource("../../images/logo.png").toExternalForm()));
 
         anchorPane.getChildren().add(textYourProfile);
         anchorPane.getChildren().add(imgAvatar);
@@ -173,7 +173,7 @@ public class ProfileScreenBase extends AnchorPane {
         anchorPane.getChildren().add(textEmail);
         anchorPane.getChildren().add(textScore);
         getChildren().add(anchorPane);
-        getChildren().add(imageView);
+        getChildren().add(imgLogo);
 
     }
 }
