@@ -1,27 +1,18 @@
 package tictactoegame;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-public class ProfileScreenBase extends SplitPane {
+public class ProfileScreenBase extends AnchorPane {
 
     protected final AnchorPane anchorPane;
-    protected final ImageView imgLogo;
-    protected final AnchorPane anchorPane0;
     protected final Text textYourProfile;
     protected final DropShadow dropShadow;
     protected final ImageView imgAvatar;
@@ -34,13 +25,11 @@ public class ProfileScreenBase extends SplitPane {
     protected final Text textUsername;
     protected final Text textEmail;
     protected final Text textScore;
-
+    protected final ImageView imageView;
 
     public ProfileScreenBase() {
 
         anchorPane = new AnchorPane();
-        imgLogo = new ImageView();
-        anchorPane0 = new AnchorPane();
         textYourProfile = new Text();
         dropShadow = new DropShadow();
         imgAvatar = new ImageView();
@@ -53,35 +42,23 @@ public class ProfileScreenBase extends SplitPane {
         textUsername = new Text();
         textEmail = new Text();
         textScore = new Text();
+        imageView = new ImageView();
 
-        setDividerPositions(0.29797979797979796);
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(400.0);
         setPrefWidth(600.0);
+        setStyle("-fx-background-color: ffffff;");
 
+        anchorPane.setLayoutX(141.0);
+        anchorPane.setLayoutY(1.0);
         anchorPane.setMinHeight(0.0);
         anchorPane.setMinWidth(0.0);
         anchorPane.setPrefHeight(398.0);
-        anchorPane.setPrefWidth(122.0);
+        anchorPane.setPrefWidth(470.0);
         anchorPane.setStyle("-fx-background-color: ffffff;");
-
-        imgLogo.setFitHeight(138.0);
-        imgLogo.setFitWidth(167.0);
-        imgLogo.setLayoutX(24.0);
-        imgLogo.setLayoutY(14.0);
-        imgLogo.setPickOnBounds(true);
-        imgLogo.setPreserveRatio(true);
-//        imgLogo.setImage(new Image(getClass().getResource("../../images/logo.png").toExternalForm()));
-        
-
-        anchorPane0.setMinHeight(0.0);
-        anchorPane0.setMinWidth(0.0);
-        anchorPane0.setPrefHeight(398.0);
-        anchorPane0.setPrefWidth(470.0);
-        anchorPane0.setStyle("-fx-background-color: ffffff;");
 
         textYourProfile.setLayoutY(65.0);
         textYourProfile.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
@@ -176,20 +153,27 @@ public class ProfileScreenBase extends SplitPane {
         textScore.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         textScore.setWrappingWidth(174.00000393390656);
 
-        anchorPane.getChildren().add(imgLogo);
-        getItems().add(anchorPane);
-        anchorPane0.getChildren().add(textYourProfile);
-        anchorPane0.getChildren().add(imgAvatar);
-        anchorPane0.getChildren().add(labelScore);
-        anchorPane0.getChildren().add(rectangle);
-        anchorPane0.getChildren().add(labelEmail);
-        anchorPane0.getChildren().add(labelUsername);
-        anchorPane0.getChildren().add(rectangle0);
-        anchorPane0.getChildren().add(rectangle1);
-        anchorPane0.getChildren().add(textUsername);
-        anchorPane0.getChildren().add(textEmail);
-        anchorPane0.getChildren().add(textScore);
-        getItems().add(anchorPane0);
+        imageView.setFitHeight(114.0);
+        imageView.setFitWidth(128.0);
+        imageView.setLayoutX(14.0);
+        imageView.setLayoutY(14.0);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+//        imageView.setImage(new Image(getClass().getResource("/images/logo.png").toExternalForm()));
+
+        anchorPane.getChildren().add(textYourProfile);
+        anchorPane.getChildren().add(imgAvatar);
+        anchorPane.getChildren().add(labelScore);
+        anchorPane.getChildren().add(rectangle);
+        anchorPane.getChildren().add(labelEmail);
+        anchorPane.getChildren().add(labelUsername);
+        anchorPane.getChildren().add(rectangle0);
+        anchorPane.getChildren().add(rectangle1);
+        anchorPane.getChildren().add(textUsername);
+        anchorPane.getChildren().add(textEmail);
+        anchorPane.getChildren().add(textScore);
+        getChildren().add(anchorPane);
+        getChildren().add(imageView);
 
     }
 }

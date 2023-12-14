@@ -19,7 +19,7 @@ public class TicTacToeGame extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new ProfileScreenBase();
+        Parent root = new RequestDialogBase();
         
         Scene scene = new Scene(root);
         
