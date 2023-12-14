@@ -1,16 +1,24 @@
 package tictactoegame;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class gameRoomDesignBase extends BorderPane {
 
@@ -52,6 +60,24 @@ public class gameRoomDesignBase extends BorderPane {
     protected final Label box12;
     protected final Label box01;
     protected final Label box02;
+    protected final Label[][] boxArray;
+    protected final boolean[][] boxEnabled;
+    GameStatus gameStatus;
+    enum GameStatus{
+        X_TURN,
+        O_TURN,
+        X_WON,
+        O_WON,
+        DRAW
+    }
+    int player1ScoreCount = 0;
+    int player2ScoreCount = 0;
+    int movesCount = 0;
+    
+    int[][] winningCasesCountX;
+    int[][] winningCasesCountO;
+    
+    Response response;
 
     public gameRoomDesignBase() {
 
@@ -93,6 +119,12 @@ public class gameRoomDesignBase extends BorderPane {
         box12 = new Label();
         box01 = new Label();
         box02 = new Label();
+        boxArray = new Label[3][3];
+        boxEnabled = new boolean[3][3];
+        winningCasesCountX = new int[3][3];
+        winningCasesCountO = new int[3][3];
+        
+        
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -115,13 +147,13 @@ public class gameRoomDesignBase extends BorderPane {
         menuIcon.setFitWidth(96.0);
         menuIcon.setPickOnBounds(true);
         menuIcon.setPreserveRatio(true);
-     //   menuIcon.setImage(new Image(getClass().getResource("images/menu.png").toExternalForm()));
+//        menuIcon.setImage(new Image(getClass().getResource("../../images/menu.png").toExternalForm()));
 
         player1Image.setFitHeight(100.0);
         player1Image.setFitWidth(100.0);
         player1Image.setPickOnBounds(true);
         player1Image.setPreserveRatio(true);
-      //  player1Image.setImage(new Image(getClass().getResource("images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
+//        player1Image.setImage(new Image(getClass().getResource("../../images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
         FlowPane.setMargin(player1Image, new Insets(0.0, 0.0, 0.0, 10.0));
 
         player1NameAndScoreView.setOrientation(javafx.geometry.Orientation.VERTICAL);
@@ -146,7 +178,7 @@ public class gameRoomDesignBase extends BorderPane {
         starImage.setPickOnBounds(true);
         starImage.setPreserveRatio(true);
         FlowPane.setMargin(starImage, new Insets(0.0, 0.0, 0.0, 10.0));
-       // starImage.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
+//        starImage.setImage(new Image(getClass().getResource("../../images/1840745.png").toExternalForm()));
         FlowPane.setMargin(player1NameAndScoreView, new Insets(0.0, 0.0, 0.0, 5.0));
 
         player1Sign.setText("O");
@@ -219,7 +251,7 @@ public class gameRoomDesignBase extends BorderPane {
         Star2Image.setPickOnBounds(true);
         Star2Image.setPreserveRatio(true);
         FlowPane.setMargin(Star2Image, new Insets(0.0, 0.0, 0.0, 10.0));
-        //Star2Image.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
+//        Star2Image.setImage(new Image(getClass().getResource("../../images/1840745.png").toExternalForm()));
         FlowPane.setMargin(player2ScoreAndStarView, new Insets(0.0));
         FlowPane.setMargin(player2NameAndScoreView, new Insets(0.0));
 
@@ -228,7 +260,7 @@ public class gameRoomDesignBase extends BorderPane {
         player2Image.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         player2Image.setPickOnBounds(true);
         player2Image.setPreserveRatio(true);
-        //player2Image.setImage(new Image(getClass().getResource("images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
+//        player2Image.setImage(new Image(getClass().getResource("../../images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
         FlowPane.setMargin(player2Image, new Insets(0.0, 0.0, 0.0, 5.0));
         setTop(topAncherPane);
 
@@ -271,7 +303,7 @@ public class gameRoomDesignBase extends BorderPane {
         box00.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box00.setMinHeight(265.0);
         box00.setMinWidth(265.0);
-        box00.setText("X");
+        box00.setText(" ");
         box00.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box00.setFont(new Font("Arial Bold", 100.0));
 
@@ -283,7 +315,7 @@ public class gameRoomDesignBase extends BorderPane {
         box22.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box22.setMinHeight(265.0);
         box22.setMinWidth(265.0);
-        box22.setText("X");
+        box22.setText(" ");
         box22.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box22.setFont(new Font("Arial Bold", 100.0));
 
@@ -295,7 +327,7 @@ public class gameRoomDesignBase extends BorderPane {
         box21.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box21.setMinHeight(265.0);
         box21.setMinWidth(265.0);
-        box21.setText("X");
+        box21.setText(" ");
         box21.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box21.setFont(new Font("Arial Bold", 100.0));
 
@@ -306,7 +338,7 @@ public class gameRoomDesignBase extends BorderPane {
         box20.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box20.setMinHeight(265.0);
         box20.setMinWidth(265.0);
-        box20.setText("X");
+        box20.setText(" ");
         box20.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box20.setFont(new Font("Arial Bold", 100.0));
 
@@ -317,7 +349,7 @@ public class gameRoomDesignBase extends BorderPane {
         box10.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box10.setMinHeight(265.0);
         box10.setMinWidth(265.0);
-        box10.setText("X");
+        box10.setText(" ");
         box10.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box10.setFont(new Font("Arial Bold", 100.0));
 
@@ -329,7 +361,7 @@ public class gameRoomDesignBase extends BorderPane {
         box11.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box11.setMinHeight(265.0);
         box11.setMinWidth(265.0);
-        box11.setText("X");
+        box11.setText(" ");
         box11.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box11.setFont(new Font("Arial Bold", 100.0));
 
@@ -341,7 +373,7 @@ public class gameRoomDesignBase extends BorderPane {
         box12.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box12.setMinHeight(265.0);
         box12.setMinWidth(265.0);
-        box12.setText("X");
+        box12.setText(" ");
         box12.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box12.setFont(new Font("Arial Bold", 100.0));
 
@@ -352,7 +384,7 @@ public class gameRoomDesignBase extends BorderPane {
         box01.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box01.setMinHeight(265.0);
         box01.setMinWidth(265.0);
-        box01.setText("X");
+        box01.setText(" ");
         box01.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box01.setFont(new Font("Arial Bold", 100.0));
 
@@ -363,7 +395,7 @@ public class gameRoomDesignBase extends BorderPane {
         box02.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box02.setMinHeight(265.0);
         box02.setMinWidth(265.0);
-        box02.setText("X");
+        box02.setText(" ");
         box02.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box02.setFont(new Font("Arial Bold", 100.0));
         setCenter(gameView);
@@ -404,6 +436,173 @@ public class gameRoomDesignBase extends BorderPane {
         gameView.getChildren().add(box12);
         gameView.getChildren().add(box01);
         gameView.getChildren().add(box02);
-
+        boxArray[0][0] = box00;
+        boxArray[0][1] = box01;
+        boxArray[0][2] = box02;
+        boxArray[1][0] = box10;
+        boxArray[1][1] = box11;
+        boxArray[1][2] = box12;
+        boxArray[2][0] = box20;
+        boxArray[2][1] = box21;
+        boxArray[2][2] = box22;
+        gameStatus = GameStatus.X_TURN;
+        
+        for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+                final int finalI = i;
+                final int finalJ = j;
+                boxEnabled[i][j] = true;
+                boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if(boxEnabled[finalI][finalJ]){
+                            switch(gameStatus){
+                                case X_TURN:{
+                                    boxArray[finalI][finalJ].setText("X");
+                                    int[] winner = checkWinner(finalI, finalJ);
+                                    if(winner[2] == 0){
+                                        gameStatus = GameStatus.O_TURN;
+                                        boxEnabled[finalI][finalJ] = false;
+                                    }
+                                    else if(winner[2] == 1){
+                                        celebrateWinner(winner[0], winner[1]);
+                                        
+                                        System.out.println("X Won the game");
+                                        showDialog();
+                                        resetGame();
+                                        
+                                    }
+                                    break;
+                                }
+                                case O_TURN: {
+                                    boxArray[finalI][finalJ].setText("O");
+                                    int[] winner = checkWinner(finalI, finalJ);
+                                    if(winner[2] == 0){
+                                        gameStatus = GameStatus.X_TURN;
+                                        boxEnabled[finalI][finalJ] = false;
+                                    }
+                                    else if(winner[2] == 2){
+                                        celebrateWinner(winner[0], winner[2]);
+                                        System.out.println("O Won the game");
+                                        showDialog();
+                                        resetGame();
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+    
+    private int[] checkWinner(int i, int j){
+        int[] def = {0,0,0};
+        if(gameStatus == GameStatus.X_TURN){
+            winningCasesCountX[0][i]++;
+            winningCasesCountX[1][j]++;
+            if(i==j)
+                winningCasesCountX[2][0]++;
+            if(i+j == 2)
+                winningCasesCountX[2][1]++;
+            for(int x=0; x<3; x++)
+                for(int y=0; y<3; y++)
+                    if(winningCasesCountX[x][y] == 3){
+                        int [] winner = {x, y, 1};
+                        return winner;
+                    }
+        }
+        else if(gameStatus == GameStatus.O_TURN){
+            winningCasesCountO[0][i]++;
+            winningCasesCountO[1][j]++;
+            if(i==j)
+                winningCasesCountO[2][0]++;
+            if(i+j == 2)
+                winningCasesCountO[2][1]++;
+            
+            for(int x=0; x<3; x++)
+                for(int y=0; y<3; y++)
+                    if(winningCasesCountO[x][y] == 3){
+                        int[] winner = {x, y, 2};
+                        return winner;
+                    }
+        }
+        return def;
+    }
+    
+    private void celebrateWinner(int x, int y){
+        player1SessionScore.setText("1000");
+        for(int i=0; i<3; i++)
+            for(int j=0; j<3; j++)
+                boxEnabled[i][j] = false;
+        if(x == 0){
+            for(int i=0; i<3; i++){
+                boxArray[y][i].setTextFill(Color.PINK);
+            }
+        }
+        
+        if(x==1){
+            for(int i=0; i<3; i++){
+                boxArray[i][y].setTextFill(Color.PINK);
+            }
+        }
+        if(x ==2 && y==0){
+            for(int i=0; i<3; i++){
+                for(int j =0; j<3; j++){
+                    if(i == j){
+                        boxArray[i][j].setTextFill(Color.PINK);
+                    }   
+                }     
+            }
+        }
+        if(x ==2 && y==1){
+            for(int i=0; i<3; i++){
+                for(int j =0; j<3; j++){
+                    if(i+j == 2){
+                        boxArray[i][j].setTextFill(Color.PINK);
+                    }   
+                }     
+            }
+        }
+    }
+    
+    private void showDialog(){
+        response = new Response();
+        Parent parent = new PlayAgainDialogBase(response);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+        
+    }
+    private void resetGame(){
+        switch(response.getResponse()){
+            case 2:
+                for(int i=0; i<3; i++)
+                    for(int j=0; j<3; j++){
+                        boxEnabled[i][j] = true;
+                        boxArray[i][j].setText(" ");
+                    }
+                break;
+            case 1:
+                System.out.println("Should Replay");
+                break;
+            case 0:
+                break;
+            default:
+                break;               
+        }
     }
 }
+class Response{
+        int response;
+
+        public void setResponse(int res) {
+            this.response = res;
+        }
+
+        public int getResponse() {
+            return response;
+        }
+    }

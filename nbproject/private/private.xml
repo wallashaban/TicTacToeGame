@@ -4,10 +4,15 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/RequestDialogBase.java</file>
+            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/ShowVideoBase.java</file>
+            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/PlayAgainDialogBase.java</file>
+            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/gameRoomDesignBase.java</file>
+            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/ShowVideo.fxml</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/ProfileScreen.fxml</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/ProfileScreenController.java</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/GameRoomDesignController.java</file>
+            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/PlayAgainDialog.fxml</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/RequestDialog.fxml</file>
         </group>
     </open-files>
