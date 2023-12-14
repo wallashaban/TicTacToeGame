@@ -2,34 +2,49 @@ package tictactoegame;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
-public class gameRoomDesignBase extends BorderPane {
-
+public class GameRoomDesignBase extends BorderPane {
+    
+    protected  boolean isX = true;
+    protected char[][] matrix ;  // remove it later
+    protected int player1Cases[];
+    protected int player2Cases[];
+    protected int playerCases[][];
+    int []winnerData;
+    final int diagonalLeft = 0;
+    final int diagonalRight = 1;
+    final int col0 = 2;
+    final int col1 = 3;
+    final int col2 = 4;
+    final int row0 = 5;
+    final int row1 = 6;
+    final int row2 = 7;
+    protected final Label[][] boxArray; // array that hold the 9 labels
+    protected final boolean[][] boxEnabled; // array that hold enablle or disable to labels
+    int player1ScoreCount = 0;
+    int player2ScoreCount = 0;
+    int movesCount = 0; // sum of moves 
     protected final AnchorPane topAncherPane;
     protected final FlowPane Player1View;
+    
     protected final ImageView menuIcon;
     protected final ImageView player1Image;
     protected final FlowPane player1NameAndScoreView;
     protected final Label player1Name;
     protected final FlowPane scoreAndStarImageView;
-    protected final Label Player1Score;
+    protected  Label Player1Score;
     protected final ImageView starImage;
     protected final Label player1Sign;
     protected final FlowPane sessionScore;
@@ -41,7 +56,7 @@ public class gameRoomDesignBase extends BorderPane {
     protected final FlowPane player2NameAndScoreView;
     protected final Label player2Name;
     protected final FlowPane player2ScoreAndStarView;
-    protected final Label player2Score;
+    protected  Label player2Score;
     protected final ImageView Star2Image;
     protected final ImageView player2Image;
     protected final GridPane gameView;
@@ -60,27 +75,15 @@ public class gameRoomDesignBase extends BorderPane {
     protected final Label box12;
     protected final Label box01;
     protected final Label box02;
-    protected final Label[][] boxArray;
-    protected final boolean[][] boxEnabled;
-    GameStatus gameStatus;
-    enum GameStatus{
-        X_TURN,
-        O_TURN,
-        X_WON,
-        O_WON,
-        DRAW
-    }
-    int player1ScoreCount = 0;
-    int player2ScoreCount = 0;
-    int movesCount = 0;
-    
-    int[][] winningCasesCountX;
-    int[][] winningCasesCountO;
-    
-    Response response;
 
-    public gameRoomDesignBase() {
-
+    public GameRoomDesignBase() {
+        matrix = new char[3][3];
+        player1Cases = new int[8];
+        player2Cases = new int[8];
+        boxArray = new Label[3][3];
+        boxEnabled = new boolean[3][3];
+        playerCases = new int [2][8];
+        winnerData = new int[2];
         topAncherPane = new AnchorPane();
         Player1View = new FlowPane();
         menuIcon = new ImageView();
@@ -119,13 +122,6 @@ public class gameRoomDesignBase extends BorderPane {
         box12 = new Label();
         box01 = new Label();
         box02 = new Label();
-        boxArray = new Label[3][3];
-        boxEnabled = new boolean[3][3];
-        winningCasesCountX = new int[3][3];
-        winningCasesCountO = new int[3][3];
-        
-        
-
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -147,13 +143,13 @@ public class gameRoomDesignBase extends BorderPane {
         menuIcon.setFitWidth(96.0);
         menuIcon.setPickOnBounds(true);
         menuIcon.setPreserveRatio(true);
-//        menuIcon.setImage(new Image(getClass().getResource("../../images/menu.png").toExternalForm()));
+//        menuIcon.setImage(new Image(getClass().getResource("images/menu.png").toExternalForm()));
 
         player1Image.setFitHeight(100.0);
         player1Image.setFitWidth(100.0);
         player1Image.setPickOnBounds(true);
         player1Image.setPreserveRatio(true);
-//        player1Image.setImage(new Image(getClass().getResource("../../images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
+//        player1Image.setImage(new Image(getClass().getResource("images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
         FlowPane.setMargin(player1Image, new Insets(0.0, 0.0, 0.0, 10.0));
 
         player1NameAndScoreView.setOrientation(javafx.geometry.Orientation.VERTICAL);
@@ -178,7 +174,7 @@ public class gameRoomDesignBase extends BorderPane {
         starImage.setPickOnBounds(true);
         starImage.setPreserveRatio(true);
         FlowPane.setMargin(starImage, new Insets(0.0, 0.0, 0.0, 10.0));
-//        starImage.setImage(new Image(getClass().getResource("../../images/1840745.png").toExternalForm()));
+//        starImage.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
         FlowPane.setMargin(player1NameAndScoreView, new Insets(0.0, 0.0, 0.0, 5.0));
 
         player1Sign.setText("O");
@@ -202,7 +198,7 @@ public class gameRoomDesignBase extends BorderPane {
         dash.setTextFill(javafx.scene.paint.Color.valueOf("#5a5a5a"));
         dash.setFont(new Font("Arial Bold", 50.0));
 
-        player2SessionScore.setText("1");
+        player2SessionScore.setText("0");
         player2SessionScore.setTextFill(javafx.scene.paint.Color.valueOf("#5a5a5a"));
         player2SessionScore.setFont(new Font("Arial Bold", 50.0));
 
@@ -251,7 +247,7 @@ public class gameRoomDesignBase extends BorderPane {
         Star2Image.setPickOnBounds(true);
         Star2Image.setPreserveRatio(true);
         FlowPane.setMargin(Star2Image, new Insets(0.0, 0.0, 0.0, 10.0));
-//        Star2Image.setImage(new Image(getClass().getResource("../../images/1840745.png").toExternalForm()));
+//        Star2Image.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
         FlowPane.setMargin(player2ScoreAndStarView, new Insets(0.0));
         FlowPane.setMargin(player2NameAndScoreView, new Insets(0.0));
 
@@ -260,7 +256,7 @@ public class gameRoomDesignBase extends BorderPane {
         player2Image.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         player2Image.setPickOnBounds(true);
         player2Image.setPreserveRatio(true);
-//        player2Image.setImage(new Image(getClass().getResource("../../images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
+//        player2Image.setImage(new Image(getClass().getResource("images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
         FlowPane.setMargin(player2Image, new Insets(0.0, 0.0, 0.0, 5.0));
         setTop(topAncherPane);
 
@@ -306,7 +302,67 @@ public class gameRoomDesignBase extends BorderPane {
         box00.setText(" ");
         box00.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box00.setFont(new Font("Arial Bold", 100.0));
+        
+        boxArray[0][0] = box00;
+        boxArray[0][1] = box01;
+        boxArray[0][2] = box02;
+        boxArray[1][0] = box10;
+        boxArray[1][1] = box11;
+        boxArray[1][2] = box12;
+        boxArray[2][0] = box20;
+        boxArray[2][1] = box21;
+        boxArray[2][2] = box22;
+        
+         for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+               final int finalI = i;
+               final int finalJ = j;
+                boxEnabled[i][j] = true;
+                
+                boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+     
+                        if(boxEnabled[finalI][finalJ]){
+                            if(isX)
+                            {
+                                 boxArray[finalI][finalJ].setText("X");                                 
+                            }else
+                            {
+                                 boxArray[finalI][finalJ].setText("O");
+                            }
+                            updateCases(finalI, finalJ);
+                            movesCount++;
+                            if(movesCount>=5)
+                             {
+                              winnerData= checkWinner();
+                                if(winnerData[0]== 0)
+                                {
+                                    player1ScoreCount++;
+                                    disableLabels();
+                                    celebrateWinner(winnerData[1]);
+                                    updateScore();
+                                  
+                                }else
+                                {
+                                    if(winnerData[0]== 1)
+                                    {
+                                        player2ScoreCount++;
+                                        disableLabels();
+                                        celebrateWinner(winnerData[1]);
+                                        updateScore();
+                                    }
+                                }
+                            }
+                            isX=!isX;
+                            boxEnabled[finalI][finalJ] = false;
+                        }
+                    }
+                });
+            }
+        }
 
+ 
         GridPane.setColumnIndex(box22, 2);
         GridPane.setHalignment(box22, javafx.geometry.HPos.CENTER);
         GridPane.setRowIndex(box22, 2);
@@ -436,173 +492,115 @@ public class gameRoomDesignBase extends BorderPane {
         gameView.getChildren().add(box12);
         gameView.getChildren().add(box01);
         gameView.getChildren().add(box02);
-        boxArray[0][0] = box00;
-        boxArray[0][1] = box01;
-        boxArray[0][2] = box02;
-        boxArray[1][0] = box10;
-        boxArray[1][1] = box11;
-        boxArray[1][2] = box12;
-        boxArray[2][0] = box20;
-        boxArray[2][1] = box21;
-        boxArray[2][2] = box22;
-        gameStatus = GameStatus.X_TURN;
-        
-        for(int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
-                final int finalI = i;
-                final int finalJ = j;
-                boxEnabled[i][j] = true;
-                boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if(boxEnabled[finalI][finalJ]){
-                            switch(gameStatus){
-                                case X_TURN:{
-                                    boxArray[finalI][finalJ].setText("X");
-                                    int[] winner = checkWinner(finalI, finalJ);
-                                    if(winner[2] == 0){
-                                        gameStatus = GameStatus.O_TURN;
-                                        boxEnabled[finalI][finalJ] = false;
-                                    }
-                                    else if(winner[2] == 1){
-                                        celebrateWinner(winner[0], winner[1]);
-                                        
-                                        System.out.println("X Won the game");
-                                        showDialog();
-                                        resetGame();
-                                        
-                                    }
-                                    break;
-                                }
-                                case O_TURN: {
-                                    boxArray[finalI][finalJ].setText("O");
-                                    int[] winner = checkWinner(finalI, finalJ);
-                                    if(winner[2] == 0){
-                                        gameStatus = GameStatus.X_TURN;
-                                        boxEnabled[finalI][finalJ] = false;
-                                    }
-                                    else if(winner[2] == 2){
-                                        celebrateWinner(winner[0], winner[2]);
-                                        System.out.println("O Won the game");
-                                        showDialog();
-                                        resetGame();
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                });
+    }
+    
+    void updateCases(int finalI,int finalJ){           
+        int x = isX?0:1;
+        System.out.println(x);
+        if(finalI == finalJ)
+            playerCases[x][diagonalLeft]++;
+         if(finalI + finalJ == 2)
+            playerCases[x][diagonalRight]++;
+         if(finalI == 0)
+            playerCases[x][row0]++;
+         if(finalI == 1)
+            playerCases[x][row1]++;
+         if(finalI == 2)
+            playerCases[x][row2]++;
+         if(finalJ == 0)
+            playerCases[x][col0]++;
+         if(finalJ == 1)
+            playerCases[x][col1]++;
+         if(finalJ == 2)
+            playerCases[x][col2]++;
+    }
+    
+    void updateScore()
+    {
+        System.out.println(player1ScoreCount);
+        player1SessionScore.setText(player1ScoreCount+"");
+        player2SessionScore.setText(player2ScoreCount+"");
+    }
+    int[] checkWinner()
+    {
+        int winner[] = {-1,0};
+        for (int i=0;i<2;i++)
+        {
+            for(int j=0;j<8;j++)
+            {
+                if(playerCases[i][j]==3)
+                {
+                    winner[0] = i;
+                    winner[1] = j;
+                    return winner;
+                }
             }
         }
+        return winner;
     }
     
-    private int[] checkWinner(int i, int j){
-        int[] def = {0,0,0};
-        if(gameStatus == GameStatus.X_TURN){
-            winningCasesCountX[0][i]++;
-            winningCasesCountX[1][j]++;
-            if(i==j)
-                winningCasesCountX[2][0]++;
-            if(i+j == 2)
-                winningCasesCountX[2][1]++;
-            for(int x=0; x<3; x++)
-                for(int y=0; y<3; y++)
-                    if(winningCasesCountX[x][y] == 3){
-                        int [] winner = {x, y, 1};
-                        return winner;
-                    }
-        }
-        else if(gameStatus == GameStatus.O_TURN){
-            winningCasesCountO[0][i]++;
-            winningCasesCountO[1][j]++;
-            if(i==j)
-                winningCasesCountO[2][0]++;
-            if(i+j == 2)
-                winningCasesCountO[2][1]++;
-            
-            for(int x=0; x<3; x++)
-                for(int y=0; y<3; y++)
-                    if(winningCasesCountO[x][y] == 3){
-                        int[] winner = {x, y, 2};
-                        return winner;
-                    }
-        }
-        return def;
-    }
     
-    private void celebrateWinner(int x, int y){
-        player1SessionScore.setText("1000");
+    void celebrateWinner(int c) {
+        System.out.println("celebrate" + c);
+        switch (c) {
+            case diagonalLeft:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (i == j) {
+                            boxArray[i][j].setTextFill(Color.PINK);
+                        }
+                    }
+                }
+                break;
+            case diagonalRight:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (i + j == 2) {
+                            boxArray[i][j].setTextFill(Color.PINK);
+                        }
+                    }
+                }
+                break;
+            case row0:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[0][i].setTextFill(Color.PINK);
+                }
+                break;
+            case row1:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[1][i].setTextFill(Color.PINK);
+                }
+                break;
+            case row2:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[2][i].setTextFill(Color.PINK);
+                }
+                break;
+            case col0:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[i][0].setTextFill(Color.PINK);
+                }
+                break;
+            case col1:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[i][1].setTextFill(Color.PINK);
+                }
+                break;
+            case col2:
+                for (int i = 0; i < 3; i++) {
+                    boxArray[i][2].setTextFill(Color.PINK);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    void disableLabels()
+    {
         for(int i=0; i<3; i++)
             for(int j=0; j<3; j++)
                 boxEnabled[i][j] = false;
-        if(x == 0){
-            for(int i=0; i<3; i++){
-                boxArray[y][i].setTextFill(Color.PINK);
-            }
-        }
-        
-        if(x==1){
-            for(int i=0; i<3; i++){
-                boxArray[i][y].setTextFill(Color.PINK);
-            }
-        }
-        if(x ==2 && y==0){
-            for(int i=0; i<3; i++){
-                for(int j =0; j<3; j++){
-                    if(i == j){
-                        boxArray[i][j].setTextFill(Color.PINK);
-                    }   
-                }     
-            }
-        }
-        if(x ==2 && y==1){
-            for(int i=0; i<3; i++){
-                for(int j =0; j<3; j++){
-                    if(i+j == 2){
-                        boxArray[i][j].setTextFill(Color.PINK);
-                    }   
-                }     
-            }
-        }
+
     }
-    
-    private void showDialog(){
-        response = new Response();
-        Parent parent = new PlayAgainDialogBase(response);
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.showAndWait();
-        
-    }
-    private void resetGame(){
-        switch(response.getResponse()){
-            case 2:
-                for(int i=0; i<3; i++)
-                    for(int j=0; j<3; j++){
-                        boxEnabled[i][j] = true;
-                        boxArray[i][j].setText(" ");
-                    }
-                break;
-            case 1:
-                System.out.println("Should Replay");
-                break;
-            case 0:
-                break;
-            default:
-                break;               
-        }
-    }
+
 }
-class Response{
-        int response;
-
-        public void setResponse(int res) {
-            this.response = res;
-        }
-
-        public int getResponse() {
-            return response;
-        }
-    }

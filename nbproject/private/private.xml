@@ -3,6 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/E:/java/TicTacToeGame/src/tictactoegame/AvailableUsersFXMLController.java</file>
+            <file>file:/E:/java/TicTacToeGame/src/FXML.fxml</file>
+            <file>file:/E:/java/TicTacToeGame/src/tictactoegame/AvailableUsersFXML.fxml</file>
+            <file>file:/E:/java/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
+            <file>file:/E:/java/TicTacToeGame/src/tictactoegame/FXMLDocumentController.java</file>
+            <file>file:/E:/java/TicTacToeGame/src/tictactoegame/FXMLDocument.fxml</file>
+            <file>file:/E:/java/TicTacToeGame/src/tictactoegame/availableusersfxml.css</file>
+
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/RequestDialogBase.java</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/ShowVideoBase.java</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/PlayAgainDialogBase.java</file>
@@ -14,6 +22,7 @@
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/GameRoomDesignController.java</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/PlayAgainDialog.fxml</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/RequestDialog.fxml</file>
+
         </group>
     </open-files>
 </project-private>
