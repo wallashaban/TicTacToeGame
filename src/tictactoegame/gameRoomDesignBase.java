@@ -299,6 +299,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 1 || i == 3 || i == 6) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -316,6 +317,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 1 || i == 3 || i == 6) {
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
@@ -356,6 +358,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 1 || i == 5 || i == 7) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -373,6 +376,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 1 || i == 5 || i == 7) {
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
@@ -413,6 +417,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 4 || i == 8) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -430,6 +435,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 4 || i == 8) {
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
@@ -469,6 +475,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 2 || i == 5 || i == 6) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -486,6 +493,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 2 || i == 5 || i == 6) {
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
@@ -525,6 +533,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 4 || i == 6) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -542,6 +551,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 4 || i == 6) {
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
@@ -582,6 +592,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 1 || i == 2 || i == 4 || i == 7) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -599,6 +610,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 1 || i == 2 || i == 4 || i == 7) {
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
@@ -638,6 +650,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 4 || i == 8) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -655,6 +668,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 4 || i == 8) {
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
@@ -694,6 +708,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 3 || i == 7) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -711,6 +726,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 3 || i == 7) {
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
@@ -751,6 +767,7 @@ public class gameRoomDesignBase extends BorderPane {
                     while (iter.hasNext()) {
                         if (i == 2 || i == 3 || i == 8) {
                             Point[] curr = iter.next();
+                            player2.winningCases.remove(curr);
                             currentvalue = player1.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player1SessionScore.getText());
@@ -769,6 +786,7 @@ public class gameRoomDesignBase extends BorderPane {
                         if (i == 2 || i == 3 || i == 8) {
                             System.out.println(i);
                             Point[] curr = iter.next();
+                            player1.winningCases.remove(curr);
                             currentvalue = player2.winningCases.get(curr);
                             if (currentvalue == 2) {
                                 int sessionscr = Integer.parseInt(player2SessionScore.getText());
