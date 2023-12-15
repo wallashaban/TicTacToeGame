@@ -325,7 +325,8 @@ public class GameRoomDesignBase extends BorderPane {
                 boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>(){
                     @Override
                     public void handle(MouseEvent event) {
-     
+                        System.out.println("Enable State" + boxEnabled[finalI][finalJ]);
+                        System.out.println("Player X?" + isX);
                         if(boxEnabled[finalI][finalJ]){
                             if(isX)
                             {
@@ -339,26 +340,32 @@ public class GameRoomDesignBase extends BorderPane {
                             if(movesCount>=5)
                              {
                               winnerData= checkWinner();
-                                if(winnerData[0]== 0)
+                                if(winnerData[0]== -1)
+                                {
+                                    isX=!isX;
+                                    boxEnabled[finalI][finalJ] = false;
+                                }
+                                else if(winnerData[0]== 0)
                                 {
                                     player1ScoreCount++;
                                     disableLabels();
                                     celebrateWinner(winnerData[1]);
                                     updateScore();
                                   
-                                }else
+                                }else if(winnerData[0]== 1)
                                 {
-                                    if(winnerData[0]== 1)
-                                    {
-                                        player2ScoreCount++;
-                                        disableLabels();
-                                        celebrateWinner(winnerData[1]);
-                                        updateScore();
-                                    }
+                                    player2ScoreCount++;
+                                    disableLabels();
+                                    celebrateWinner(winnerData[1]);
+                                    updateScore();
                                 }
+                                
+                                
                             }
-                            isX=!isX;
-                            boxEnabled[finalI][finalJ] = false;
+                            else{
+                                isX=!isX;
+                                boxEnabled[finalI][finalJ] = false;
+                            }
                         }
                     }
                 });
@@ -596,6 +603,10 @@ public class GameRoomDesignBase extends BorderPane {
         }
         showDialog();
         resetGame();
+        System.out.println("isX:" + isX);
+        for(int i=0; i<3; i++)
+            for(int j=0; j<3; j++)
+                System.out.println("Box"+i+" "+j+"  "+boxEnabled[i][j]);
     }
     void disableLabels()
     {
@@ -611,7 +622,6 @@ public class GameRoomDesignBase extends BorderPane {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
-        
     }
     private void resetGame(){
         switch(message.getResponse()){
