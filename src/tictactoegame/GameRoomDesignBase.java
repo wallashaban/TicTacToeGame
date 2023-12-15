@@ -325,8 +325,6 @@ public class GameRoomDesignBase extends BorderPane {
                 boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>(){
                     @Override
                     public void handle(MouseEvent event) {
-                        System.out.println("Enable State" + boxEnabled[finalI][finalJ]);
-                        System.out.println("Player X?" + isX);
                         if(boxEnabled[finalI][finalJ]){
                             if(isX)
                             {
@@ -603,10 +601,6 @@ public class GameRoomDesignBase extends BorderPane {
         }
         showDialog();
         resetGame();
-        System.out.println("isX:" + isX);
-        for(int i=0; i<3; i++)
-            for(int j=0; j<3; j++)
-                System.out.println("Box"+i+" "+j+"  "+boxEnabled[i][j]);
     }
     void disableLabels()
     {
