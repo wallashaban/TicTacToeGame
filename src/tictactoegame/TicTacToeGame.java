@@ -34,7 +34,6 @@ public class TicTacToeGame extends Application {
 //        GameRoomDesignBase teb= new GameRoomDesignBase();
 //        rootb.getChildren().add(teb);
         Scene scene = new Scene(root);
-
          
         stage.setTitle("Text Editor app");
         stage.setScene(scene);
