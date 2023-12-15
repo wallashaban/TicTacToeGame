@@ -1,14 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoegame.FXMLDocumentController">
-    <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-    </children>
-</AnchorPane>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="426.0" prefWidth="687.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane fx:id="onlinePane" layoutX="30.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #EB8FB4; -fx-background-radius: 18 18 18 18;">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="181.0" layoutX="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/تنزيل.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="63.0" layoutY="158.0" text="Online" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="computerPane" layoutX="250.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 18 18 18 18;">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="181.0" layoutX="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/تنزيل.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="44.0" layoutY="158.0" text="Computer" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="localPane" layoutX="466.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #94CBF0; -fx-background-radius: 18 18 18 18;">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="181.0" layoutX="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/تنزيل.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="71.0" layoutY="151.0" text="Local" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="250.0" layoutY="331.0" prefHeight="73.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="exitBtn" layoutX="30.0" layoutY="11.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 10 10 10 10;" text="EXIT">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+      <Pane layoutX="7.0" layoutY="8.0" prefHeight="82.0" prefWidth="200.0">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" text="Choose Game">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Pane layoutX="13.0" layoutY="48.0" prefHeight="11.0" prefWidth="127.0" style="-fx-background-color: #94CBF0; -fx-background-radius: 10 10 10 10;" />
+         </children>
+      </Pane>
+   </children>
+</Pane>

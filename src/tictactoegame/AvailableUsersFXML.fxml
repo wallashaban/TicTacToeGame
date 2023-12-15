@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="7.0" layoutY="14.0" prefHeight="155.0" prefWidth="152.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="168.0" layoutX="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/xo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="201.0" layoutY="134.0" prefHeight="54.0" prefWidth="225.0" style="-fx-background-color: #FAF9F6; -fx-background-radius: 30 30 30 30;">
+         <children>
+            <Label layoutX="27.0" layoutY="10.0" text="Available Users">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="14.0" layoutY="226.0" prefHeight="73.0" prefWidth="240.0" style="-fx-background-color: #94CBF0; -fx-background-radius: 25 25 25 25;">
+         <children>
+            <Label layoutX="14.0" layoutY="9.0" text="Walaa Shaaban" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Hyperlink layoutX="14.0" layoutY="44.0" prefHeight="23.0" prefWidth="114.0" style="-fx-border-color: transparent;" text="Challenge Now" textFill="#eb8fb4">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Hyperlink>
+         </children>
+      </Pane>
+      <Pane layoutX="337.0" layoutY="226.0" prefHeight="73.0" prefWidth="240.0" style="-fx-background-color: #EB8FB4; -fx-background-radius: 25 25 25 25;">
+         <children>
+            <Label layoutX="14.0" layoutY="9.0" text="Tasneem Ibrahim" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Hyperlink layoutX="14.0" layoutY="44.0" prefHeight="23.0" prefWidth="114.0" text="Challenge Now">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Hyperlink>
+         </children>
+      </Pane>
+      <Button layoutX="268.0" layoutY="327.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 10 10 10 10;" text="Back">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

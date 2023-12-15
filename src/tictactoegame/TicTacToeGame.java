@@ -20,12 +20,20 @@ public class TicTacToeGame extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
+
+        Parent root = new GameRoomDesignBase();// FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        
+        
        // Parent root = FXMLLoader.load(getClass().getResource("GameRoomDesign.fxml"));
-         BorderPane rootb = new BorderPane();
-        gameRoomDesignBase teb= new gameRoomDesignBase();
-        //LoginDesignBase teb = new LoginDesignBase();
-        rootb.getChildren().add(teb);
-        Scene scene = new Scene(rootb,1000,800);
+//         BorderPane rootb = new BorderPane();
+//        gameRoomDesignBase teb= new gameRoomDesignBase();
+//        rootb.getChildren().add(teb);
+//        Scene scene = new Scene(rootb, 720, 720);
+//        Scene scene = new Scene(rootb, 720, 720);
+//         BorderPane rootb = new BorderPane();
+//        GameRoomDesignBase teb= new GameRoomDesignBase();
+//        rootb.getChildren().add(teb);
+        Scene scene = new Scene(root);
          
         stage.setTitle("Text Editor app");
         stage.setScene(scene);
