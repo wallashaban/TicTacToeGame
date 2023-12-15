@@ -1,9 +1,12 @@
 package tictactoegame;
 
+import java.util.Iterator;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -13,6 +16,13 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 
 public class gameRoomDesignBase extends BorderPane {
+
+    public static final int PLAYER1 = 1;
+    public static final int PLAYER2 = 2;
+    Player player1;
+    Player player2;
+
+    private int currentPlayer;
 
     protected final AnchorPane topAncherPane;
     protected final FlowPane Player1View;
@@ -54,6 +64,10 @@ public class gameRoomDesignBase extends BorderPane {
     protected final Label box02;
 
     public gameRoomDesignBase() {
+
+        currentPlayer = PLAYER1;
+        player1 = new Player("x");
+        player2 = new Player("o");
 
         topAncherPane = new AnchorPane();
         Player1View = new FlowPane();
@@ -115,13 +129,13 @@ public class gameRoomDesignBase extends BorderPane {
         menuIcon.setFitWidth(96.0);
         menuIcon.setPickOnBounds(true);
         menuIcon.setPreserveRatio(true);
-     //   menuIcon.setImage(new Image(getClass().getResource("images/menu.png").toExternalForm()));
+        //   menuIcon.setImage(new Image(getClass().getResource("images/menu.png").toExternalForm()));
 
         player1Image.setFitHeight(100.0);
         player1Image.setFitWidth(100.0);
         player1Image.setPickOnBounds(true);
         player1Image.setPreserveRatio(true);
-      //  player1Image.setImage(new Image(getClass().getResource("images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
+        //  player1Image.setImage(new Image(getClass().getResource("images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
         FlowPane.setMargin(player1Image, new Insets(0.0, 0.0, 0.0, 10.0));
 
         player1NameAndScoreView.setOrientation(javafx.geometry.Orientation.VERTICAL);
@@ -146,7 +160,7 @@ public class gameRoomDesignBase extends BorderPane {
         starImage.setPickOnBounds(true);
         starImage.setPreserveRatio(true);
         FlowPane.setMargin(starImage, new Insets(0.0, 0.0, 0.0, 10.0));
-       // starImage.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
+        // starImage.setImage(new Image(getClass().getResource("images/1840745.png").toExternalForm()));
         FlowPane.setMargin(player1NameAndScoreView, new Insets(0.0, 0.0, 0.0, 5.0));
 
         player1Sign.setText("O");
@@ -271,9 +285,54 @@ public class gameRoomDesignBase extends BorderPane {
         box00.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box00.setMinHeight(265.0);
         box00.setMinWidth(265.0);
-        box00.setText("X");
+        box00.setText(" ");
         box00.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box00.setFont(new Font("Arial Bold", 100.0));
+        box00.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (currentPlayer == PLAYER1) {
+                    box00.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 1 || i == 3 || i == 6) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box00.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 1 || i == 3 || i == 6) {
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                            i++;
+                        }
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+            }
+        });
 
         GridPane.setColumnIndex(box22, 2);
         GridPane.setHalignment(box22, javafx.geometry.HPos.CENTER);
@@ -283,9 +342,54 @@ public class gameRoomDesignBase extends BorderPane {
         box22.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box22.setMinHeight(265.0);
         box22.setMinWidth(265.0);
-        box22.setText("X");
+        box22.setText(" ");
         box22.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box22.setFont(new Font("Arial Bold", 100.0));
+        box22.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (currentPlayer == PLAYER1) {
+                    box22.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 1 || i == 5 || i == 7) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box22.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 1 || i == 5 || i == 7) {
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+            }
+        });
 
         GridPane.setColumnIndex(box21, 1);
         GridPane.setHalignment(box21, javafx.geometry.HPos.CENTER);
@@ -295,9 +399,54 @@ public class gameRoomDesignBase extends BorderPane {
         box21.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box21.setMinHeight(265.0);
         box21.setMinWidth(265.0);
-        box21.setText("X");
+        box21.setText(" ");
         box21.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box21.setFont(new Font("Arial Bold", 100.0));
+        box21.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (currentPlayer == PLAYER1) {
+                    box21.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 4 || i == 8) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box21.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 4 || i == 8) {
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+            }
+        });
 
         GridPane.setHalignment(box20, javafx.geometry.HPos.CENTER);
         GridPane.setRowIndex(box20, 2);
@@ -306,9 +455,54 @@ public class gameRoomDesignBase extends BorderPane {
         box20.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box20.setMinHeight(265.0);
         box20.setMinWidth(265.0);
-        box20.setText("X");
+        box20.setText(" ");
         box20.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box20.setFont(new Font("Arial Bold", 100.0));
+        box20.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (currentPlayer == PLAYER1) {
+                    box20.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 2 || i == 5 || i == 6) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box20.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 2 || i == 5 || i == 6) {
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+            }
+        });
 
         GridPane.setHalignment(box10, javafx.geometry.HPos.CENTER);
         GridPane.setRowIndex(box10, 1);
@@ -317,9 +511,54 @@ public class gameRoomDesignBase extends BorderPane {
         box10.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box10.setMinHeight(265.0);
         box10.setMinWidth(265.0);
-        box10.setText("X");
+        box10.setText(" ");
         box10.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box10.setFont(new Font("Arial Bold", 100.0));
+        box10.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (currentPlayer == PLAYER1) {
+                    box10.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 4 || i == 6) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box10.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 4 || i == 6) {
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+            }
+        });
 
         GridPane.setColumnIndex(box11, 1);
         GridPane.setHalignment(box11, javafx.geometry.HPos.CENTER);
@@ -329,10 +568,54 @@ public class gameRoomDesignBase extends BorderPane {
         box11.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box11.setMinHeight(265.0);
         box11.setMinWidth(265.0);
-        box11.setText("X");
+        box11.setText(" ");
         box11.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box11.setFont(new Font("Arial Bold", 100.0));
-
+        box11.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (currentPlayer == PLAYER1) {
+                    box11.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 1 || i == 2 || i == 4 || i == 7) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box11.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 1 || i == 2 || i == 4 || i == 7) {
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+            }
+        });
         GridPane.setColumnIndex(box12, 2);
         GridPane.setHalignment(box12, javafx.geometry.HPos.CENTER);
         GridPane.setRowIndex(box12, 1);
@@ -341,9 +624,54 @@ public class gameRoomDesignBase extends BorderPane {
         box12.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box12.setMinHeight(265.0);
         box12.setMinWidth(265.0);
-        box12.setText("X");
+        box12.setText(" ");
         box12.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box12.setFont(new Font("Arial Bold", 100.0));
+        box12.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (currentPlayer == PLAYER1) {
+                    box12.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 4 || i == 8) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box12.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 4 || i == 8) {
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+            }
+        });
 
         GridPane.setColumnIndex(box01, 1);
         GridPane.setHalignment(box01, javafx.geometry.HPos.CENTER);
@@ -352,9 +680,54 @@ public class gameRoomDesignBase extends BorderPane {
         box01.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box01.setMinHeight(265.0);
         box01.setMinWidth(265.0);
-        box01.setText("X");
+        box01.setText(" ");
         box01.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box01.setFont(new Font("Arial Bold", 100.0));
+        box01.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (currentPlayer == PLAYER1) {
+                    box01.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 3 || i == 7) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box01.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 3 || i == 7) {
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+            }
+        });
 
         GridPane.setColumnIndex(box02, 2);
         GridPane.setHalignment(box02, javafx.geometry.HPos.CENTER);
@@ -363,9 +736,57 @@ public class gameRoomDesignBase extends BorderPane {
         box02.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box02.setMinHeight(265.0);
         box02.setMinWidth(265.0);
-        box02.setText("X");
+        box02.setText(" ");
         box02.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box02.setFont(new Font("Arial Bold", 100.0));
+        box02.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("enter box02");
+                if (currentPlayer == PLAYER1) {
+                    box02.setText(player1.getSign());
+                    Iterator<Point[]> iter = player1.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 2 || i == 3 || i == 8) {
+                            Point[] curr = iter.next();
+                            currentvalue = player1.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player1SessionScore.getText());
+                                player1SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player1.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                } else {
+                    box02.setText(player2.getSign());
+                    Iterator<Point[]> iter = player2.winningCases.keySet().iterator();
+                    int i = 1;
+                    int currentvalue;
+                    while (iter.hasNext()) {
+                        if (i == 2 || i == 3 || i == 8) {
+                            System.out.println(i);
+                            Point[] curr = iter.next();
+                            currentvalue = player2.winningCases.get(curr);
+                            if (currentvalue == 2) {
+                                int sessionscr = Integer.parseInt(player2SessionScore.getText());
+                                player2SessionScore.setText(Integer.toString(++sessionscr));
+                            }
+                            player2.winningCases.put(curr, ++currentvalue);
+                        }
+                        i++;
+                    }
+                }
+                if (currentPlayer == PLAYER1) {
+                    currentPlayer = PLAYER2;
+                } else {
+                    currentPlayer = PLAYER1;
+                }
+                System.out.println("exit box02");
+            }
+        });
         setCenter(gameView);
 
         Player1View.getChildren().add(menuIcon);
