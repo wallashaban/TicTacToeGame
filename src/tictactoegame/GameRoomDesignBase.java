@@ -340,8 +340,13 @@ public class GameRoomDesignBase extends BorderPane {
                               winnerData= checkWinner();
                                 if(winnerData[0]== -1)
                                 {
-                                    isX=!isX;
-                                    boxEnabled[finalI][finalJ] = false;
+                                    if(movesCount == 9){
+                                        draw();
+                                    }
+                                    else{
+                                        isX=!isX;
+                                        boxEnabled[finalI][finalJ] = false;
+                                    }
                                 }
                                 else if(winnerData[0]== 0)
                                 {
@@ -599,7 +604,8 @@ public class GameRoomDesignBase extends BorderPane {
             default:
                 break;
         }
-        showDialog();
+        char winner = isX? 'X': 'O';
+        showDialog(winner);
         resetGame();
     }
     void disableLabels()
@@ -609,8 +615,9 @@ public class GameRoomDesignBase extends BorderPane {
                 boxEnabled[i][j] = false;
 
     }
-    private void showDialog(){
+    private void showDialog(char winner){
         message = new MessageController();
+        message.setWinner(winner);
         Parent parent = new PlayAgainDialogBase(message);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
@@ -620,6 +627,7 @@ public class GameRoomDesignBase extends BorderPane {
     private void resetGame(){
         switch(message.getResponse()){
             case 2:
+                movesCount = 0;
                 isX = true;
                 for(int i=0; i<3; i++){
                     for(int j=0; j<3; j++){
@@ -643,6 +651,10 @@ public class GameRoomDesignBase extends BorderPane {
             default:
                 break;               
         }
+    }
+    void draw(){
+        showDialog('D');
+        resetGame();
     }
 
 }
