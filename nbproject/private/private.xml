@@ -5,6 +5,15 @@
         <group>
             <file>file:/E:/java/TicTacToeGame/src/tictactoegame/GameRoomDesignBase.java</file>
             <file>file:/E:/java/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
-        </group>
+			<!--
+            <file>file:/C:/Users/anasn/OneDrive/Desktop/Tic%20Tac%20Toe/TicTacToeGame/src/tictactoegame/SplashScreen.fxml</file>
+            <file>file:/C:/Users/anasn/OneDrive/Desktop/Tic%20Tac%20Toe/TicTacToeGame/src/tictactoegame/SignUpController.java</file>
+            <file>file:/C:/Users/anasn/OneDrive/Desktop/Tic%20Tac%20Toe/TicTacToeGame/src/tictactoegame/Server%20Screen.fxml</file>
+            <file>file:/C:/Users/anasn/OneDrive/Desktop/Tic%20Tac%20Toe/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
+            <file>file:/C:/Users/anasn/OneDrive/Desktop/Tic%20Tac%20Toe/TicTacToeGame/src/tictactoegame/Sign%20Up.fxml</file>
+            <file>file:/C:/Users/anasn/OneDrive/Desktop/Tic%20Tac%20Toe/TicTacToeGame/src/tictactoegame/SplashScreenController.java</file>
+            <file>file:/C:/Users/anasn/OneDrive/Desktop/Tic%20Tac%20Toe/TicTacToeGame/src/tictactoegame/ServerScreenController.java</file>
+         -->
+		</group>
     </open-files>
 </project-private>
