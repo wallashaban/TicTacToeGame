@@ -27,7 +27,7 @@ public class ProfileScreenBase extends AnchorPane {
     protected final Text textScore;
     protected final ImageView imgLogo;
 
-    public ProfileScreenBase() {
+    public ProfileScreenBase(Person person) {
 
         anchorPane = new AnchorPane();
         textYourProfile = new Text();
@@ -43,6 +43,8 @@ public class ProfileScreenBase extends AnchorPane {
         textEmail = new Text();
         textScore = new Text();
         imgLogo = new ImageView();
+        
+        
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -175,5 +177,12 @@ public class ProfileScreenBase extends AnchorPane {
         getChildren().add(anchorPane);
         getChildren().add(imgLogo);
 
+        
+        // Work
+        String myScore = String.valueOf(person.score);
+        
+        textUsername.setText(person.userName);
+        textEmail.setText(person.email);
+        textScore.setText(myScore);
     }
 }

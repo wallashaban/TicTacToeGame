@@ -24,7 +24,7 @@
             </Text>
             <ImageView fx:id="imgAvatar" fitHeight="98.0" fitWidth="121.0" layoutX="262.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/avatar.jpg" />
+                  <Image url="/images/avatar.jpg" />
                </image>
             </ImageView>
             <Label fx:id="labelScore" layoutX="35.0" layoutY="304.0" style="-fx-font-family: serif; -fx-font-size: 20;" text="Score" />
@@ -40,7 +40,7 @@
       </AnchorPane>
       <ImageView id="imgLogo" fx:id="imgLogo" fitHeight="114.0" fitWidth="128.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../images/logo.png" />
+            <Image url="/images/logo.png" />
          </image>
       </ImageView>
    </children>
