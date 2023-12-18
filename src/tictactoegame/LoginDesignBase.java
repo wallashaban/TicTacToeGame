@@ -1,5 +1,8 @@
 package tictactoegame;
 
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
@@ -20,6 +23,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
@@ -169,6 +173,30 @@ public class LoginDesignBase extends BorderPane {
         contentFlowView.getChildren().add(signUpQuestionLabel);
         logoView.getChildren().add(letterX);
         logoView.getChildren().add(letterY);
+        newPlayerQuestionLable.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Parent root = new SignUpBase();
+                        Scene scene = new Scene(root);
+         
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
+    loginButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        Parent root = new AvailableUsersScreen(stage) ;
+                        Scene scene = new Scene(root);
+         
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
+
+
         testConnection();
         startListeningThread();
 
@@ -232,7 +260,7 @@ public class LoginDesignBase extends BorderPane {
     }
     
         private void navigateToGameScreen(){
-        Parent root = new GameRoomDesignBase();
+        Parent root = new MainScreen();
         Stage stage = SharedData.getStage();
         Scene scene = new Scene(root);
         stage.setScene(scene);

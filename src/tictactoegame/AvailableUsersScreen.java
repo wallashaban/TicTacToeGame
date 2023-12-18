@@ -1,5 +1,9 @@
 package tictactoegame;
 
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,10 +18,12 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
-public class AvailableUsersScreen extends Pane {
+public  class AvailableUsersScreen extends Pane {
 
     protected final Pane pane;
     protected final ImageView imageView;
@@ -33,7 +39,7 @@ public class AvailableUsersScreen extends Pane {
             ArrayList<Player> avaliablePlayerList;
 
 
-    public AvailableUsersScreen() {
+    public AvailableUsersScreen(Stage stage) {
 
         try {
             System.out.println("client up and running");
@@ -49,17 +55,17 @@ public class AvailableUsersScreen extends Pane {
          //   mouth.println("i am the client who are you?");
             mouth.println("i want all avaliable users");
            
-            try {
-                                    System.out.println("before ois");
-
-                                                System.out.println("after ois");
-
-                Player ptest = (Player)ois.readObject();
-                System.out.println("after read object");
-                System.out.println(ptest.toString());
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(AvailableUsersScreen.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try {
+//                                    System.out.println("before ois");
+//
+//                                                System.out.println("after ois");
+//
+//                //Player ptest = (Player)ois.readObject();
+//                System.out.println("after read object");
+//                System.out.println(ptest.toString());
+//            } catch (ClassNotFoundException ex) {
+//                Logger.getLogger(AvailableUsersScreen.class.getName()).log(Level.SEVERE, null, ex);
+//            }
            /* for(int i=0;i<avaliablePlayerList.size();i++){
                 System.out.println(avaliablePlayerList.get(i).username);
             }*/
@@ -97,7 +103,7 @@ public class AvailableUsersScreen extends Pane {
         imageView.setLayoutX(7.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-//        imageView.setImage(new Image(getClass().getResource("../../images/xo.png").toExternalForm()));
+        imageView.setImage(new Image(getClass().getResource("/images/xo.png").toExternalForm()));
 
         pane0.setLayoutX(201.0);
         pane0.setLayoutY(134.0);
@@ -170,6 +176,32 @@ public class AvailableUsersScreen extends Pane {
         pane2.getChildren().add(hyperlink0);
         getChildren().add(pane2);
         getChildren().add(button);
+        
+        button.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Parent root = new MainScreen();
+                        Scene scene = new Scene(root);
+         
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
+        
+        hyperlink.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Parent root = new GameRoomDesignBase(stage);
+                        Scene scene = new Scene(root);
+         
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
+        
+        
 
     }
 }

@@ -11,11 +11,11 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author s
+ * @author Dr.Wlaa
  */
 public class SharedData {
+    public static Player currentPlayer;
     public static boolean connectionStatus;
-    public static Person currentPlayer;
     public static Socket socket;
     public static Stage stage;
     
@@ -35,11 +35,11 @@ public class SharedData {
         SharedData.connectionStatus = connectionStatus;
     }
 
-    public static Person getCurrentPlayer() {
+    public static Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public static void setCurrentPlayer(Person currentPlayer) {
+    public static void setCurrentPlayer(Player currentPlayer) {
         SharedData.currentPlayer = currentPlayer;
     }
 

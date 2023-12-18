@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -30,6 +31,7 @@ public class GameRoomDesignBase extends BorderPane {
     protected int player1Cases[];
     protected int player2Cases[];
     protected int playerCases[][];
+    protected Stage stage;
     int[] winnerData;
     final int diagonalLeft = 0;
     final int diagonalRight = 1;
@@ -87,13 +89,14 @@ public class GameRoomDesignBase extends BorderPane {
     protected final Label box12;
     protected final Label box01;
     protected final Label box02;
-
     int currentp1Index;
     int currentp2Index;
     int x;
     int y;
 
-    public GameRoomDesignBase() {
+    public GameRoomDesignBase(Stage stage) {
+
+        this.stage = stage;
         currentp1Index = 0;
         currentp2Index = 0;
 
@@ -343,51 +346,41 @@ public class GameRoomDesignBase extends BorderPane {
                 boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        if(boxEnabled[finalI][finalJ]){
-                            if(isX)
-                            {
-                                 boxArray[finalI]
-								player1Moves.add((finalI * 10) + finalJ);
-								[finalJ].setText("X");                                 
-                            }else
-                            {
-                                 boxArray[finalI]
+                        if (boxEnabled[finalI][finalJ]) {
+                            if (isX) {
+                                boxArray[finalI][finalJ].setText("X");
+                                player1Moves.add((finalI * 10) + finalJ);
+
+                            } else {
+                                boxArray[finalI][finalJ].setText("O");
                                 player2Moves.add((finalI * 10) + finalJ);
-								[finalJ].setText("O");
+
                             }
                             updateCases(finalI, finalJ);
                             movesCount++;
-                            if(movesCount>=5)
-                             {
-                              winnerData= checkWinner();
-                                if(winnerData[0]== -1)
-                                {
-                                    if(movesCount == 9){
+                            if (movesCount >= 5) {
+                                winnerData = checkWinner();
+                                if (winnerData[0] == -1) {
+                                    if (movesCount == 9) {
                                         draw();
-                                    }
-                                    else{
-                                        isX=!isX;
+                                    } else {
+                                        isX = !isX;
                                         boxEnabled[finalI][finalJ] = false;
                                     }
-                                }
-                                else if(winnerData[0]== 0)
-                                {
+                                } else if (winnerData[0] == 0) {
                                     player1ScoreCount++;
                                     disableLabels();
                                     //    celebrateWinner(winnerData[1]);
-                                    updateScore();                                  
-                                }else if(winnerData[0]== 1)
-                                {
+                                    updateScore();
+                                } else if (winnerData[0] == 1) {
                                     player2ScoreCount++;
                                     disableLabels();
                                     celebrateWinner(winnerData[1]);
                                     updateScore();
                                 }
-                                
-                                
-                            }
-                            else{
-                                isX=!isX;
+
+                            } else {
+                                isX = !isX;
                                 boxEnabled[finalI][finalJ] = false;
                             }
                         }
@@ -627,7 +620,7 @@ public class GameRoomDesignBase extends BorderPane {
             default:
                 break;
         }
-        char winner = isX? 'X': 'O';
+        char winner = isX ? 'X' : 'O';
         showDialog(winner);
         resetGame();
     }
@@ -640,7 +633,8 @@ public class GameRoomDesignBase extends BorderPane {
         }
 
     }
-    private void showDialog(char winner){
+
+    private void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
         Parent parent = new PlayAgainDialogBase(message);
@@ -671,13 +665,21 @@ public class GameRoomDesignBase extends BorderPane {
             case 1:
                 break;
             case 0:
+                Parent root = new MainScreen();
+                Scene scene = new Scene(root);
+
+                // Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                stage.setTitle("Text Editor app");
+                stage.setScene(scene);
+                stage.show();
 
                 break;
             default:
                 break;
         }
     }
-    void draw(){
+
+    void draw() {
         showDialog('D');
         resetGame();
     }
@@ -694,7 +696,6 @@ public class GameRoomDesignBase extends BorderPane {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         // Schedule the task to run every second
 
-     
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -721,7 +722,7 @@ public class GameRoomDesignBase extends BorderPane {
                                 //   executor.shutdown();
                             }
                         }
-                        if(currentp1Index == player1Moves.size()&&currentp2Index == player2Moves.size()){
+                        if (currentp1Index == player1Moves.size() && currentp2Index == player2Moves.size()) {
                             executor.shutdown();
                         }
                         isX = !isX;
