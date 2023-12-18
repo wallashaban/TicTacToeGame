@@ -116,6 +116,10 @@ public class PlayAgainDialogBase extends Pane {
         buttonMinimize.setStyle("-fx-background-radius: 30; -fx-background-color: e8ccd5;");
         buttonMinimize.setText("-");
         buttonMinimize.setFont(new Font("Gill Sans MT Bold Italic", 18.0));
+        buttonMinimize.setOnAction((ActionEvent event) -> {
+            Stage stage = (Stage) buttonMinimize.getScene().getWindow();
+            stage.setIconified(true);
+        });
 
         text.setFill(javafx.scene.paint.Color.WHITE);
         text.setLayoutX(17.0);

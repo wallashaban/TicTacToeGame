@@ -1,11 +1,14 @@
 package tictactoegame;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class RequestDialogBase extends Pane {
 
@@ -81,6 +84,10 @@ public class RequestDialogBase extends Pane {
         buttonMinimize.setStyle("-fx-background-radius: 30; -fx-background-color: e8ccd5;");
         buttonMinimize.setText("-");
         buttonMinimize.setFont(new Font("Segoe UI Bold Italic", 16.0));
+        buttonMinimize.setOnAction((ActionEvent event) -> {
+            Stage stage = (Stage) buttonMinimize.getScene().getWindow();
+            stage.setIconified(true);
+        });
 
         getChildren().add(rectangle);
         getChildren().add(btnAccept);

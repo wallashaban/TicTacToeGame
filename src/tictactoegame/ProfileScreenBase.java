@@ -1,6 +1,7 @@
 package tictactoegame;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -11,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class ProfileScreenBase extends AnchorPane {
 
@@ -180,6 +182,10 @@ public class ProfileScreenBase extends AnchorPane {
         buttonMinimize.setStyle("-fx-background-radius: 30; -fx-background-color: e8ccd5;");
         buttonMinimize.setText("-");
         buttonMinimize.setFont(new Font("Gill Sans MT", 19.0));
+        buttonMinimize.setOnAction((ActionEvent event) -> {
+            Stage stage = (Stage) buttonMinimize.getScene().getWindow();
+            stage.setIconified(true);
+        });
 
         anchorPane.getChildren().add(textYourProfile);
         anchorPane.getChildren().add(imgAvatar);
