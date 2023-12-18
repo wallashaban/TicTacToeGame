@@ -1,71 +1,66 @@
 package tictactoegame;
 
+import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PlayAgainDialogBase extends Pane {
 
-    protected final ImageView imageView;
-    protected final Rectangle rectangle;
+    protected final MediaView mediaView;
     protected final Button btnReplay;
     protected final Button btnNotNow;
-    protected final Label labelRequestMessage;
-    protected final Button btnOk;
+    protected final Button btnPlayAgain;
+    protected final Button buttonMinimize;
+    protected final Text text;
 
     public PlayAgainDialogBase(MessageController message) {
 
-        imageView = new ImageView();
-        rectangle = new Rectangle();
+        String path = "C:/Users/s/Desktop/celebration.mp4";  
+        Media media = new Media(new File(path).toURI().toString());   
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+        mediaView = new MediaView(mediaPlayer);
         btnReplay = new Button();
         btnNotNow = new Button();
-        labelRequestMessage = new Label();
-        btnOk = new Button();
+        btnPlayAgain = new Button();
+        buttonMinimize = new Button();
+        text = new Text();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(244.0);
+        setPrefHeight(525.0);
         setPrefWidth(587.0);
-        setStyle("-fx-background-color: ffffff;");
+        getStyleClass().add("backgroundColor");
+        getStylesheets().add("/tictactoegame/BackGround.css");
         setPadding(new Insets(15.0));
 
-        imageView.setFitHeight(92.0);
-        imageView.setFitWidth(105.0);
-        imageView.setLayoutX(14.0);
-        imageView.setLayoutY(14.0);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-//        imageView.setImage(new Image(getClass().getResource("../../images/logo.png").toExternalForm()));
+        mediaView.setFitHeight(330.0);
+        mediaView.setFitWidth(450.0);
+        mediaView.setLayoutX(68.0);
+        mediaView.setLayoutY(29.0);
 
-        rectangle.setArcHeight(5.0);
-        rectangle.setArcWidth(5.0);
-        rectangle.setFill(javafx.scene.paint.Color.valueOf("#faf9f6"));
-        rectangle.setHeight(101.0);
-        rectangle.setLayoutX(88.0);
-        rectangle.setLayoutY(69.0);
-        rectangle.setStroke(javafx.scene.paint.Color.valueOf("#d9d9d9"));
-        rectangle.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
-        rectangle.setStyle("-fx-arc-width: 40; -fx-arc-height: 40;");
-        rectangle.setWidth(412.0);
-
-        btnReplay.setLayoutX(74.0);
-        btnReplay.setLayoutY(184.0);
+        btnReplay.setLayoutX(73.0);
+        btnReplay.setLayoutY(442.0);
         btnReplay.setMnemonicParsing(false);
         btnReplay.setPrefHeight(39.0);
-        btnReplay.setPrefWidth(127.0);
-        btnReplay.setStyle("-fx-border-color: D9D9D9; -fx-background-color: ffffff; -fx-font-family: serif; -fx-font-weight: bold; -fx-font-size: 20; -fx-border-radius: 40;");
+        btnReplay.setPrefWidth(131.0);
+        btnReplay.setStyle("-fx-background-color: CF8A9B; -fx-background-radius: 40;");
         btnReplay.setText("Replay");
         btnReplay.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        btnReplay.setTextFill(javafx.scene.paint.Color.WHITE);
+        btnReplay.setFont(new Font("Segoe UI", 20.0));
         btnReplay.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -76,13 +71,15 @@ public class PlayAgainDialogBase extends Pane {
         });
 
         btnNotNow.setLayoutX(381.0);
-        btnNotNow.setLayoutY(184.0);
+        btnNotNow.setLayoutY(442.0);
         btnNotNow.setMnemonicParsing(false);
-        btnNotNow.setPrefHeight(39.0);
-        btnNotNow.setPrefWidth(113.0);
-        btnNotNow.setStyle("-fx-border-color: D9D9D9; -fx-background-color: ffffff; -fx-font-family: serif; -fx-font-weight: bold; -fx-font-size: 20; -fx-border-radius: 40;");
+        btnNotNow.setPrefHeight(40.0);
+        btnNotNow.setPrefWidth(119.0);
+        btnNotNow.setStyle("-fx-background-color: CF8A9B; -fx-background-radius: 40;");
         btnNotNow.setText("Not Now");
         btnNotNow.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        btnNotNow.setTextFill(javafx.scene.paint.Color.WHITE);
+        btnNotNow.setFont(new Font("Segoe UI", 20.0));
         btnNotNow.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -91,37 +88,18 @@ public class PlayAgainDialogBase extends Pane {
                 stage.close();
             }
         });
-        
-        char winner = message.getWinner();
-        labelRequestMessage.setLayoutX(174.0);
-        labelRequestMessage.setLayoutY(89.0);
-        labelRequestMessage.setLineSpacing(1.5);
-        labelRequestMessage.setPrefHeight(61.0);
-        labelRequestMessage.setPrefWidth(263.0);
-        labelRequestMessage.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
-        labelRequestMessage.setText("Congratulations X!! Do you want to play again? ");
-        labelRequestMessage.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        labelRequestMessage.setWrapText(true);
-        switch(winner){
-            case 'X':
-                labelRequestMessage.setText("Congratulations X!!\n Do you want to play again? ");
-                break;
-            case 'O':
-                labelRequestMessage.setText("Congratulations O!!\n Do you want to play again? ");
-                break;
-            case 'D':
-                labelRequestMessage.setText("Draw!\n Do you want to play again? ");
-                break;
-        }
-        btnOk.setLayoutX(237.0);
-        btnOk.setLayoutY(184.0);
-        btnOk.setMnemonicParsing(false);
-        btnOk.setPrefHeight(39.0);
-        btnOk.setPrefWidth(113.0);
-        btnOk.setStyle("-fx-border-color: D9D9D9; -fx-background-color: ffffff; -fx-font-family: serif; -fx-font-weight: bold; -fx-font-size: 20; -fx-border-radius: 40;");
-        btnOk.setText("OK");
-        btnOk.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        btnOk.setOnAction(new EventHandler<ActionEvent>() {
+
+        btnPlayAgain.setLayoutX(227.0);
+        btnPlayAgain.setLayoutY(442.0);
+        btnPlayAgain.setMnemonicParsing(false);
+        btnPlayAgain.setPrefHeight(39.0);
+        btnPlayAgain.setPrefWidth(131.0);
+        btnPlayAgain.setStyle("-fx-background-color: CF8A9B; -fx-background-radius: 40;");
+        btnPlayAgain.setText("Play Again");
+        btnPlayAgain.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        btnPlayAgain.setTextFill(javafx.scene.paint.Color.WHITE);
+        btnPlayAgain.setFont(new Font("Segoe UI", 20.0));
+        btnPlayAgain.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(2);
@@ -130,12 +108,29 @@ public class PlayAgainDialogBase extends Pane {
             }
         });
 
-        getChildren().add(imageView);
-        getChildren().add(rectangle);
+        buttonMinimize.setLayoutX(545.0);
+        buttonMinimize.setLayoutY(12.0);
+        buttonMinimize.setMnemonicParsing(false);
+        buttonMinimize.setPrefHeight(23.0);
+        buttonMinimize.setPrefWidth(26.0);
+        buttonMinimize.setStyle("-fx-background-radius: 30; -fx-background-color: e8ccd5;");
+        buttonMinimize.setText("-");
+        buttonMinimize.setFont(new Font("Gill Sans MT Bold Italic", 18.0));
+
+        text.setFill(javafx.scene.paint.Color.WHITE);
+        text.setLayoutX(17.0);
+        text.setLayoutY(404.0);
+        text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        text.setStrokeWidth(0.0);
+        text.setText("Congratulations! You Won the Game!!");
+        text.setFont(new Font("Segoe UI", 33.0));
+
+        getChildren().add(mediaView);
         getChildren().add(btnReplay);
         getChildren().add(btnNotNow);
-        getChildren().add(labelRequestMessage);
-        getChildren().add(btnOk);
+        getChildren().add(btnPlayAgain);
+        getChildren().add(buttonMinimize);
+        getChildren().add(text);
 
     }
 }

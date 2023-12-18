@@ -1,5 +1,7 @@
 package tictactoegame;
 
+import javafx.application.Platform;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -25,7 +27,8 @@ public class ProfileScreenBase extends AnchorPane {
     protected final Text textUsername;
     protected final Text textEmail;
     protected final Text textScore;
-    protected final ImageView imgLogo;
+    protected final Button buttonExit;
+    protected final Button buttonMinimize;
 
     public ProfileScreenBase() {
 
@@ -42,124 +45,141 @@ public class ProfileScreenBase extends AnchorPane {
         textUsername = new Text();
         textEmail = new Text();
         textScore = new Text();
-        imgLogo = new ImageView();
+        buttonExit = new Button();
+        buttonMinimize = new Button();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(400.0);
-        setPrefWidth(600.0);
-        setStyle("-fx-background-color: ffffff;");
+        setPrefHeight(600.0);
+        setPrefWidth(800.0);
+        getStyleClass().add("backgroundColor");
+        getStylesheets().add("/tictactoegame/BackGround.css");
 
-        anchorPane.setLayoutX(141.0);
-        anchorPane.setLayoutY(1.0);
+        anchorPane.setLayoutX(50.0);
+        anchorPane.setLayoutY(45.0);
         anchorPane.setMinHeight(0.0);
         anchorPane.setMinWidth(0.0);
-        anchorPane.setPrefHeight(398.0);
-        anchorPane.setPrefWidth(470.0);
-        anchorPane.setStyle("-fx-background-color: ffffff;");
+        anchorPane.setPrefHeight(525.0);
+        anchorPane.setPrefWidth(591.0);
+        anchorPane.getStyleClass().add("backgroundColor");
+        anchorPane.getStylesheets().add("/tictactoegame/BackGround.css");
 
-        textYourProfile.setLayoutY(65.0);
+        textYourProfile.setFill(javafx.scene.paint.Color.WHITE);
+        textYourProfile.setLayoutX(23.0);
+        textYourProfile.setLayoutY(85.0);
         textYourProfile.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         textYourProfile.setStrokeWidth(0.0);
-        textYourProfile.setStyle("-fx-font-family: serif;");
         textYourProfile.setText("Your Profile");
         textYourProfile.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        textYourProfile.setWrappingWidth(185.10205078125);
-        textYourProfile.setFont(new Font(31.0));
+        textYourProfile.setWrappingWidth(256.10205078125);
+        textYourProfile.setFont(new Font("Segoe UI", 48.0));
 
         textYourProfile.setEffect(dropShadow);
 
-        imgAvatar.setFitHeight(98.0);
-        imgAvatar.setFitWidth(121.0);
-        imgAvatar.setLayoutX(262.0);
-        imgAvatar.setLayoutY(31.0);
+        imgAvatar.setFitHeight(146.0);
+        imgAvatar.setFitWidth(114.0);
+        imgAvatar.setLayoutX(444.0);
+        imgAvatar.setLayoutY(8.0);
         imgAvatar.setPickOnBounds(true);
         imgAvatar.setPreserveRatio(true);
-//        imgAvatar.setImage(new Image(getClass().getResource("../../images/avatar.jpg").toExternalForm()));
+        imgAvatar.setImage(new Image(getClass().getResource("/images/monster.png").toExternalForm()));
 
-        labelScore.setLayoutX(35.0);
-        labelScore.setLayoutY(304.0);
-        labelScore.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
+        labelScore.setLayoutX(109.0);
+        labelScore.setLayoutY(369.0);
         labelScore.setText("Score");
+        labelScore.setTextFill(javafx.scene.paint.Color.WHITE);
+        labelScore.setFont(new Font("Segoe UI", 34.0));
 
         rectangle.setArcHeight(5.0);
         rectangle.setArcWidth(5.0);
-        rectangle.setFill(javafx.scene.paint.Color.valueOf("#faf9f6"));
+        rectangle.setFill(javafx.scene.paint.Color.valueOf("#e8ccd5"));
         rectangle.setHeight(43.0);
-        rectangle.setLayoutX(86.0);
-        rectangle.setLayoutY(168.0);
+        rectangle.setLayoutX(191.0);
+        rectangle.setLayoutY(200.0);
         rectangle.setStroke(javafx.scene.paint.Color.valueOf("#aea9a9"));
         rectangle.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
         rectangle.setStyle("-fx-arc-width: 20; -fx-arc-height: 20;");
-        rectangle.setWidth(225.0);
+        rectangle.setWidth(450.0);
 
-        labelEmail.setLayoutX(35.0);
-        labelEmail.setLayoutY(227.0);
-        labelEmail.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
+        labelEmail.setLayoutX(108.0);
+        labelEmail.setLayoutY(263.0);
         labelEmail.setText("Email");
+        labelEmail.setTextFill(javafx.scene.paint.Color.WHITE);
+        labelEmail.setFont(new Font("Segoe UI", 34.0));
 
-        labelUsername.setLayoutX(35.0);
-        labelUsername.setLayoutY(147.0);
-        labelUsername.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
+        labelUsername.setLayoutX(91.0);
+        labelUsername.setLayoutY(160.0);
         labelUsername.setText("Username");
+        labelUsername.setTextFill(javafx.scene.paint.Color.WHITE);
+        labelUsername.setFont(new Font("Segoe UI", 34.0));
 
         rectangle0.setArcHeight(5.0);
         rectangle0.setArcWidth(5.0);
-        rectangle0.setFill(javafx.scene.paint.Color.valueOf("#faf9f6"));
+        rectangle0.setFill(javafx.scene.paint.Color.valueOf("#e8ccd5"));
         rectangle0.setHeight(43.0);
-        rectangle0.setLayoutX(86.0);
-        rectangle0.setLayoutY(248.0);
+        rectangle0.setLayoutX(190.0);
+        rectangle0.setLayoutY(303.0);
         rectangle0.setStroke(javafx.scene.paint.Color.valueOf("#aea9a9"));
         rectangle0.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
         rectangle0.setStyle("-fx-arc-width: 20; -fx-arc-height: 20;");
-        rectangle0.setWidth(225.0);
+        rectangle0.setWidth(450.0);
 
         rectangle1.setArcHeight(5.0);
         rectangle1.setArcWidth(5.0);
-        rectangle1.setFill(javafx.scene.paint.Color.valueOf("#faf9f6"));
+        rectangle1.setFill(javafx.scene.paint.Color.valueOf("#e8ccd5"));
         rectangle1.setHeight(43.0);
-        rectangle1.setLayoutX(86.0);
-        rectangle1.setLayoutY(325.0);
+        rectangle1.setLayoutX(188.0);
+        rectangle1.setLayoutY(401.0);
         rectangle1.setStroke(javafx.scene.paint.Color.valueOf("#aea9a9"));
         rectangle1.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
         rectangle1.setStyle("-fx-arc-width: 20; -fx-arc-height: 20;");
-        rectangle1.setWidth(225.0);
+        rectangle1.setWidth(450.0);
 
-        textUsername.setLayoutX(102.0);
-        textUsername.setLayoutY(196.0);
+        textUsername.setLayoutX(280.0);
+        textUsername.setLayoutY(232.0);
         textUsername.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         textUsername.setStrokeWidth(0.0);
-        textUsername.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
-        textUsername.setText(SharedData.currentPlayer.getUserName());
+        textUsername.setText("Fordo");
         textUsername.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        textUsername.setWrappingWidth(193.00000393390656);
+        textUsername.setWrappingWidth(265.00000393390656);
+        textUsername.setFont(new Font("Segoe UI", 34.0));
 
-        textEmail.setLayoutX(115.0);
-        textEmail.setLayoutY(276.0);
+        textEmail.setLayoutX(280.0);
+        textEmail.setLayoutY(335.0);
         textEmail.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         textEmail.setStrokeWidth(0.0);
-        textEmail.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
-        textEmail.setText(SharedData.currentPlayer.getEmail());
-        textEmail.setWrappingWidth(185.10204702615738);
+        textEmail.setText("frodo@gmail.com");
+        textEmail.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        textEmail.setWrappingWidth(284.9999874830246);
+        textEmail.setFont(new Font("Segoe UI", 34.0));
 
-        textScore.setLayoutX(111.0);
-        textScore.setLayoutY(353.0);
+        textScore.setLayoutX(280.0);
+        textScore.setLayoutY(433.0);
         textScore.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         textScore.setStrokeWidth(0.0);
-        textScore.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
-        textScore.setText(SharedData.currentPlayer.getScore()+"");
+        textScore.setText("25000");
         textScore.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        textScore.setWrappingWidth(174.00000393390656);
+        textScore.setWrappingWidth(264.9999976158142);
+        textScore.setFont(new Font("Segoe UI", 34.0));
 
-        imgLogo.setFitHeight(114.0);
-        imgLogo.setFitWidth(128.0);
-        imgLogo.setLayoutX(14.0);
-        imgLogo.setLayoutY(14.0);
-        imgLogo.setPickOnBounds(true);
-        imgLogo.setPreserveRatio(true);
-       imgLogo.setImage(new Image(getClass().getResource("/images/logo.png").toExternalForm()));
+        buttonExit.setLayoutX(750.0);
+        buttonExit.setLayoutY(14.0);
+        buttonExit.setMnemonicParsing(false);
+        buttonExit.setStyle("-fx-background-radius: 30; -fx-background-color: e8ccd5;");
+        buttonExit.setText("X");
+        buttonExit.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
+        buttonExit.setOnAction((e)-> {Platform.exit();});
+
+        buttonMinimize.setLayoutX(709.0);
+        buttonMinimize.setLayoutY(14.0);
+        buttonMinimize.setMnemonicParsing(false);
+        buttonMinimize.setPrefHeight(17.0);
+        buttonMinimize.setPrefWidth(31.0);
+        buttonMinimize.setStyle("-fx-background-radius: 30; -fx-background-color: e8ccd5;");
+        buttonMinimize.setText("-");
+        buttonMinimize.setFont(new Font("Gill Sans MT", 19.0));
 
         anchorPane.getChildren().add(textYourProfile);
         anchorPane.getChildren().add(imgAvatar);
@@ -173,7 +193,8 @@ public class ProfileScreenBase extends AnchorPane {
         anchorPane.getChildren().add(textEmail);
         anchorPane.getChildren().add(textScore);
         getChildren().add(anchorPane);
-        getChildren().add(imgLogo);
+        getChildren().add(buttonExit);
+        getChildren().add(buttonMinimize);
 
     }
 }
