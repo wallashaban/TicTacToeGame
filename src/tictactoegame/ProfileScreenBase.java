@@ -132,7 +132,7 @@ public class ProfileScreenBase extends AnchorPane {
         textUsername.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         textUsername.setStrokeWidth(0.0);
         textUsername.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
-        textUsername.setText("Fordo");
+        textUsername.setText(SharedData.currentPlayer.getUserName());
         textUsername.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         textUsername.setWrappingWidth(193.00000393390656);
 
@@ -141,7 +141,7 @@ public class ProfileScreenBase extends AnchorPane {
         textEmail.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         textEmail.setStrokeWidth(0.0);
         textEmail.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
-        textEmail.setText("frodo@gmail.com");
+        textEmail.setText(SharedData.currentPlayer.getEmail());
         textEmail.setWrappingWidth(185.10204702615738);
 
         textScore.setLayoutX(111.0);
@@ -149,7 +149,7 @@ public class ProfileScreenBase extends AnchorPane {
         textScore.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         textScore.setStrokeWidth(0.0);
         textScore.setStyle("-fx-font-family: serif; -fx-font-size: 20;");
-        textScore.setText("25000");
+        textScore.setText(SharedData.currentPlayer.getScore()+"");
         textScore.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         textScore.setWrappingWidth(174.00000393390656);
 
@@ -159,7 +159,7 @@ public class ProfileScreenBase extends AnchorPane {
         imgLogo.setLayoutY(14.0);
         imgLogo.setPickOnBounds(true);
         imgLogo.setPreserveRatio(true);
-//        imgLogo.setImage(new Image(getClass().getResource("../../images/logo.png").toExternalForm()));
+       imgLogo.setImage(new Image(getClass().getResource("/images/logo.png").toExternalForm()));
 
         anchorPane.getChildren().add(textYourProfile);
         anchorPane.getChildren().add(imgAvatar);

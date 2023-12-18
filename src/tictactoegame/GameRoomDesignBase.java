@@ -1,9 +1,8 @@
-<<<<<<< HEAD
-=======
 package tictactoegame;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -27,6 +26,7 @@ public class GameRoomDesignBase extends BorderPane {
     protected int player1Cases[];
     protected int player2Cases[];
     protected int playerCases[][];
+    protected Stage stage;
     int []winnerData;
     final int diagonalLeft = 0;
     final int diagonalRight = 1;
@@ -82,7 +82,8 @@ public class GameRoomDesignBase extends BorderPane {
     protected final Label box01;
     protected final Label box02;
 
-    public GameRoomDesignBase() {
+    public GameRoomDesignBase(Stage stage) {
+        this.stage=stage;
         message = new MessageController();
         matrix = new char[3][3];
         boxArray = new Label[3][3];
@@ -649,6 +650,13 @@ public class GameRoomDesignBase extends BorderPane {
             case 1:
                 break;
             case 0:
+                Parent root = new MainScreen();
+                Scene scene = new Scene(root);
+
+               // Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                stage.setTitle("Text Editor app");
+                stage.setScene(scene);
+                stage.show();
                 break;
             default:
                 break;               
@@ -660,4 +668,3 @@ public class GameRoomDesignBase extends BorderPane {
     }
 
 }
->>>>>>> e5289678e137d1284f32e65ff81b3697d7cd6e44
