@@ -369,7 +369,7 @@ public class GameRoomDesignBase extends BorderPane {
                                 } else if (winnerData[0] == 0) {
                                     player1ScoreCount++;
                                     disableLabels();
-                                    //    celebrateWinner(winnerData[1]);
+                                    celebrateWinner(winnerData[1]);
                                     updateScore();
                                 } else if (winnerData[0] == 1) {
                                     player2ScoreCount++;
@@ -662,6 +662,8 @@ public class GameRoomDesignBase extends BorderPane {
                 }
                 break;
             case 1:
+                isX = true;
+                review();
                 break;
             case 0:
                 Parent root = new MainScreen();
@@ -684,7 +686,8 @@ public class GameRoomDesignBase extends BorderPane {
     }
 
     private void review() {
-        isX = false;
+        System.out.println("we are inside review");
+        isX = true;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 //boxEnabled[i][j] = true;
