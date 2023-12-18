@@ -8,65 +8,75 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane fx:id="borderView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoegame.LoginDesignController">
+<BorderPane fx:id="borderView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom, #DBA7B7, #B292AA);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoegame.LoginDesignController">
    <center>
-      <FlowPane fx:id="contentFlowView" orientation="VERTICAL" prefHeight="780.0" prefWidth="719.0" vgap="20.0" BorderPane.alignment="CENTER">
+      <FlowPane fx:id="contentFlowView" orientation="VERTICAL" prefHeight="780.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="welcomeLabel" text="Welcome back" textFill="#5a5a5a">
+            <Label fx:id="welcomeLabel" text="Welcome back" textFill="WHITE">
                <font>
-                  <Font name="Candara Bold" size="59.0" />
+                  <Font name="Segoe UI Bold" size="40.0" />
                </font>
                <FlowPane.margin>
-                  <Insets />
+                  <Insets bottom="10.0" />
                </FlowPane.margin>
             </Label>
-            <Label fx:id="subTitleLabel" text="Login to play online" textFill="#5a5a5a">
+            <Label fx:id="subTitleLabel" text="Login to play online" textFill="WHITE">
                <font>
-                  <Font name="Arial Bold Italic" size="30.0" />
+                  <Font name="Segoe UI Semibold" size="25.0" />
                </font>
                <padding>
-                  <Insets left="40.0" />
+                  <Insets left="20.0" />
                </padding>
             </Label>
-            <TextField fx:id="emailTextField" alignment="CENTER" promptText="Email" style="-fx-border-color: 000000; -fx-background-radius: 30; -fx-border-width: 5; -fx-border-radius: 30; boar: ;">
+            <Label text="Email" textFill="WHITE">
                <font>
-                  <Font size="30.0" />
+                  <Font name="Segoe UI Bold" size="18.0" />
                </font>
                <FlowPane.margin>
-                  <Insets top="100.0" />
-               </FlowPane.margin>
-            </TextField>
-            <TextField fx:id="passwordTextField" alignment="CENTER" promptText="Password" style="-fx-border-color: 000000; -fx-background-radius: 30; -fx-border-width: 5; -fx-border-radius: 30; boar: ;">
-               <font>
-                  <Font size="30.0" />
-               </font>
-               <FlowPane.margin>
-                  <Insets top="35.0" />
-               </FlowPane.margin>
-            </TextField>
-            <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: fefdfc; -fx-border-color: 111111; -fx-background-radius: 20; -fx-border-width: 5; -fx-border-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" text="Login" textAlignment="CENTER">
-               <font>
-                  <Font name="Arial Bold" size="30.0" />
-               </font>
-               <FlowPane.margin>
-                  <Insets left="125.0" top="40.0" />
-               </FlowPane.margin>
-            </Button>
-            <Label fx:id="newPlayerQuestionLable" text="New Player?" textFill="#94cbf0" underline="true">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <FlowPane.margin>
-                  <Insets left="145.0" />
+                  <Insets left="115.0" top="60.0" />
                </FlowPane.margin>
             </Label>
-            <Label fx:id="signUpQuestionLabel" text="Sign UP!" textFill="#94cbf0">
+            <TextField fx:id="emailTextField" alignment="CENTER" minWidth="400.0" prefWidth="70.0" promptText="Email" style="-fx-border-color: #56354A; -fx-background-color: EACCD6; -fx-background-radius: 20; -fx-border-width: 5; -fx-border-radius: 20;">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <FlowPane.margin>
+                  <Insets left="-60.0" top="10.0" />
+               </FlowPane.margin>
+            </TextField>
+            <Label text="Password" textFill="WHITE">
+               <font>
+                  <Font name="Segoe UI Bold" size="18.0" />
+               </font>
+               <FlowPane.margin>
+                  <Insets left="100.0" top="20.0" />
+               </FlowPane.margin>
+            </Label>
+            <TextField fx:id="emailTextField1" alignment="CENTER" promptText="password" style="-fx-border-color: #56354A; -fx-background-color: EACCD6; -fx-background-radius: 20; -fx-border-width: 5; -fx-border-radius: 20;">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <FlowPane.margin>
+                  <Insets left="-60.0" top="10.0" />
+               </FlowPane.margin>
+            </TextField>
+            <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" style="-fx-background-color: CF8A9B; -fx-border-color: 111111; -fx-background-radius: 10; -fx-border-width: 5; -fx-border-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" text="Login" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="25.0" />
+               </font>
+               <FlowPane.margin>
+                  <Insets bottom="10.0" left="90.0" top="60.0" />
+               </FlowPane.margin>
+            </Button>
+            <Label fx:id="newPlayerQuestionLable" text="New Player?  Sign UP" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
                <FlowPane.margin>
-                  <Insets left="155.0" top="-10.0" />
+                  <Insets left="55.0" top="10.0" />
                </FlowPane.margin>
             </Label>
          </children>
@@ -76,9 +86,9 @@
       </FlowPane>
    </center>
    <left>
-      <FlowPane fx:id="logoView" hgap="15.0" prefHeight="780.0" prefWidth="303.0" BorderPane.alignment="CENTER">
+      <FlowPane fx:id="logoView" hgap="15.0" prefHeight="580.0" prefWidth="256.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="letterX" rotate="10.0" text="X" textFill="#94cbf0">
+            <Label fx:id="letterX" rotate="10.0" text="X" textFill="#8a559b">
                <font>
                   <Font name="Arial Bold" size="96.0" />
                </font>
@@ -86,7 +96,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <Label fx:id="letterY" rotate="-5.0" text="O" textFill="#eb8fb4">
+            <Label fx:id="letterY" rotate="-5.0" text="O" textFill="#db4f7e">
                <font>
                   <Font name="Arial Bold" size="80.0" />
                </font>
