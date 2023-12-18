@@ -53,8 +53,8 @@ public  class MainScreen extends Pane {
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(426.0);
-        setPrefWidth(687.0);
+        setPrefHeight(600.0);
+        setPrefWidth(800.0);
         setStyle("-fx-background-color: #FFFFFF;");
 
         onlinePane.setLayoutX(30.0);
