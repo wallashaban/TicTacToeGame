@@ -22,7 +22,7 @@ public class TicTacToeGame extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = new SignUpBase();// FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        Parent root = new ProfileScreenBase();// FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
 
         
@@ -35,10 +35,11 @@ public class TicTacToeGame extends Application {
 //         BorderPane rootb = new BorderPane();
 //        GameRoomDesignBase teb= new GameRoomDesignBase();
 //        rootb.getChildren().add(teb);
+
+        stage.initStyle(StageStyle.UNDECORATED); 
+        stage.setTitle("Text Editor app");
         Scene scene = new Scene(root,800,600);
          
-
-        stage.setTitle("Text Editor app");
         stage.setScene(scene);
         stage.show();
     }
