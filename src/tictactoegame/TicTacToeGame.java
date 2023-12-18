@@ -21,8 +21,8 @@ public class TicTacToeGame extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = new GameRoomDesignBase();// FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+        Parent root = new LoginDesignBase();// FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        SharedData.setStage(stage);
         
        // Parent root = FXMLLoader.load(getClass().getResource("GameRoomDesign.fxml"));
 //         BorderPane rootb = new BorderPane();
