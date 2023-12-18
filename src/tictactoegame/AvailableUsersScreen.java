@@ -1,5 +1,14 @@
 package tictactoegame;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -8,7 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 
-public abstract class AvailableUsersScreen extends Pane {
+public class AvailableUsersScreen extends Pane {
 
     protected final Pane pane;
     protected final ImageView imageView;
@@ -21,8 +30,42 @@ public abstract class AvailableUsersScreen extends Pane {
     protected final Label label1;
     protected final Hyperlink hyperlink0;
     protected final Button button;
+            ArrayList<Player> avaliablePlayerList;
+
 
     public AvailableUsersScreen() {
+
+        try {
+            System.out.println("client up and running");
+            Socket socket = new Socket("127.0.0.1", 7777);
+                    System.out.println("in app after connection");
+
+            DataInputStream ear = new DataInputStream(socket.getInputStream());
+            PrintStream mouth = new PrintStream(socket.getOutputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                        ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+
+            
+         //   mouth.println("i am the client who are you?");
+            mouth.println("i want all avaliable users");
+           
+            try {
+                                    System.out.println("before ois");
+
+                                                System.out.println("after ois");
+
+                Player ptest = (Player)ois.readObject();
+                System.out.println("after read object");
+                System.out.println(ptest.toString());
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AvailableUsersScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           /* for(int i=0;i<avaliablePlayerList.size();i++){
+                System.out.println(avaliablePlayerList.get(i).username);
+            }*/
+           
+        } catch (IOException e) {
+        }
 
         pane = new Pane();
         imageView = new ImageView();
@@ -54,7 +97,7 @@ public abstract class AvailableUsersScreen extends Pane {
         imageView.setLayoutX(7.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("../../images/xo.png").toExternalForm()));
+//        imageView.setImage(new Image(getClass().getResource("../../images/xo.png").toExternalForm()));
 
         pane0.setLayoutX(201.0);
         pane0.setLayoutY(134.0);
