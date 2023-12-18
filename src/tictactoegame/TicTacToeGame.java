@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -21,8 +22,9 @@ public class TicTacToeGame extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = new GameRoomDesignBase();// FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        Parent root = new SignUpBase();// FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
+
         
        // Parent root = FXMLLoader.load(getClass().getResource("GameRoomDesign.fxml"));
 //         BorderPane rootb = new BorderPane();
@@ -35,6 +37,7 @@ public class TicTacToeGame extends Application {
 //        rootb.getChildren().add(teb);
         Scene scene = new Scene(root,800,600);
          
+
         stage.setTitle("Text Editor app");
         stage.setScene(scene);
         stage.show();

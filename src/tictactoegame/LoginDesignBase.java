@@ -1,12 +1,33 @@
 package tictactoegame;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Socket;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class LoginDesignBase extends BorderPane {
 
@@ -21,6 +42,14 @@ public class LoginDesignBase extends BorderPane {
     protected final FlowPane logoView;
     protected final Label letterX;
     protected final Label letterY;
+    protected final Dialog<String> noConnectionDialog;
+    protected final Dialog<String> disconnectedDialog;
+    Socket socket;
+    DataInputStream dis;
+    PrintStream ps;
+    BufferedReader buffReader;
+    Thread thread;
+    String serverResponse;
 
     public LoginDesignBase() {
 
@@ -35,6 +64,16 @@ public class LoginDesignBase extends BorderPane {
         logoView = new FlowPane();
         letterX = new Label();
         letterY = new Label();
+        
+        noConnectionDialog = new Dialog<String>();
+        noConnectionDialog.setTitle("No Connection");
+        ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        noConnectionDialog.setContentText("Couldn't Connect to Server.\nPlease make sure server is connected and try again.");
+        noConnectionDialog.getDialogPane().getButtonTypes().add(type);
+        disconnectedDialog = new Dialog<String>();
+        disconnectedDialog.setTitle("No Connection");
+        disconnectedDialog.setContentText("It seems you are disconnected.");
+        disconnectedDialog.getDialogPane().getButtonTypes().add(type);
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -80,6 +119,19 @@ public class LoginDesignBase extends BorderPane {
         loginButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         loginButton.setFont(new Font("Arial Bold", 30.0));
         FlowPane.setMargin(loginButton, new Insets(40.0, 0.0, 0.0, 125.0));
+        loginButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String email = emailTextField.getText();
+                String password = passwordTextField.getText();
+                if(email != null && password !=null){
+                    LoginData player = new LoginData(email, password);
+                    Gson gson = new GsonBuilder().create();
+                    String jsonMessage = gson.toJson(player);
+                    ps.println(jsonMessage);
+                }
+            }
+        });
 
         newPlayerQuestionLable.setText("New Player?");
         newPlayerQuestionLable.setTextFill(javafx.scene.paint.Color.valueOf("#94cbf0"));
@@ -121,6 +173,97 @@ public class LoginDesignBase extends BorderPane {
         contentFlowView.getChildren().add(signUpQuestionLabel);
         logoView.getChildren().add(letterX);
         logoView.getChildren().add(letterY);
+        newPlayerQuestionLable.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Parent root = new SignUpBase();
+                        Scene scene = new Scene(root);
+         
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
+    loginButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        Parent root = new AvailableUsersScreen(stage) ;
+                        Scene scene = new Scene(root);
+         
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
 
+
+        testConnection();
+        startListeningThread();
+
+    }
+    
+    private void testConnection(){
+        try {
+            socket = new Socket("127.0.0.1", 5007);
+            dis = new DataInputStream(socket.getInputStream());
+            ps = new PrintStream(socket.getOutputStream());
+            buffReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            noConnectionDialog.showAndWait();
+            Platform.exit();
+        }
+    }
+    
+    public void closeConnections(){
+        
+        try{
+                dis.close();
+                ps.close();
+                buffReader.close();
+                socket.close();
+                thread.stop();
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+    }
+    
+    public void startListeningThread(){
+        thread = new Thread(){
+            @Override
+            public void run() {
+                while(true){
+                    try {
+                        serverResponse = buffReader.readLine();
+                        System.out.println(serverResponse);
+                        if(serverResponse.equals("Success")){
+                            Platform.runLater(new Runnable(){
+                            @Override
+                                public void run(){
+                                      navigateToGameScreen();
+                                }
+                             });
+                        }
+                    } catch (IOException ex) {
+                        Platform.runLater(new Runnable(){
+                            @Override
+                            public void run(){
+                                disconnectedDialog.showAndWait();
+                                closeConnections();
+                            }
+                        });
+                    }
+                }
+            }
+        };
+        thread.start();
+    }
+    
+        private void navigateToGameScreen(){
+        Parent root = new MainScreen();
+        Stage stage = SharedData.getStage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

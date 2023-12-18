@@ -14,47 +14,86 @@ import java.util.LinkedHashMap;
  */
 public class Player {
 
-    Point p00 = new Point(0, 0);
-    Point p01 = new Point(0, 1);
-    Point p02 = new Point(0, 2);
-    Point p10 = new Point(1, 0);
-    Point p11 = new Point(1, 1);
-    Point p12 = new Point(1, 2);
-    Point p20 = new Point(2, 0);
-    Point p21 = new Point(2, 1);
-    Point p22 = new Point(2, 2);
-
-    public LinkedHashMap<Point[], Integer> winningCases = new LinkedHashMap<Point[], Integer>();
-    String sign;
-
-    public Player() {
-        Point w1[] = {p00, p11, p22};
-        winningCases.put(w1, 0);
-        Point w2[] = {p02, p11, p20};
-        winningCases.put(w2, 0);
-        Point w3[] = {p00, p01, p02};
-        winningCases.put(w3, 0);
-        Point w4[] = {p10, p11, p12};
-        winningCases.put(w4, 0);
-        Point w5[] = {p20, p21, p22};
-        winningCases.put(w5, 0);
-        Point w6[] = {p00, p10, p20};
-        winningCases.put(w6, 0);
-        Point w7[] = {p01, p11, p21};
-        winningCases.put(w7, 0);
-        Point w8[] = {p02, p12, p22};
-        winningCases.put(w8, 0);
-    }
-public Player(String c){
-this();
-sign=c;
-}
-    public String getSign() {
-        return sign;
+   
+    public String getUserName() {
+        return userName;
     }
 
-    public void setSign(String sign) {
-        this.sign = sign;
+    public String getEmail() {
+        return email;
     }
 
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public String getPlayerImage() {
+        return playerImage;
+    }
+
+    public boolean isIsPlaying() {
+        return isPlaying;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public void setPlayerImage(String playerImage) {
+        this.playerImage = playerImage;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
+
+    public void setIsPlaying(boolean isPlaying) {
+        this.isPlaying = isPlaying;
+    }
+
+  private String userName;
+  private String password;
+  private String email;
+  private boolean available;
+  private String playerImage;
+  private byte[] salt;
+  private boolean isPlaying;
+  private long score;
+
+    public long getScore() {
+        return score;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
+    }
+  
+    public Player(String userName, String password, String email, boolean available, String playerImage) {
+        
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.available = available;
+        this.playerImage = playerImage;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" + "userName=" + userName + ", password=" + password + ", email=" + email + ", available=" + available + ", playerImage=" + playerImage + ", salt=" + salt + '}';
+    }
+
+   
+   
 }
