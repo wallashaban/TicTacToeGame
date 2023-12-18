@@ -91,7 +91,8 @@ public class PlayAgainDialogBase extends Pane {
                 stage.close();
             }
         });
-
+        
+        char winner = message.getWinner();
         labelRequestMessage.setLayoutX(174.0);
         labelRequestMessage.setLayoutY(89.0);
         labelRequestMessage.setLineSpacing(1.5);
@@ -101,7 +102,17 @@ public class PlayAgainDialogBase extends Pane {
         labelRequestMessage.setText("Congratulations X!! Do you want to play again? ");
         labelRequestMessage.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         labelRequestMessage.setWrapText(true);
-
+        switch(winner){
+            case 'X':
+                labelRequestMessage.setText("Congratulations X!!\n Do you want to play again? ");
+                break;
+            case 'O':
+                labelRequestMessage.setText("Congratulations O!!\n Do you want to play again? ");
+                break;
+            case 'D':
+                labelRequestMessage.setText("Draw!\n Do you want to play again? ");
+                break;
+        }
         btnOk.setLayoutX(237.0);
         btnOk.setLayoutY(184.0);
         btnOk.setMnemonicParsing(false);

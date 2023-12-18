@@ -343,40 +343,53 @@ public class GameRoomDesignBase extends BorderPane {
                 boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-
-                        if (boxEnabled[finalI][finalJ]) {
-                            if (isX) {
-                                boxArray[finalI][finalJ].setText("X");
-                                player1Moves.add((finalI * 10) + finalJ);
-
-                            } else {
-                                boxArray[finalI][finalJ].setText("O");
+                        if(boxEnabled[finalI][finalJ]){
+                            if(isX)
+                            {
+                                 boxArray[finalI]
+								player1Moves.add((finalI * 10) + finalJ);
+								[finalJ].setText("X");                                 
+                            }else
+                            {
+                                 boxArray[finalI]
                                 player2Moves.add((finalI * 10) + finalJ);
-
+								[finalJ].setText("O");
                             }
                             updateCases(finalI, finalJ);
                             movesCount++;
-                            if (movesCount >= 5) {
-                                winnerData = checkWinner();
-                                if (winnerData[0] == 0) {
+                            if(movesCount>=5)
+                             {
+                              winnerData= checkWinner();
+                                if(winnerData[0]== -1)
+                                {
+                                    if(movesCount == 9){
+                                        draw();
+                                    }
+                                    else{
+                                        isX=!isX;
+                                        boxEnabled[finalI][finalJ] = false;
+                                    }
+                                }
+                                else if(winnerData[0]== 0)
+                                {
                                     player1ScoreCount++;
                                     disableLabels();
                                     //    celebrateWinner(winnerData[1]);
+                                    updateScore();                                  
+                                }else if(winnerData[0]== 1)
+                                {
+                                    player2ScoreCount++;
+                                    disableLabels();
+                                    celebrateWinner(winnerData[1]);
                                     updateScore();
-                                    review();
-
-                                } else {
-                                    if (winnerData[0] == 1) {
-                                        player2ScoreCount++;
-                                        disableLabels();
-                                        //    celebrateWinner(winnerData[1]);
-                                        updateScore();
-                                        review();
-                                    }
                                 }
+                                
+                                
                             }
-                            isX = !isX;
-                            boxEnabled[finalI][finalJ] = false;
+                            else{
+                                isX=!isX;
+                                boxEnabled[finalI][finalJ] = false;
+                            }
                         }
                     }
                 });
@@ -614,7 +627,8 @@ public class GameRoomDesignBase extends BorderPane {
             default:
                 break;
         }
-        showDialog();
+        char winner = isX? 'X': 'O';
+        showDialog(winner);
         resetGame();
     }
 
@@ -626,20 +640,20 @@ public class GameRoomDesignBase extends BorderPane {
         }
 
     }
-
-    private void showDialog() {
+    private void showDialog(char winner){
         message = new MessageController();
+        message.setWinner(winner);
         Parent parent = new PlayAgainDialogBase(message);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
-
     }
 
     private void resetGame() {
         switch (message.getResponse()) {
             case 2:
+                movesCount = 0;
                 isX = true;
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
@@ -662,6 +676,10 @@ public class GameRoomDesignBase extends BorderPane {
             default:
                 break;
         }
+    }
+    void draw(){
+        showDialog('D');
+        resetGame();
     }
 
     private void review() {
