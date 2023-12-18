@@ -33,7 +33,7 @@ public class TicTacToeGame extends Application {
 //         BorderPane rootb = new BorderPane();
 //        GameRoomDesignBase teb= new GameRoomDesignBase();
 //        rootb.getChildren().add(teb);
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root,800,600);
          
         stage.setTitle("Text Editor app");
         stage.setScene(scene);

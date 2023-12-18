@@ -346,14 +346,14 @@ public class GameRoomDesignBase extends BorderPane {
                         if(boxEnabled[finalI][finalJ]){
                             if(isX)
                             {
-                                 boxArray[finalI]
+                                 boxArray[finalI][finalJ].setText("X");                                 
+
 								player1Moves.add((finalI * 10) + finalJ);
-								[finalJ].setText("X");                                 
                             }else
                             {
-                                 boxArray[finalI]
+                                 boxArray[finalI][finalJ].setText("O");
                                 player2Moves.add((finalI * 10) + finalJ);
-								[finalJ].setText("O");
+								
                             }
                             updateCases(finalI, finalJ);
                             movesCount++;
