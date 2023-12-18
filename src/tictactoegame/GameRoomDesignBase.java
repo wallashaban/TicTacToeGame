@@ -1,5 +1,10 @@
 package tictactoegame;
 
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -19,13 +24,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class GameRoomDesignBase extends BorderPane {
-    
-    protected  boolean isX = true;
-    protected char[][] matrix ;  // remove it later
+
+    protected boolean isX = true;
+    protected char[][] matrix;  // remove it later
     protected int player1Cases[];
     protected int player2Cases[];
     protected int playerCases[][];
-    int []winnerData;
+    int[] winnerData;
     final int diagonalLeft = 0;
     final int diagonalRight = 1;
     final int col0 = 2;
@@ -36,19 +41,22 @@ public class GameRoomDesignBase extends BorderPane {
     final int row2 = 7;
     protected final Label[][] boxArray; // array that hold the 9 labels
     protected final boolean[][] boxEnabled; // array that hold enablle or disable to labels
+
+    ArrayList<Integer> player1Moves;
+    ArrayList<Integer> player2Moves;
     int player1ScoreCount = 0;
     int player2ScoreCount = 0;
     int movesCount = 0; // sum of moves 
     MessageController message;
     protected final AnchorPane topAncherPane;
     protected final FlowPane Player1View;
-    
+
     protected final ImageView menuIcon;
     protected final ImageView player1Image;
     protected final FlowPane player1NameAndScoreView;
     protected final Label player1Name;
     protected final FlowPane scoreAndStarImageView;
-    protected  Label Player1Score;
+    protected Label Player1Score;
     protected final ImageView starImage;
     protected final Label player1Sign;
     protected final FlowPane sessionScore;
@@ -60,7 +68,7 @@ public class GameRoomDesignBase extends BorderPane {
     protected final FlowPane player2NameAndScoreView;
     protected final Label player2Name;
     protected final FlowPane player2ScoreAndStarView;
-    protected  Label player2Score;
+    protected Label player2Score;
     protected final ImageView Star2Image;
     protected final ImageView player2Image;
     protected final GridPane gameView;
@@ -80,12 +88,22 @@ public class GameRoomDesignBase extends BorderPane {
     protected final Label box01;
     protected final Label box02;
 
+    int currentp1Index;
+    int currentp2Index;
+    int x;
+    int y;
+
     public GameRoomDesignBase() {
+        currentp1Index = 0;
+        currentp2Index = 0;
+
         message = new MessageController();
         matrix = new char[3][3];
         boxArray = new Label[3][3];
+        player1Moves = new ArrayList<Integer>();
+        player2Moves = new ArrayList<Integer>();
         boxEnabled = new boolean[3][3];
-        playerCases = new int [2][8];
+        playerCases = new int[2][8];
         winnerData = new int[2];
         topAncherPane = new AnchorPane();
         Player1View = new FlowPane();
@@ -305,7 +323,7 @@ public class GameRoomDesignBase extends BorderPane {
         box00.setText(" ");
         box00.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box00.setFont(new Font("Arial Bold", 100.0));
-        
+
         boxArray[0][0] = box00;
         boxArray[0][1] = box01;
         boxArray[0][2] = box02;
@@ -315,49 +333,49 @@ public class GameRoomDesignBase extends BorderPane {
         boxArray[2][0] = box20;
         boxArray[2][1] = box21;
         boxArray[2][2] = box22;
-        
-         for(int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
-               final int finalI = i;
-               final int finalJ = j;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                final int finalI = i;
+                final int finalJ = j;
                 boxEnabled[i][j] = true;
-                
-                boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+                boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-     
-                        if(boxEnabled[finalI][finalJ]){
-                            if(isX)
-                            {
-                                 boxArray[finalI][finalJ].setText("X");                                 
-                            }else
-                            {
-                                 boxArray[finalI][finalJ].setText("O");
+
+                        if (boxEnabled[finalI][finalJ]) {
+                            if (isX) {
+                                boxArray[finalI][finalJ].setText("X");
+                                player1Moves.add((finalI * 10) + finalJ);
+
+                            } else {
+                                boxArray[finalI][finalJ].setText("O");
+                                player2Moves.add((finalI * 10) + finalJ);
+
                             }
                             updateCases(finalI, finalJ);
                             movesCount++;
-                            if(movesCount>=5)
-                             {
-                              winnerData= checkWinner();
-                                if(winnerData[0]== 0)
-                                {
+                            if (movesCount >= 5) {
+                                winnerData = checkWinner();
+                                if (winnerData[0] == 0) {
                                     player1ScoreCount++;
                                     disableLabels();
-                                    celebrateWinner(winnerData[1]);
+                                    //    celebrateWinner(winnerData[1]);
                                     updateScore();
-                                  
-                                }else
-                                {
-                                    if(winnerData[0]== 1)
-                                    {
+                                    review();
+
+                                } else {
+                                    if (winnerData[0] == 1) {
                                         player2ScoreCount++;
                                         disableLabels();
-                                        celebrateWinner(winnerData[1]);
+                                        //    celebrateWinner(winnerData[1]);
                                         updateScore();
+                                        review();
                                     }
                                 }
                             }
-                            isX=!isX;
+                            isX = !isX;
                             boxEnabled[finalI][finalJ] = false;
                         }
                     }
@@ -365,7 +383,6 @@ public class GameRoomDesignBase extends BorderPane {
             }
         }
 
- 
         GridPane.setColumnIndex(box22, 2);
         GridPane.setHalignment(box22, javafx.geometry.HPos.CENTER);
         GridPane.setRowIndex(box22, 2);
@@ -496,41 +513,45 @@ public class GameRoomDesignBase extends BorderPane {
         gameView.getChildren().add(box01);
         gameView.getChildren().add(box02);
     }
-    
-    void updateCases(int finalI,int finalJ){           
-        int x = isX?0:1;
-        if(finalI == finalJ)
+
+    void updateCases(int finalI, int finalJ) {
+        int x = isX ? 0 : 1;
+        if (finalI == finalJ) {
             playerCases[x][diagonalLeft]++;
-         if(finalI + finalJ == 2)
+        }
+        if (finalI + finalJ == 2) {
             playerCases[x][diagonalRight]++;
-         if(finalI == 0)
+        }
+        if (finalI == 0) {
             playerCases[x][row0]++;
-         if(finalI == 1)
+        }
+        if (finalI == 1) {
             playerCases[x][row1]++;
-         if(finalI == 2)
+        }
+        if (finalI == 2) {
             playerCases[x][row2]++;
-         if(finalJ == 0)
+        }
+        if (finalJ == 0) {
             playerCases[x][col0]++;
-         if(finalJ == 1)
+        }
+        if (finalJ == 1) {
             playerCases[x][col1]++;
-         if(finalJ == 2)
+        }
+        if (finalJ == 2) {
             playerCases[x][col2]++;
+        }
     }
-    
-    void updateScore()
-    {
-        player1SessionScore.setText(player1ScoreCount+"");
-        player2SessionScore.setText(player2ScoreCount+"");
+
+    void updateScore() {
+        player1SessionScore.setText(player1ScoreCount + "");
+        player2SessionScore.setText(player2ScoreCount + "");
     }
-    int[] checkWinner()
-    {
-        int winner[] = {-1,0};
-        for (int i=0;i<2;i++)
-        {
-            for(int j=0;j<8;j++)
-            {
-                if(playerCases[i][j]==3)
-                {
+
+    int[] checkWinner() {
+        int winner[] = {-1, 0};
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (playerCases[i][j] == 3) {
                     winner[0] = i;
                     winner[1] = j;
                     return winner;
@@ -539,8 +560,7 @@ public class GameRoomDesignBase extends BorderPane {
         }
         return winner;
     }
-    
-    
+
     void celebrateWinner(int c) {
         switch (c) {
             case diagonalLeft:
@@ -597,37 +617,39 @@ public class GameRoomDesignBase extends BorderPane {
         showDialog();
         resetGame();
     }
-    void disableLabels()
-    {
-        for(int i=0; i<3; i++)
-            for(int j=0; j<3; j++)
+
+    void disableLabels() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 boxEnabled[i][j] = false;
+            }
+        }
 
     }
-    private void showDialog(){
+
+    private void showDialog() {
         message = new MessageController();
         Parent parent = new PlayAgainDialogBase(message);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
-        
+
     }
-    private void resetGame(){
-        switch(message.getResponse()){
+
+    private void resetGame() {
+        switch (message.getResponse()) {
             case 2:
                 isX = true;
-                for(int i=0; i<3; i++){
-                    for(int j=0; j<3; j++){
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
                         boxEnabled[i][j] = true;
                         boxArray[i][j].setText(" ");
                         boxArray[i][j].setTextFill(Color.BLACK);
                     }
-                }   
-                for (int i=0;i<2;i++)
-                {
-                    for(int j=0;j<8;j++)
-                    {
+                }
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < 8; j++) {
                         playerCases[i][j] = 0;
                     }
                 }
@@ -635,10 +657,62 @@ public class GameRoomDesignBase extends BorderPane {
             case 1:
                 break;
             case 0:
+
                 break;
             default:
-                break;               
+                break;
         }
     }
 
+    private void review() {
+        isX = false;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                //boxEnabled[i][j] = true;
+                boxArray[i][j].setText(" ");
+                boxArray[i][j].setTextFill(Color.BLACK);
+            }
+        }
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        // Schedule the task to run every second
+
+     
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isX) {
+                            if (currentp1Index < player1Moves.size()) {
+                                x = player1Moves.get(currentp1Index);
+                                boxArray[x / 10][x % 10].setText("X");
+                                currentp1Index++;
+                            } else {
+                                // Stop the executor when the array is fully iterated
+                                //  executor.shutdown();
+                            }
+                        } else {
+                            if (currentp2Index < player2Moves.size()) {
+                                y = player2Moves.get(currentp2Index);
+                                boxArray[y / 10][y % 10].setText("O");
+
+                                currentp2Index++;
+                            } else {
+                                // Stop the executor when the array is fully iterated
+                                //   executor.shutdown();
+                            }
+                        }
+                        if(currentp1Index == player1Moves.size()&&currentp2Index == player2Moves.size()){
+                            executor.shutdown();
+                        }
+                        isX = !isX;
+                    }
+
+                });
+            }
+        };
+
+        executor.scheduleAtFixedRate(r, 1, 1, TimeUnit.SECONDS); // 0 seconds initial delay, 1 second interval
+    }
 }
