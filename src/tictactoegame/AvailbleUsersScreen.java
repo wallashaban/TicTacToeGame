@@ -8,7 +8,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 
-public abstract class AvailbleUsersScreen extends AnchorPane {
+public class AvailbleUsersScreen extends AnchorPane {
 
     protected final FlowPane flowPane;
     protected final Pane availableUsersPane;
@@ -54,7 +54,7 @@ public abstract class AvailbleUsersScreen extends AnchorPane {
         setPrefHeight(800.0);
         setPrefWidth(800.0);
         getStyleClass().add("backgroundColor");
-        getStylesheets().add("/tictactoegame/../css/style.css");
+        getStylesheets().add("/css/style.css");
 
         flowPane.setLayoutX(1.0);
         flowPane.setLayoutY(185.0);

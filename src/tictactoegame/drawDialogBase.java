@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public abstract class drawDialogBase extends Pane {
+public class drawDialogBase extends Pane {
 
     protected final Button btnReplay;
     protected final Button btnNotNow;
@@ -33,7 +33,7 @@ public abstract class drawDialogBase extends Pane {
         setPrefHeight(525.0);
         setPrefWidth(587.0);
         getStyleClass().add("backgroundColor");
-        getStylesheets().add("/tictactoegame/BackGround.css");
+        getStylesheets().add("/css/style.css");
         setPadding(new Insets(15.0));
 
         btnReplay.setLayoutX(80.0);
@@ -111,7 +111,7 @@ public abstract class drawDialogBase extends Pane {
         text.setLayoutY(203.0);
         text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
-        text.setText("Congratulations! You Won the Game!!");
+        text.setText("Draw!! No one won the game");
         text.setFont(new Font("Segoe UI", 33.0));
 
         getChildren().add(btnReplay);
