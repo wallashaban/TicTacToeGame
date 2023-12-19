@@ -225,7 +225,7 @@ public  class MainScreenUI extends AnchorPane {
                     @Override
                     public void handle(MouseEvent event) {
                         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new ProfileScreenBase();
+                        Parent root = new gameRoomScreen();
                         Scene scene = new Scene(root);
          
                         
@@ -237,7 +237,7 @@ public  class MainScreenUI extends AnchorPane {
                     @Override
                     public void handle(MouseEvent event) {
                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new GameRoomDesignBase(stage);
+                        Parent root = new gameRoomScreen();
                         Scene scene = new Scene(root);
          
                         stage.setTitle("Text Editor app");
@@ -248,7 +248,7 @@ public  class MainScreenUI extends AnchorPane {
                     @Override
                     public void handle(MouseEvent event) {
                         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new LoginDesignBase();   
+                        Parent root = new LoginScreen();   
                         Scene scene = new Scene(root);
          
 
@@ -268,6 +268,12 @@ public  class MainScreenUI extends AnchorPane {
                         stage.setTitle("Text Editor app");
                         stage.setScene(scene);
                         stage.show();
+                    }});
+        
+         closePane.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Platform.exit();
                     }});
    
 
