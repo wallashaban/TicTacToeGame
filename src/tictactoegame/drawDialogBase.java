@@ -113,6 +113,13 @@ public class drawDialogBase extends Pane {
         text.setStrokeWidth(0.0);
         text.setText("Draw!! No one won the game");
         text.setFont(new Font("Segoe UI", 33.0));
+        char c = message.getWinner();
+        if( c == 'D'){
+            text.setText("Draw!! No one won the game");
+        }
+        else if(c == 'R'){
+            text.setText("Replay is Done!");
+        }
 
         getChildren().add(btnReplay);
         getChildren().add(btnNotNow);

@@ -706,7 +706,7 @@ public  class GameRoomScreen extends BorderPane {
     }
 
     void draw() {
-        showDrawDialog();
+        showDrawDialog('D');
         resetGame();
     }
 
@@ -750,8 +750,8 @@ public  class GameRoomScreen extends BorderPane {
                             }
                         }
                         if (currentp1Index == player1Moves.size() && currentp2Index == player2Moves.size()) {
-
                             executor.shutdown();
+                             showDrawDialog('R');
                         }
                         isX = !isX;
                     }
@@ -762,9 +762,9 @@ public  class GameRoomScreen extends BorderPane {
 
         executor.scheduleAtFixedRate(r, 1, 1, TimeUnit.SECONDS); // 0 seconds initial delay, 1 second interval
     }
-    private void showDrawDialog(){
+    private void showDrawDialog(char c){
         message = new MessageController();
-        message.setWinner('D');
+        message.setWinner(c);
         Parent parent = new drawDialogBase(message);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
