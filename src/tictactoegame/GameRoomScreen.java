@@ -23,6 +23,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public  class GameRoomScreen extends BorderPane {
 
@@ -705,7 +706,7 @@ public  class GameRoomScreen extends BorderPane {
     }
 
     void draw() {
-        //showDialog('D');
+        showDrawDialog('D');
         resetGame();
     }
 
@@ -749,8 +750,8 @@ public  class GameRoomScreen extends BorderPane {
                             }
                         }
                         if (currentp1Index == player1Moves.size() && currentp2Index == player2Moves.size()) {
-
                             executor.shutdown();
+                             showDrawDialog('R');
                         }
                         isX = !isX;
                     }
@@ -761,6 +762,14 @@ public  class GameRoomScreen extends BorderPane {
 
         executor.scheduleAtFixedRate(r, 1, 1, TimeUnit.SECONDS); // 0 seconds initial delay, 1 second interval
     }
-
+    private void showDrawDialog(char c){
+        message = new MessageController();
+        message.setWinner(c);
+        Parent parent = new drawDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
 }
 
