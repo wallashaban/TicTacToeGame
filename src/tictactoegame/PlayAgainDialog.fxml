@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="587.0" styleClass="backgroundColor" stylesheets="@BackGround.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+   <children>
+      <MediaView fx:id="mediaView" fitHeight="330.0" fitWidth="450.0" layoutX="68.0" layoutY="29.0" />
+      <Button fx:id="btnReplay" layoutX="73.0" layoutY="442.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="131.0" style="-fx-background-color: CF8A9B; -fx-background-radius: 40;" text="Replay" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Gill Sans MT Bold" size="20.0" />
+         </font></Button>
+      <Button fx:id="btnNotNow" layoutX="381.0" layoutY="442.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="119.0" style="-fx-background-color: CF8A9B; -fx-background-radius: 40;" text="Not Now" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Gill Sans MT Bold" size="20.0" />
+         </font></Button>
+      <Button fx:id="btnOk" layoutX="227.0" layoutY="442.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="131.0" style="-fx-background-color: CF8A9B; -fx-background-radius: 40;" text="Play Again" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Gill Sans MT Bold" size="20.0" />
+         </font></Button>
+      <Button fx:id="buttonMinimize" layoutX="545.0" layoutY="12.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="26.0" style="-fx-background-radius: 30; -fx-background-color: e8ccd5;" text="-">
+         <font>
+            <Font name="Gill Sans MT Bold Italic" size="18.0" />
+         </font>
+      </Button>
+      <Text fill="WHITE" layoutX="17.0" layoutY="404.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations! You Won the Game!!">
+         <font>
+            <Font name="Segoe UI" size="33.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>

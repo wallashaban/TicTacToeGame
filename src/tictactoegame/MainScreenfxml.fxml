@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="backgroundColor" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoegame.MainScreenfxmlController">
+   <children>
+      <BorderPane layoutX="1.0" layoutY="1.0" prefHeight="600.0" prefWidth="800.0">
+         <left>
+            <Pane fx:id="onlinePane" maxHeight="250.0" maxWidth="220.0" prefHeight="220.0" prefWidth="220.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-border-radius: 30;" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="100.0" left="20.0" right="20.0" top="50.0" />
+               </BorderPane.margin>
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="23.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/avatar.jpg" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="75.0" layoutY="208.0" prefHeight="17.0" prefWidth="70.0" text="Online" textFill="#dba7b7">
+                     <font>
+                        <Font name="Gill Sans MT" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </left>
+         <center>
+            <Pane fx:id="computerPane" maxHeight="250.0" maxWidth="220.0" prefHeight="250.0" prefWidth="220.0" style="-fx-background-color: #FFFFFF; -fx-border-radius: 30; -fx-background-radius: 30;" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="100.0" left="20.0" right="20.0" top="50.0" />
+               </BorderPane.margin>
+               <children>
+                  <Label layoutX="63.0" layoutY="208.0" prefHeight="29.0" prefWidth="107.0" text="Computer" textFill="#dba7b7">
+                     <font>
+                        <Font name="Gill Sans MT" size="24.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="37.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/avatar.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </center>
+         <right>
+            <Pane fx:id="localPane" maxHeight="250.0" maxWidth="220.0" prefHeight="250.0" prefWidth="220.0" style="-fx-background-color: #ffffff; -fx-background-radius: 30; -fx-border-radius: 30;" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="100.0" left="20.0" right="20.0" top="50.0" />
+               </BorderPane.margin>
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label layoutX="86.0" layoutY="205.0" prefHeight="21.0" prefWidth="95.0" text="Local" textFill="#dba7b7">
+                     <font>
+                        <Font name="Gill Sans MT" size="24.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/avatar.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </right>
+         <top>
+            <Pane maxHeight="100.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label layoutX="78.0" layoutY="40.0" prefHeight="21.0" prefWidth="135.0" style="-fx-background-color: transparent;" text="Choose Game" textFill="WHITE">
+                     <font>
+                        <Font name="Gill Sans MT Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Pane layoutX="78.0" layoutY="65.0" prefHeight="14.0" prefWidth="95.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" />
+                  <ImageView fx:id="menuImageView" fitHeight="51.0" fitWidth="43.0" layoutX="14.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/menu.jpg" />
+                     </image>
+                  </ImageView>
+                  <Pane fx:id="closePane" layoutX="736.0" layoutY="10.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #EACCD6; -fx-background-radius: 30;">
+                     <children>
+                        <Label layoutX="15.0" layoutY="11.0" text="X" textFill="WHITE">
+                           <font>
+                              <Font name="Gill Sans MT Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="minimizePane" layoutX="670.0" layoutY="10.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #EACCD6; -fx-background-radius: 30;" />
+                  <Label layoutX="683.0" layoutY="-13.0" text="-" textFill="WHITE">
+                     <font>
+                        <Font name="Gill Sans MT Bold" size="72.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
