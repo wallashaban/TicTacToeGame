@@ -47,7 +47,7 @@ public class SignUpUI extends Pane {
         setPrefHeight(600.0);
         setPrefWidth(800.0);
         getStyleClass().add("backgroundColor");
-        getStylesheets().add("/testnavigation/BackGround.css");
+        getStylesheets().add("/css/style.css");
 
         labelSignUp.setLayoutX(319.0);
         labelSignUp.setLayoutY(35.0);

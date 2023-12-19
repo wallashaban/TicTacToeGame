@@ -17,7 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public  class MainScreenUI extends AnchorPane {
+public class MainScreenUI extends AnchorPane {
 
     protected final BorderPane borderPane;
     protected final Pane onlinePane;
@@ -65,7 +65,7 @@ public  class MainScreenUI extends AnchorPane {
         setPrefHeight(600.0);
         setPrefWidth(800.0);
         getStyleClass().add("backgroundColor");
-        getStylesheets().add("/tictactoegame/../css/style.css");
+        getStylesheets().add("/css/style.css");
 
         borderPane.setLayoutX(1.0);
         borderPane.setLayoutY(1.0);
@@ -86,7 +86,7 @@ public  class MainScreenUI extends AnchorPane {
         imageView.setLayoutY(14.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("../images/avatar.jpg").toExternalForm()));
+        imageView.setImage(new Image(getClass().getResource("/images/avatar.jpg").toExternalForm()));
 
         label.setLayoutX(75.0);
         label.setLayoutY(208.0);
@@ -119,7 +119,7 @@ public  class MainScreenUI extends AnchorPane {
         imageView0.setLayoutY(28.0);
         imageView0.setPickOnBounds(true);
         imageView0.setPreserveRatio(true);
-        imageView0.setImage(new Image(getClass().getResource("../images/avatar.jpg").toExternalForm()));
+        imageView0.setImage(new Image(getClass().getResource("/images/avatar.jpg").toExternalForm()));
         borderPane.setCenter(computerPane);
 
         BorderPane.setAlignment(localPane, javafx.geometry.Pos.CENTER);
@@ -149,7 +149,7 @@ public  class MainScreenUI extends AnchorPane {
         imageView2.setLayoutY(30.0);
         imageView2.setPickOnBounds(true);
         imageView2.setPreserveRatio(true);
-        imageView2.setImage(new Image(getClass().getResource("../images/avatar.jpg").toExternalForm()));
+        imageView2.setImage(new Image(getClass().getResource("/images/avatar.jpg").toExternalForm()));
         borderPane.setRight(localPane);
 
         BorderPane.setAlignment(pane, javafx.geometry.Pos.CENTER);
@@ -178,7 +178,7 @@ public  class MainScreenUI extends AnchorPane {
         menuImageView.setLayoutY(39.0);
         menuImageView.setPickOnBounds(true);
         menuImageView.setPreserveRatio(true);
-        menuImageView.setImage(new Image(getClass().getResource("../images/menu.jpg").toExternalForm()));
+        menuImageView.setImage(new Image(getClass().getResource("/images/menu.jpg").toExternalForm()));
 
         closePane.setLayoutX(736.0);
         closePane.setLayoutY(10.0);
@@ -220,62 +220,70 @@ public  class MainScreenUI extends AnchorPane {
         pane.getChildren().add(minimizePane);
         pane.getChildren().add(label4);
         getChildren().add(borderPane);
-        
-           computerPane.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new gameRoomScreen();
-                        Scene scene = new Scene(root);
-         
-                        
-                        stage.setTitle("Text Editor app");
-                        stage.setScene(scene);
-                        stage.show();
-                    }});
-        localPane.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                       Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new gameRoomScreen();
-                        Scene scene = new Scene(root);
-         
-                        stage.setTitle("Text Editor app");
-                        stage.setScene(scene);
-                        stage.show();
-                    }});
-        onlinePane.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new LoginScreen();   
-                        Scene scene = new Scene(root);
-         
 
-                        stage.setTitle("Text Editor app");
-                        stage.setScene(scene);
-                        stage.show();
-                    }});
-        
-        
-        menuImageView.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Parent root = new ProfileScreenBase();
-                        Scene scene = new Scene(root);
-         
-                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        stage.setTitle("Text Editor app");
-                        stage.setScene(scene);
-                        stage.show();
-                    }});
-        
-         closePane.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Platform.exit();
-                    }});
-   
+        computerPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new GameRoomScreen();
+                Scene scene = new Scene(root);
+
+                stage.setTitle("Text Editor app");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+        localPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new GameRoomScreen();
+                Scene scene = new Scene(root);
+
+                stage.setTitle("Text Editor app");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+        onlinePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new LoginDesignUI();
+                Scene scene = new Scene(root);
+
+                stage.setTitle("Text Editor app");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
+        menuImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Parent root = new ProfileScreenBase();
+                Scene scene = new Scene(root);
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("Text Editor app");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
+        closePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Platform.exit();
+            }
+        });
+        minimizePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage) minimizePane.getScene().getWindow();
+                stage.setIconified(true);
+            }
+        });
 
     }
 }
