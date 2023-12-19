@@ -1,14 +1,19 @@
 package tictactoegame;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
-public abstract class AvailbleUsersScreen extends AnchorPane {
+public  class AvailbleUsersScreenUI extends AnchorPane {
 
     protected final FlowPane flowPane;
     protected final Pane availableUsersPane;
@@ -28,7 +33,7 @@ public abstract class AvailbleUsersScreen extends AnchorPane {
     protected final Pane minimisePane;
     protected final Label label3;
 
-    public AvailbleUsersScreen() {
+    public AvailbleUsersScreenUI() {
 
         flowPane = new FlowPane();
         availableUsersPane = new Pane();
@@ -190,6 +195,20 @@ public abstract class AvailbleUsersScreen extends AnchorPane {
         getChildren().add(closePane);
         minimisePane.getChildren().add(label3);
         getChildren().add(minimisePane);
-
+        
+                 closePane.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Platform.exit();
+                    }});
+                 
+                 minimisePane.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Stage stage = (Stage) minimisePane.getScene().getWindow();
+            stage.setIconified(true);
+                    }});
+                         
+                            
     }
 }
