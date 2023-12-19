@@ -661,7 +661,6 @@ public  class GameRoomScreen extends BorderPane {
         Parent parent = new PlayAgainDialogBase(message);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.showAndWait();
     }
@@ -769,7 +768,6 @@ public  class GameRoomScreen extends BorderPane {
         Parent parent = new drawDialogBase(message);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.showAndWait();
     }
