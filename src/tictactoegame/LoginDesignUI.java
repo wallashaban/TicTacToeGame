@@ -193,6 +193,18 @@ public class LoginDesignUI extends BorderPane {
         logoView.getChildren().add(letterY);
         pane.getChildren().add(buttonMinimize);
         pane.getChildren().add(buttonExit);
+        newPlayerQuestionLable.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        Parent root = new SignUpUI();   
+                        Scene scene = new Scene(root);
+         
+
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
         
         
     

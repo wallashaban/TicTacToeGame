@@ -1,6 +1,7 @@
 package tictactoegame;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -15,7 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public  class SplashScreen extends AnchorPane {
+public class SplashScreen extends AnchorPane {
 
     protected final Pane pane;
     protected final Label label;
@@ -43,7 +44,7 @@ public  class SplashScreen extends AnchorPane {
         setPrefHeight(600.0);
         setPrefWidth(800.0);
         getStyleClass().add("backgroundColor");
-        getStylesheets().add("/tictactoegame/../css/style.css");
+        getStylesheets().add("/css/style.css");
 
         pane.setLayoutX(50.0);
         pane.setLayoutY(66.0);
@@ -63,7 +64,7 @@ public  class SplashScreen extends AnchorPane {
         imageView.setLayoutY(184.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("../images/Layer_1.png").toExternalForm()));
+        imageView.setImage(new Image(getClass().getResource("/images/Layer_1.png").toExternalForm()));
 
         letsPlaybtn.setLayoutX(287.0);
         letsPlaybtn.setLayoutY(417.0);
@@ -120,26 +121,33 @@ public  class SplashScreen extends AnchorPane {
         getChildren().add(pane0);
         pane1.getChildren().add(label1);
         getChildren().add(pane1);
-        
-         letsPlaybtn.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Parent root = new MainScreenUI();
-                        Scene scene = new Scene(root);
-         
-                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        stage.setTitle("Text Editor app");
-                        stage.setScene(scene);
-                        stage.show();
-                    }});
-         
-         pane0.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Platform.exit();
-                    }});
-         
-         
+
+        letsPlaybtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("Text Editor app");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
+        pane0.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Platform.exit();
+            }
+        });
+        pane1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage) pane1.getScene().getWindow();
+                stage.setIconified(true);
+            }
+        });
 
     }
 }
