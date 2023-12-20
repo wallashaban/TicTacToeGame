@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom, #DBA7B7, #B292AA);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <AnchorPane fx:id="topAncherPane" maxHeight="100.0" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <children>
+            <FlowPane fx:id="Player1View" prefHeight="114.0" prefWidth="310.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="493.0">
+               <children>
+                  <ImageView fx:id="menuIcon" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/menu.png" />
+                     </image>
+                     <FlowPane.margin>
+                        <Insets left="10.0" top="20.0" />
+                     </FlowPane.margin>
+                  </ImageView>
+                  <ImageView fx:id="player1Image" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../332116278_1280755552796980_7935683117072368396_n.jpg" />
+                     </image>
+                     <FlowPane.margin>
+                        <Insets left="10.0" top="15.0" />
+                     </FlowPane.margin>
+                  </ImageView>
+                  <FlowPane fx:id="player1NameAndScoreView" maxHeight="100.0" orientation="VERTICAL" prefHeight="87.0" prefWidth="144.0" prefWrapLength="100.0">
+                     <children>
+                        <Label fx:id="player1Name" minHeight="38.0" prefHeight="38.0" prefWidth="145.0" text="Ahmed Ghoneim" textFill="WHITE">
+                           <font>
+                              <Font name="SansSerif Bold" size="18.0" />
+                           </font>
+                           <FlowPane.margin>
+                              <Insets top="20.0" />
+                           </FlowPane.margin>
+                        </Label>
+                        <FlowPane fx:id="scoreAndStarImageView" prefHeight="25.0" prefWidth="122.0">
+                           <children>
+                              <Label fx:id="Player1Score" text="690" textFill="WHITE">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="starImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/1840745.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </FlowPane>
+                     </children>
+                     <FlowPane.margin>
+                        <Insets left="5.0" />
+                     </FlowPane.margin>
+                  </FlowPane>
+                  <Label fx:id="player1Sign" text="X" textFill="#8a559b">
+                     <font>
+                        <Font name="Arial Black" size="18.0" />
+                     </font>
+                     <FlowPane.margin>
+                        <Insets />
+                     </FlowPane.margin>
+                     <padding>
+                        <Insets left="12.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </FlowPane>
+            <AnchorPane fx:id="sessionScore" layoutX="306.0" prefHeight="70.0" prefWidth="197.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="20.0">
+               <children>
+                  <Label fx:id="player1SessionScore" text="0" textFill="#56354a" AnchorPane.leftAnchor="50.0">
+                     <font>
+                        <Font name="Segoe UI Bold" size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="dash" text="-" textFill="#56354a" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="-10.0">
+                     <font>
+                        <Font name="Segoe UI Bold" size="40.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player2SessionScore" text="1" textFill="#56354a" AnchorPane.rightAnchor="50.0">
+                     <font>
+                        <Font name="Segoe UI Bold" size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <FlowPane fx:id="Player2View" alignment="TOP_CENTER" layoutX="489.0" layoutY="-2.0" prefHeight="114.0" prefWidth="311.0" AnchorPane.leftAnchor="489.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Label fx:id="player2Sign" alignment="TOP_LEFT" contentDisplay="TOP" text="O" textFill="#db4f7e">
+                     <font>
+                        <Font name="Arial Black" size="18.0" />
+                     </font>
+                     <FlowPane.margin>
+                        <Insets />
+                     </FlowPane.margin>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                  </Label>
+                  <FlowPane fx:id="player2NameAndScoreView" maxHeight="100.0" orientation="VERTICAL" prefHeight="85.0" prefWidth="159.0" prefWrapLength="100.0">
+                     <children>
+                        <Label fx:id="player2NameAndScoreView" minHeight="31.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="44.0" prefWidth="154.0" text="Mohamed Ghoneim" textFill="WHITE">
+                           <font>
+                              <Font name="SansSerif Bold" size="16.0" />
+                           </font>
+                           <FlowPane.margin>
+                              <Insets top="15.0" />
+                           </FlowPane.margin>
+                        </Label>
+                        <FlowPane fx:id="player2ScoreAndStarView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="13.0" prefWidth="154.0">
+                           <children>
+                              <ImageView fx:id="Star2Image" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/1840745.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="player2Score" text="690" textFill="WHITE">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </FlowPane>
+                     </children>
+                     <FlowPane.margin>
+                        <Insets right="5.0" />
+                     </FlowPane.margin>
+                  </FlowPane>
+                  <ImageView fitHeight="60.0" fitWidth="60.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/39467269_2158747357747944_2865808226652258304_n.jpg" />
+                     </image>
+                     <FlowPane.margin>
+                        <Insets top="10.0" />
+                     </FlowPane.margin>
+                  </ImageView>
+                  <Button mnemonicParsing="false" style="-fx-background-radius: 30; -fx-background-color: e8ccd5;" text="-">
+                     <font>
+                        <Font name="Gill Sans MT Bold Italic" size="19.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" style="-fx-background-radius: 30; -fx-background-color: e8ccd5;" text="X">
+                     <font>
+                        <Font name="Gill Sans MT Bold Italic" size="19.0" />
+                     </font>
+                  </Button>
+               </children>
+            </FlowPane>
+         </children>
+      </AnchorPane>
+   </top>
+   <center>
+      <GridPane fx:id="gameView" gridLinesVisible="true" maxHeight="450.0" maxWidth="450.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #EACCD6; -fx-border-color: #56354A; -fx-border-radius: 20; -fx-background-radius: 20; -fx-border-width: 7; -fx-border-style: solid; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="box00" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="X" textAlignment="CENTER" textFill="#8a559b">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+            <Label fx:id="box10" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="O" textAlignment="CENTER" textFill="#db4f7e" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+            <Label fx:id="box20" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="X" textAlignment="CENTER" textFill="#8a559b" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+            <Label fx:id="box01" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="O" textAlignment="CENTER" textFill="#db4f7e" GridPane.columnIndex="1">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+            <Label fx:id="box11" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="X" textAlignment="CENTER" textFill="#8a559b" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+            <Label fx:id="box21" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="O" textAlignment="CENTER" textFill="#db4f7e" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+            <Label fx:id="box02" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="O" textAlignment="CENTER" textFill="#db4f7e" GridPane.columnIndex="2">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+            <Label fx:id="box12" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="X" textAlignment="CENTER" textFill="#8a559b" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+            <Label fx:id="box22" alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="150.0" text="X" textAlignment="CENTER" textFill="#8a559b" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Arial Bold" size="80.0" />
+               </font>
+            </Label>
+         </children>
+      </GridPane>
+   </center>
+</BorderPane>

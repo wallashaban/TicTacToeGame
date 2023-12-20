@@ -1,11 +1,19 @@
 package tictactoegame;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public  class MainScreen extends Pane {
 
@@ -45,8 +53,8 @@ public  class MainScreen extends Pane {
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(426.0);
-        setPrefWidth(687.0);
+        setPrefHeight(600.0);
+        setPrefWidth(800.0);
         setStyle("-fx-background-color: #FFFFFF;");
 
         onlinePane.setLayoutX(30.0);
@@ -60,7 +68,7 @@ public  class MainScreen extends Pane {
         imageView.setLayoutX(25.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("../../images/�����.png").toExternalForm()));
+        imageView.setImage(new Image(getClass().getResource("/images/logo.png").toExternalForm()));
 
         label.setLayoutX(63.0);
         label.setLayoutY(158.0);
@@ -79,7 +87,7 @@ public  class MainScreen extends Pane {
         imageView0.setLayoutX(25.0);
         imageView0.setPickOnBounds(true);
         imageView0.setPreserveRatio(true);
-        imageView0.setImage(new Image(getClass().getResource("../../images/�����.png").toExternalForm()));
+        imageView0.setImage(new Image(getClass().getResource("/images/logo.png").toExternalForm()));
 
         label0.setLayoutX(44.0);
         label0.setLayoutY(158.0);
@@ -98,7 +106,7 @@ public  class MainScreen extends Pane {
         imageView1.setLayoutX(25.0);
         imageView1.setPickOnBounds(true);
         imageView1.setPreserveRatio(true);
-        imageView1.setImage(new Image(getClass().getResource("../../images/�����.png").toExternalForm()));
+        imageView1.setImage(new Image(getClass().getResource("/images/logo.png").toExternalForm()));
 
         label1.setLayoutX(71.0);
         label1.setLayoutY(151.0);
@@ -150,6 +158,60 @@ public  class MainScreen extends Pane {
         pane0.getChildren().add(label2);
         pane0.getChildren().add(pane1);
         getChildren().add(pane0);
+        
+        
+        computerPane.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        Parent root = new ProfileScreenBase();
+                        Scene scene = new Scene(root);
+         
+                        
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
+        localPane.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                       Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        Parent root = new GameRoomDesignBase(stage);
+                        Scene scene = new Scene(root);
+         
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
+        onlinePane.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        Parent root = new LoginDesignBase();   
+                        Scene scene = new Scene(root);
+         
 
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
+        exitBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Platform.exit();
+                             }
+        });
+        
+        pane1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Parent root = new ProfileScreenBase();
+                        Scene scene = new Scene(root);
+         
+                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                        stage.setTitle("Text Editor app");
+                        stage.setScene(scene);
+                        stage.show();
+                    }});
     }
 }

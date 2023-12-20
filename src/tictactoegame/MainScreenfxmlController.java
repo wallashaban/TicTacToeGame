@@ -12,16 +12,16 @@ import javafx.fxml.Initializable;
 /**
  * FXML Controller class
  *
- * @author anasn
+ * @author Dr.Wlaa
  */
-public class SplashScreenController implements Initializable {
+public class MainScreenfxmlController implements Initializable {
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        // TODO
     }    
     
 }
