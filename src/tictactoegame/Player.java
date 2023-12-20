@@ -45,10 +45,10 @@ public class Player {
         Point w8[] = {p02, p12, p22};
         winningCases.put(w8, 0);
     }
-public Player(String c){
-this();
-sign=c;
-}
+    public Player(String c) {
+        this();
+        sign = c;
+    }
     public String getSign() {
         return sign;
     }

@@ -1,0 +1,4 @@
+.backgroundColor{
+    -fx-background-color: linear-gradient(to bottom, #DBA7B7, #B292AA);
+    -fx-btn-color: linear-gradient(to bottom, #DBA7B7, #B292AA);
+}
