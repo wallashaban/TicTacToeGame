@@ -199,7 +199,7 @@ public class ProfileScreenBase extends AnchorPane {
         anchorPane.getChildren().add(textEmail);
         anchorPane.getChildren().add(textScore);
         getChildren().add(anchorPane);
-        getChildren().add(imgLogo);
+        //getChildren().add(imgLogo);
         
 
         

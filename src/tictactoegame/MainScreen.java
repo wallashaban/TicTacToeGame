@@ -164,7 +164,7 @@ public  class MainScreen extends Pane {
                     @Override
                     public void handle(MouseEvent event) {
                         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new ProfileScreenBase();
+                        Parent root = new ProfileScreenBase(new Person());
                         Scene scene = new Scene(root);
          
                         
@@ -205,7 +205,7 @@ public  class MainScreen extends Pane {
         pane1.setOnMouseClicked(new EventHandler<MouseEvent>(){
                     @Override
                     public void handle(MouseEvent event) {
-                        Parent root = new ProfileScreenBase();
+                        Parent root = new ProfileScreenBase(new Person());
                         Scene scene = new Scene(root);
          
                         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();

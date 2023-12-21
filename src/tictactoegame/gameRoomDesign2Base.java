@@ -1,32 +1,19 @@
 package tictactoegame;
 
-import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
-public  class gameRoomScreen extends BorderPane {
-    
+public abstract class gameRoomDesign2Base extends BorderPane {
 
-    
     protected final AnchorPane topAncherPane;
     protected final FlowPane Player1View;
     protected final ImageView menuIcon;
@@ -65,49 +52,9 @@ public  class gameRoomScreen extends BorderPane {
     protected final Label box02;
     protected final Label box12;
     protected final Label box22;
-     protected boolean isX = true;
-    protected char[][] matrix;  // remove it later
-    protected int player1Cases[];
-    protected int player2Cases[];
-    protected int playerCases[][];
-    protected Stage stage;
-    int[] winnerData;
-    final int diagonalLeft = 0;
-    final int diagonalRight = 1;
-    final int col0 = 2;
-    final int col1 = 3;
-    final int col2 = 4;
-    final int row0 = 5;
-    final int row1 = 6;
-    final int row2 = 7;
-    protected final Label[][] boxArray; // array that hold the 9 labels
-    protected final boolean[][] boxEnabled; // array that hold enablle or disable to labels
 
-    ArrayList<Integer> player1Moves;
-    ArrayList<Integer> player2Moves;
-    int player1ScoreCount = 0;
-    int player2ScoreCount = 0;
-    int movesCount = 0; // sum of moves 
-    MessageController message;
-        int currentp1Index;
-    int currentp2Index;
-    int x;
-    int y;
+    public gameRoomDesign2Base() {
 
-    public gameRoomScreen() {
-
-         this.stage = stage;
-        currentp1Index = 0;
-        currentp2Index = 0;
-
-        message = new MessageController();
-        matrix = new char[3][3];
-        boxArray = new Label[3][3];
-        player1Moves = new ArrayList<Integer>();
-        player2Moves = new ArrayList<Integer>();
-        boxEnabled = new boolean[3][3];
-        playerCases = new int[2][8];
-        winnerData = new int[2];
         topAncherPane = new AnchorPane();
         Player1View = new FlowPane();
         menuIcon = new ImageView();
@@ -169,14 +116,14 @@ public  class gameRoomScreen extends BorderPane {
         menuIcon.setFitWidth(50.0);
         menuIcon.setPickOnBounds(true);
         menuIcon.setPreserveRatio(true);
-        menuIcon.setImage(new Image(getClass().getResource("/images/menu.png").toExternalForm()));
+        menuIcon.setImage(new Image(getClass().getResource("../../images/menu.png").toExternalForm()));
         FlowPane.setMargin(menuIcon, new Insets(20.0, 0.0, 0.0, 10.0));
 
         player1Image.setFitHeight(60.0);
         player1Image.setFitWidth(60.0);
         player1Image.setPickOnBounds(true);
         player1Image.setPreserveRatio(true);
-        player1Image.setImage(new Image(getClass().getResource("/images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
+        player1Image.setImage(new Image(getClass().getResource("../../../../332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
         FlowPane.setMargin(player1Image, new Insets(15.0, 0.0, 0.0, 10.0));
 
         player1NameAndScoreView.setMaxHeight(100.0);
@@ -204,7 +151,7 @@ public  class gameRoomScreen extends BorderPane {
         starImage.setFitWidth(25.0);
         starImage.setPickOnBounds(true);
         starImage.setPreserveRatio(true);
-        starImage.setImage(new Image(getClass().getResource("/images/1840745.png").toExternalForm()));
+        starImage.setImage(new Image(getClass().getResource("../../images/1840745.png").toExternalForm()));
         FlowPane.setMargin(player1NameAndScoreView, new Insets(0.0, 0.0, 0.0, 5.0));
 
         player1Sign.setText("X");
@@ -274,7 +221,7 @@ public  class gameRoomScreen extends BorderPane {
         Star2Image.setFitWidth(25.0);
         Star2Image.setPickOnBounds(true);
         Star2Image.setPreserveRatio(true);
-        Star2Image.setImage(new Image(getClass().getResource("/images/1840745.png").toExternalForm()));
+        Star2Image.setImage(new Image(getClass().getResource("../../images/1840745.png").toExternalForm()));
 
         player2Score.setText("690");
         player2Score.setTextFill(javafx.scene.paint.Color.WHITE);
@@ -286,7 +233,7 @@ public  class gameRoomScreen extends BorderPane {
         imageView.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("/images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
+        imageView.setImage(new Image(getClass().getResource("../../images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
         FlowPane.setMargin(imageView, new Insets(10.0, 0.0, 0.0, 0.0));
         setTop(topAncherPane);
 
@@ -326,7 +273,7 @@ public  class gameRoomScreen extends BorderPane {
         box00.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box00.setPrefHeight(150.0);
         box00.setPrefWidth(150.0);
-        box00.setText(" ");
+        box00.setText("X");
         box00.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box00.setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
         box00.setFont(new Font("Arial Bold", 80.0));
@@ -336,7 +283,7 @@ public  class gameRoomScreen extends BorderPane {
         box10.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box10.setPrefHeight(150.0);
         box10.setPrefWidth(150.0);
-        box10.setText(" ");
+        box10.setText("O");
         box10.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box10.setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
         box10.setFont(new Font("Arial Bold", 80.0));
@@ -346,7 +293,7 @@ public  class gameRoomScreen extends BorderPane {
         box20.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box20.setPrefHeight(150.0);
         box20.setPrefWidth(150.0);
-        box20.setText(" ");
+        box20.setText("X");
         box20.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box20.setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
         box20.setFont(new Font("Arial Bold", 80.0));
@@ -356,7 +303,7 @@ public  class gameRoomScreen extends BorderPane {
         box01.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box01.setPrefHeight(150.0);
         box01.setPrefWidth(150.0);
-        box01.setText(" ");
+        box01.setText("O");
         box01.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box01.setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
         box01.setFont(new Font("Arial Bold", 80.0));
@@ -367,7 +314,7 @@ public  class gameRoomScreen extends BorderPane {
         box11.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box11.setPrefHeight(150.0);
         box11.setPrefWidth(150.0);
-        box11.setText(" ");
+        box11.setText("X");
         box11.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box11.setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
         box11.setFont(new Font("Arial Bold", 80.0));
@@ -378,7 +325,7 @@ public  class gameRoomScreen extends BorderPane {
         box21.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box21.setPrefHeight(150.0);
         box21.setPrefWidth(150.0);
-        box21.setText(" ");
+        box21.setText("O");
         box21.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box21.setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
         box21.setFont(new Font("Arial Bold", 80.0));
@@ -388,7 +335,7 @@ public  class gameRoomScreen extends BorderPane {
         box02.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box02.setPrefHeight(150.0);
         box02.setPrefWidth(150.0);
-        box02.setText(" ");
+        box02.setText("O");
         box02.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box02.setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
         box02.setFont(new Font("Arial Bold", 80.0));
@@ -399,7 +346,7 @@ public  class gameRoomScreen extends BorderPane {
         box12.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box12.setPrefHeight(150.0);
         box12.setPrefWidth(150.0);
-        box12.setText(" ");
+        box12.setText("X");
         box12.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box12.setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
         box12.setFont(new Font("Arial Bold", 80.0));
@@ -410,7 +357,7 @@ public  class gameRoomScreen extends BorderPane {
         box22.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         box22.setPrefHeight(150.0);
         box22.setPrefWidth(150.0);
-        box22.setText(" ");
+        box22.setText("X");
         box22.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         box22.setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
         box22.setFont(new Font("Arial Bold", 80.0));
@@ -452,291 +399,6 @@ public  class gameRoomScreen extends BorderPane {
         gameView.getChildren().add(box02);
         gameView.getChildren().add(box12);
         gameView.getChildren().add(box22);
-        
-        boxArray[0][0] = box00;
-        boxArray[0][1] = box01;
-        boxArray[0][2] = box02;
-        boxArray[1][0] = box10;
-        boxArray[1][1] = box11;
-        boxArray[1][2] = box12;
-        boxArray[2][0] = box20;
-        boxArray[2][1] = box21;
-        boxArray[2][2] = box22;
-        
-          for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                final int finalI = i;
-                final int finalJ = j;
-                boxEnabled[i][j] = true;
 
-                boxArray[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if (boxEnabled[finalI][finalJ]) {
-                            if (isX) {
-                                boxArray[finalI][finalJ].setText("X");
-                                player1Moves.add((finalI * 10) + finalJ);
-
-                            } else {
-                                boxArray[finalI][finalJ].setText("O");
-                                player2Moves.add((finalI * 10) + finalJ);
-                            }
-                            updateCases(finalI, finalJ);
-                            movesCount++;
-                            if (movesCount >= 5) {
-                                winnerData = checkWinner();
-                                if (winnerData[0] == -1) {
-                                    if (movesCount == 9) {
-                                        draw();
-                                    } else {
-                                        isX = !isX;
-                                        boxEnabled[finalI][finalJ] = false;
-                                    }
-                                } else if (winnerData[0] == 0) {
-                                    player1ScoreCount++;
-                                    disableLabels();
-                                    celebrateWinner(winnerData[1]);
-                                    updateScore();
-                                } else if (winnerData[0] == 1) {
-                                    player2ScoreCount++;
-                                    disableLabels();
-                                    celebrateWinner(winnerData[1]);
-                                    updateScore();
-                                }
-
-                            } else {
-                                isX = !isX;
-                                boxEnabled[finalI][finalJ] = false;
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
-
-    }
-    
-       void updateCases(int finalI, int finalJ) {
-        int x = isX ? 0 : 1;
-        if (finalI == finalJ) {
-            playerCases[x][diagonalLeft]++;
-        }
-        if (finalI + finalJ == 2) {
-            playerCases[x][diagonalRight]++;
-        }
-        if (finalI == 0) {
-            playerCases[x][row0]++;
-        }
-        if (finalI == 1) {
-            playerCases[x][row1]++;
-        }
-        if (finalI == 2) {
-            playerCases[x][row2]++;
-        }
-        if (finalJ == 0) {
-            playerCases[x][col0]++;
-        }
-        if (finalJ == 1) {
-            playerCases[x][col1]++;
-        }
-        if (finalJ == 2) {
-            playerCases[x][col2]++;
-        }
-    }
-
-    void updateScore() {
-        player1SessionScore.setText(player1ScoreCount + "");
-        player2SessionScore.setText(player2ScoreCount + "");
-    }
-
-    int[] checkWinner() {
-        int winner[] = {-1, 0};
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (playerCases[i][j] == 3) {
-                    winner[0] = i;
-                    winner[1] = j;
-                    return winner;
-                }
-            }
-        }
-        return winner;
-    }
-
-    void celebrateWinner(int c) {
-        switch (c) {
-            case diagonalLeft:
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        if (i == j) {
-                            boxArray[i][j].setTextFill(Color.PINK);
-                        }
-                    }
-                }
-                break;
-            case diagonalRight:
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        if (i + j == 2) {
-                            boxArray[i][j].setTextFill(Color.PINK);
-                        }
-                    }
-                }
-                break;
-            case row0:
-                for (int i = 0; i < 3; i++) {
-                    boxArray[0][i].setTextFill(Color.PINK);
-                }
-                break;
-            case row1:
-                for (int i = 0; i < 3; i++) {
-                    boxArray[1][i].setTextFill(Color.PINK);
-                }
-                break;
-            case row2:
-                for (int i = 0; i < 3; i++) {
-                    boxArray[2][i].setTextFill(Color.PINK);
-                }
-                break;
-            case col0:
-                for (int i = 0; i < 3; i++) {
-                    boxArray[i][0].setTextFill(Color.PINK);
-                }
-                break;
-            case col1:
-                for (int i = 0; i < 3; i++) {
-                    boxArray[i][1].setTextFill(Color.PINK);
-                }
-                break;
-            case col2:
-                for (int i = 0; i < 3; i++) {
-                    boxArray[i][2].setTextFill(Color.PINK);
-                }
-                break;
-            default:
-                break;
-        }
-        char winner = isX ? 'X' : 'O';
-        showDialog(winner);
-        resetGame();
-    }
-
-    void disableLabels() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                boxEnabled[i][j] = false;
-            }
-        }
-
-    }
-
-    private void showDialog(char winner) {
-        message = new MessageController();
-        message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message);
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.showAndWait();
-    }
-
-    private void resetGame() {
-        switch (message.getResponse()) {
-            case 2:
-                movesCount = 0;
-                isX = true;
-                 player2Moves.clear();
-                            player1Moves.clear();
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        boxEnabled[i][j] = true;
-                        boxArray[i][j].setText(" ");
-                        boxArray[i][j].setTextFill(Color.BLACK);
-                        
-                    }
-                }
-                for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 8; j++) {
-                        playerCases[i][j] = 0;
-                    }
-                }
-                break;
-            case 1:
-                isX = true;
-                review();
-                break;
-            case 0:
-                Parent root = new MainScreen();
-                Scene scene = new Scene(root);
-
-                // Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                stage.setTitle("Text Editor app");
-                stage.setScene(scene);
-                stage.show();
-
-                break;
-            default:
-                break;
-        }
-    }
-
-    void draw() {
-        showDialog('D');
-        resetGame();
-    }
-
-    private void review() {
-        System.out.println("we are inside review");
-        isX = true;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                //boxEnabled[i][j] = true;
-                boxArray[i][j].setText(" ");
-                boxArray[i][j].setTextFill(Color.BLACK);
-            }
-        }
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        // Schedule the task to run every second
-
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isX) {
-                            if (currentp1Index < player1Moves.size()) {
-                                x = player1Moves.get(currentp1Index);
-                                boxArray[x / 10][x % 10].setText("X");
-                                currentp1Index++;
-                            } else {
-                                // Stop the executor when the array is fully iterated
-                                //  executor.shutdown();
-                            }
-                        } else {
-                            if (currentp2Index < player2Moves.size()) {
-                                y = player2Moves.get(currentp2Index);
-                                boxArray[y / 10][y % 10].setText("O");
-
-                                currentp2Index++;
-                            } else {
-                                // Stop the executor when the array is fully iterated
-                                //   executor.shutdown();
-                            }
-                        }
-                        if (currentp1Index == player1Moves.size() && currentp2Index == player2Moves.size()) {
-                           
-                            executor.shutdown();
-                        }
-                        isX = !isX;
-                    }
-
-                });
-            }
-        };
-
-        
-        executor.scheduleAtFixedRate(r, 1, 1, TimeUnit.SECONDS); // 0 seconds initial delay, 1 second interval
     }
 }

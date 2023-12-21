@@ -10,29 +10,29 @@ package tictactoegame;
  * @author s
  */
 public class Person {
-    String username;
+    String userName;
     int id;
     String email;
     String imgPath;
-    int playerScore;
+    int score;
 
     public Person(String username, int id, String email, String imgPath, int playerScore) {
-        this.username = username;
+        this.userName = username;
         this.id = id;
         this.email = email;
         this.imgPath = imgPath;
-        this.playerScore = playerScore;
+        this.score = playerScore;
     }
 
     public Person() {
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public int getId() {
@@ -59,12 +59,12 @@ public class Person {
         this.imgPath = imgPath;
     }
 
-    public int getPlayerScore() {
-        return playerScore;
+    public int getScore() {
+        return score;
     }
 
-    public void setPlayerScore(int playerScore) {
-        this.playerScore = playerScore;
+    public void setScore(int score) {
+        this.score = score;
     }
     
     

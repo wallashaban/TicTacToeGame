@@ -1,35 +1,25 @@
 package tictactoegame;
 
-import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class PlayAgainDialogBase extends Pane {
+public class drawDialogBase extends Pane {
 
-    protected final MediaView mediaView;
     protected final Button btnReplay;
     protected final Button btnNotNow;
     protected final Button btnPlayAgain;
     protected final Button buttonMinimize;
     protected final Text text;
 
-    public PlayAgainDialogBase(MessageController message) {
+    public drawDialogBase(MessageController message) {
 
-        String path = "C:/Users/s/Desktop/celebration.mp4";  
-        Media media = new Media(new File(path).toURI().toString());   
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
-        mediaView = new MediaView(mediaPlayer);
         btnReplay = new Button();
         btnNotNow = new Button();
         btnPlayAgain = new Button();
@@ -43,16 +33,11 @@ public class PlayAgainDialogBase extends Pane {
         setPrefHeight(525.0);
         setPrefWidth(587.0);
         getStyleClass().add("backgroundColor");
-        getStylesheets().add("/tictactoegame/BackGround.css");
+        getStylesheets().add("/css/style.css");
         setPadding(new Insets(15.0));
 
-        mediaView.setFitHeight(330.0);
-        mediaView.setFitWidth(450.0);
-        mediaView.setLayoutX(68.0);
-        mediaView.setLayoutY(29.0);
-
-        btnReplay.setLayoutX(73.0);
-        btnReplay.setLayoutY(442.0);
+        btnReplay.setLayoutX(80.0);
+        btnReplay.setLayoutY(273.0);
         btnReplay.setMnemonicParsing(false);
         btnReplay.setPrefHeight(39.0);
         btnReplay.setPrefWidth(131.0);
@@ -60,7 +45,7 @@ public class PlayAgainDialogBase extends Pane {
         btnReplay.setText("Replay");
         btnReplay.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         btnReplay.setTextFill(javafx.scene.paint.Color.WHITE);
-        btnReplay.setFont(new Font("Segoe UI", 20.0));
+        btnReplay.setFont(new Font("Gill Sans MT Bold", 20.0));
         btnReplay.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -70,8 +55,8 @@ public class PlayAgainDialogBase extends Pane {
             }
         });
 
-        btnNotNow.setLayoutX(381.0);
-        btnNotNow.setLayoutY(442.0);
+        btnNotNow.setLayoutX(388.0);
+        btnNotNow.setLayoutY(273.0);
         btnNotNow.setMnemonicParsing(false);
         btnNotNow.setPrefHeight(40.0);
         btnNotNow.setPrefWidth(119.0);
@@ -79,7 +64,7 @@ public class PlayAgainDialogBase extends Pane {
         btnNotNow.setText("Not Now");
         btnNotNow.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         btnNotNow.setTextFill(javafx.scene.paint.Color.WHITE);
-        btnNotNow.setFont(new Font("Segoe UI", 20.0));
+        btnNotNow.setFont(new Font("Gill Sans MT Bold", 20.0));
         btnNotNow.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -89,8 +74,8 @@ public class PlayAgainDialogBase extends Pane {
             }
         });
 
-        btnPlayAgain.setLayoutX(227.0);
-        btnPlayAgain.setLayoutY(442.0);
+        btnPlayAgain.setLayoutX(234.0);
+        btnPlayAgain.setLayoutY(273.0);
         btnPlayAgain.setMnemonicParsing(false);
         btnPlayAgain.setPrefHeight(39.0);
         btnPlayAgain.setPrefWidth(131.0);
@@ -98,8 +83,8 @@ public class PlayAgainDialogBase extends Pane {
         btnPlayAgain.setText("Play Again");
         btnPlayAgain.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         btnPlayAgain.setTextFill(javafx.scene.paint.Color.WHITE);
-        btnPlayAgain.setFont(new Font("Segoe UI", 20.0));
-        btnPlayAgain.setOnAction(new EventHandler<ActionEvent>() {
+        btnPlayAgain.setFont(new Font("Gill Sans MT Bold", 20.0));
+         btnPlayAgain.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(2);
@@ -123,13 +108,19 @@ public class PlayAgainDialogBase extends Pane {
 
         text.setFill(javafx.scene.paint.Color.WHITE);
         text.setLayoutX(17.0);
-        text.setLayoutY(404.0);
+        text.setLayoutY(203.0);
         text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
-        text.setText("Congratulations! You Won the Game!!");
+        text.setText("Draw!! No one won the game");
         text.setFont(new Font("Segoe UI", 33.0));
+        char c = message.getWinner();
+        if( c == 'D'){
+            text.setText("Draw!! No one won the game");
+        }
+        else if(c == 'R'){
+            text.setText("Replay is Done!");
+        }
 
-        getChildren().add(mediaView);
         getChildren().add(btnReplay);
         getChildren().add(btnNotNow);
         getChildren().add(btnPlayAgain);
@@ -137,5 +128,4 @@ public class PlayAgainDialogBase extends Pane {
         getChildren().add(text);
 
     }
-
 }

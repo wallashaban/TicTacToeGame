@@ -89,6 +89,9 @@ public class Player {
         this.playerImage = playerImage;
     }
 
+    public Player() {
+    }
+
     @Override
     public String toString() {
         return "Player{" + "userName=" + userName + ", password=" + password + ", email=" + email + ", available=" + available + ", playerImage=" + playerImage + ", salt=" + salt + '}';
