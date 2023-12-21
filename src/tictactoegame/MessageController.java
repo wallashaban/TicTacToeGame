@@ -9,7 +9,7 @@ package tictactoegame;
  *
  * @author s
  */
-class MessageController{
+public class MessageController{
         int response;
         char winner;
 

@@ -32,7 +32,7 @@ public class ProfileScreenBase extends AnchorPane {
     protected final Button buttonExit;
     protected final Button buttonMinimize;
 
-    public ProfileScreenBase() {
+    public ProfileScreenBase(Person person) {
 
         anchorPane = new AnchorPane();
         textYourProfile = new Text();
@@ -199,8 +199,15 @@ public class ProfileScreenBase extends AnchorPane {
         anchorPane.getChildren().add(textEmail);
         anchorPane.getChildren().add(textScore);
         getChildren().add(anchorPane);
-        getChildren().add(buttonExit);
-        getChildren().add(buttonMinimize);
+        //getChildren().add(imgLogo);
+        
 
+        
+        // Work
+        String myScore = String.valueOf(person.score);
+        
+        textUsername.setText(person.userName);
+        textEmail.setText(person.email);
+        textScore.setText(myScore);
     }
 }

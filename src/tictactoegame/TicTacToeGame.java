@@ -6,13 +6,11 @@
 package tictactoegame;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
+import tictactoegame.GameVsPC.GameVsPcBaseUI;
 /**
  *
  * @author Dr.Wlaa
@@ -23,6 +21,7 @@ public class TicTacToeGame extends Application {
     public void start(Stage stage) throws Exception {
 
         Parent root = new SplashScreen();// FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        //Parent root = new GameVsPcBaseUI();
 
         
 
@@ -42,6 +41,7 @@ public class TicTacToeGame extends Application {
         stage.setTitle("Text Editor app");
          
         stage.setScene(scene);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
     }
 

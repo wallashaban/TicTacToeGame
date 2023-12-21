@@ -25,7 +25,7 @@
             </Text>
             <ImageView fx:id="imgAvatar" fitHeight="146.0" fitWidth="114.0" layoutX="444.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/avatar.jpg" />
+                  <Image url="/images/avatar.jpg" />
                </image>
             </ImageView>
             <Label fx:id="labelScore" layoutX="109.0" layoutY="369.0" text="Score" textFill="WHITE">
@@ -67,5 +67,13 @@
             <Font name="Gill Sans MT" size="19.0" />
          </font>
       </Button>
+      <!-- 
+
+               <ImageView id="imgLogo" fx:id="imgLogo" fitHeight="114.0" fitWidth="128.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/images/logo.png" />
+         </image>
+      </ImageView>
+      -->
    </children>
 </Pane>
