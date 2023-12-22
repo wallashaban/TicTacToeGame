@@ -16,8 +16,8 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import tictactoegame.MessageController;
-import tictactoegame.PlayAgainDialogBase;
+import tictactoegame.data.MessageController;
+import tictactoegame.dialogs.PlayAgainDialogBase;
 
 public class GameVsPcBaseUI extends AnchorPane {
     
