@@ -19,7 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tictactoegame.LocalGame.GameRoomScreen;
-import tictactoegame.data.Person;
+import tictactoegame.data.Player;
 
 public class MainScreenUI extends AnchorPane {
 
@@ -265,7 +265,7 @@ public class MainScreenUI extends AnchorPane {
         menuImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Parent root = new ProfileScreenBase(new Person());
+                Parent root = new ProfileScreenBase(new Player());
                 Scene scene = new Scene(root);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

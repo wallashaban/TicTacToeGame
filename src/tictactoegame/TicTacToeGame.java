@@ -6,7 +6,7 @@
 package tictactoegame;
 
 import tictactoegame.data.SharedData;
-import tictactoegame.splash.SplashScreen;
+import tictactoegame.SplashScreen.SplashScreen;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

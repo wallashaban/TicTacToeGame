@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import tictactoegame.data.Person;
+import tictactoegame.data.Player;
 
 public class ProfileScreenBase extends AnchorPane {
 
@@ -33,7 +33,7 @@ public class ProfileScreenBase extends AnchorPane {
     protected final Button buttonExit;
     protected final Button buttonMinimize;
 
-    public ProfileScreenBase(Person person) {
+    public ProfileScreenBase(Player person) {
 
         anchorPane = new AnchorPane();
         textYourProfile = new Text();

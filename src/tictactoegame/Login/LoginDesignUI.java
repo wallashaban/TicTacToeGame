@@ -17,7 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import tictactoegame.availableUsers.AvailableUsersScreen;
+import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.SignUp.SignUpUI;
 
 public class LoginDesignUI extends BorderPane {

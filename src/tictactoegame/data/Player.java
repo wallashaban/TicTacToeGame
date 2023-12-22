@@ -13,7 +13,14 @@ import java.util.LinkedHashMap;
  * @author ghon
  */
 public class Player {
-
+    private String userName;
+    private String password;
+    private String email;
+    private boolean available;
+    private String playerImage;
+    private byte[] salt;
+    private boolean isPlaying;
+    private long score;
    
     public String getUserName() {
         return userName;
@@ -62,15 +69,6 @@ public class Player {
     public void setIsPlaying(boolean isPlaying) {
         this.isPlaying = isPlaying;
     }
-
-  private String userName;
-  private String password;
-  private String email;
-  private boolean available;
-  private String playerImage;
-  private byte[] salt;
-  private boolean isPlaying;
-  private long score;
 
     public long getScore() {
         return score;

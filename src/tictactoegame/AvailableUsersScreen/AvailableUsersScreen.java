@@ -1,4 +1,4 @@
-package tictactoegame.availableUsers;
+package tictactoegame.AvailableUsersScreen;
 
 import java.io.DataInputStream;
 import java.io.IOException;

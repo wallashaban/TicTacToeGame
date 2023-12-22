@@ -17,7 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import tictactoegame.data.Person;
+import tictactoegame.data.Player;
 
 public  class MainScreen extends Pane {
 
@@ -168,7 +168,7 @@ public  class MainScreen extends Pane {
                     @Override
                     public void handle(MouseEvent event) {
                         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new ProfileScreenBase(new Person());
+                        Parent root = new ProfileScreenBase(new Player());
                         Scene scene = new Scene(root);
          
                         
@@ -209,7 +209,7 @@ public  class MainScreen extends Pane {
         pane1.setOnMouseClicked(new EventHandler<MouseEvent>(){
                     @Override
                     public void handle(MouseEvent event) {
-                        Parent root = new ProfileScreenBase(new Person());
+                        Parent root = new ProfileScreenBase(new Player());
                         Scene scene = new Scene(root);
          
                         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();

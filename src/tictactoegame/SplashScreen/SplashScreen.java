@@ -1,4 +1,4 @@
-package tictactoegame.splash;
+package tictactoegame.SplashScreen;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
