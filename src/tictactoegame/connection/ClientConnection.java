@@ -14,10 +14,21 @@ import java.io.PrintStream;
 import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.stage.Stage;
+import tictactoegame.data.SharedData;
+import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
+import tictactoegame.data.Player;
 
 
 /**
@@ -29,6 +40,22 @@ public class ClientConnection {
     DataInputStream in;
     PrintStream out;
     ArrayList responceData;
+    
+    protected final Dialog<String> noConnectionDialog;
+    protected final Dialog<String> disconnectedDialog;
+    
+    public ClientConnection(){
+        noConnectionDialog = new Dialog<String>();
+        noConnectionDialog.setTitle("No Connection");
+        ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        noConnectionDialog.setContentText("Couldn't Connect to Server.\nPlease make sure server is connected and try again.");
+        noConnectionDialog.getDialogPane().getButtonTypes().add(type);
+        disconnectedDialog = new Dialog<String>();
+        disconnectedDialog.setTitle("No Connection");
+        disconnectedDialog.setContentText("It seems you are disconnected.");
+        disconnectedDialog.getDialogPane().getButtonTypes().add(type);
+
+    }
 
     public void connect() {
         try {
@@ -37,6 +64,7 @@ public class ClientConnection {
             out = new PrintStream(mySocket.getOutputStream());
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+            noConnectionDialog.showAndWait();
         }
         startListening();
     }
@@ -52,62 +80,70 @@ public class ClientConnection {
     }
     
     public void sendRequest(String gson) {
-        out.println(gson);
+        if(out != null)
+            out.println(gson);
     }
 
     public void startListening() {
         new Thread(() -> {
             try {
-                while (mySocket != null && !(mySocket.isClosed())) {
+                while (mySocket != null && !(mySocket.isClosed()) && in !=null) {
                     String gsonResponse = in.readLine();
                     handleResponse(gsonResponse);
                 }
             } catch (IOException ex) {
+                Platform.runLater(new Runnable(){
+                            @Override
+                            public void run(){
+                                disconnectedDialog.showAndWait();
+                            }
+                        });
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
         }).start();
     }
     
-    public void handleResponse(String gsonResponce) {
-        
-        Type listType = new TypeToken<ArrayList<Object>>() {}.getType();
-        Gson gson = new Gson();
-        responceData = gson.fromJson(gsonResponce, listType);
-        double action= (double) responceData.get(0);
-        
-        System.out.println(action);
-        
-        switch ((int) action) {
-            case Constants.REGISTER:
+    public void handleResponse(String gsonResponse) {
+        Gson gson = new GsonBuilder().create();
+        ArrayList<String> response;
+        response = gson.fromJson(gsonResponse, ArrayList.class);
+        if(response == null){
+            System.out.println("Response is null");
+            return;
+        }
+            
+        String action = response.get(0);
+        switch (action){
+            case "register":
                 register();
                 break;
-            case Constants.LOGIN:
-                login();
+            case "login":
+                login(response);
                 break;
-            case 3:
-                //TODO request();
+            case "request":
+                handlePlayRequest(response);
                 break;
-            case 4:
-                //TODO accept();
+            case "startGame":
+                startGame(response);
                 break;
-            case 5:
-                //TODO updateBoard();
-                break;
-            case 6:
-                //TODO logout();
-                break;
-            case 7:
-                // TODO save();
-                break;
-            case 8:
-                //TODO finish();
-                break;
-            case 9:
-                //TODO updateScore();
-                break;
-            case 10:
-                // TODO sendMessage();
-                break;
+//            case 5:
+//                //TODO updateBoard();
+//                break;
+//            case 6:
+//                //TODO logout();
+//                break;
+//            case 7:
+//                // TODO save();
+//                break;
+//            case 8:
+//                //TODO finish();
+//                break;
+//            case 9:
+//                //TODO updateScore();
+//                break;
+//            case 10:
+//                // TODO sendMessage();
+//                break;
         }
     }
     
@@ -115,7 +151,33 @@ public class ClientConnection {
 
     }
     
-    private void login() {
+    private void login(ArrayList<String> response) {
+        if(response.get(1).equals("Success")){
+            System.out.println("Login Successfully");
+            Gson gson = new GsonBuilder().create();
+            Player player = gson.fromJson(response.get(2), Player.class);
+            if(player != null){
+                SharedData.setCurrentPlayer(player);
+                System.out.println(player.toString());
+                Stage stage = SharedData.getStage();
+                Parent root = new AvailableUsersScreen();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        }
+        else{
+            System.out.println("Login Failed");
+            System.out.println(response.get(1));
+        }
+    }
+    
+    private void handlePlayRequest(ArrayList<String> response){
+        //show request dialog and wait for response to send it to server
+    }
+    
+    private void startGame(ArrayList<String> response){
+        //navigate to online game screen
     }
 } 
 
