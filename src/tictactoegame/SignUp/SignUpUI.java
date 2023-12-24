@@ -3,12 +3,16 @@ package tictactoegame.SignUp;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.Login.LoginDesignUI;
+import tictactoegame.data.SharedData;
 
 public class SignUpUI extends Pane {
 
@@ -19,7 +23,7 @@ public class SignUpUI extends Pane {
     protected final TextField txtFPasword;
     protected final TextField txtFConfirmPassword;
     protected final Button btnSignUp;
-    protected final Label btnAlreadyHaveAcc;
+    protected final Label alreadyHaveAccLabel;
     protected final Label letterX;
     protected final Label letterY;
     protected final Button buttonExit;
@@ -34,7 +38,7 @@ public class SignUpUI extends Pane {
         txtFPasword = new TextField();
         txtFConfirmPassword = new TextField();
         btnSignUp = new Button();
-        btnAlreadyHaveAcc = new Label();
+        alreadyHaveAccLabel = new Label();
         letterX = new Label();
         letterY = new Label();
         buttonExit = new Button();
@@ -109,11 +113,19 @@ public class SignUpUI extends Pane {
         btnSignUp.setTextFill(javafx.scene.paint.Color.valueOf("#f8f8f8"));
         btnSignUp.setFont(new Font("Segoe UI", 24.0));
 
-        btnAlreadyHaveAcc.setLayoutX(271.0);
-        btnAlreadyHaveAcc.setLayoutY(547.0);
-        btnAlreadyHaveAcc.setText("Already Have Account? Login");
-        btnAlreadyHaveAcc.setTextFill(javafx.scene.paint.Color.WHITE);
-        btnAlreadyHaveAcc.setFont(new Font("Segoe UI", 20.0));
+        alreadyHaveAccLabel.setLayoutX(271.0);
+        alreadyHaveAccLabel.setLayoutY(547.0);
+        alreadyHaveAccLabel.setText("Already Have Account? Login");
+        alreadyHaveAccLabel.setUnderline(true);
+        alreadyHaveAccLabel.setTextFill(javafx.scene.paint.Color.WHITE);
+        alreadyHaveAccLabel.setFont(new Font("Segoe UI", 20.0));
+        alreadyHaveAccLabel.setOnMouseClicked((e)->{
+            Parent root = new LoginDesignUI();
+            Scene scene = new Scene(root);
+            Stage stage = SharedData.getStage();
+            stage.setScene(scene);
+            stage.show();
+        });
 
         letterX.setLayoutX(23.0);
         letterX.setLayoutY(19.0);
@@ -157,7 +169,7 @@ public class SignUpUI extends Pane {
         getChildren().add(txtFPasword);
         getChildren().add(txtFConfirmPassword);
         getChildren().add(btnSignUp);
-        getChildren().add(btnAlreadyHaveAcc);
+        getChildren().add(alreadyHaveAccLabel);
         getChildren().add(letterX);
         getChildren().add(letterY);
         getChildren().add(buttonExit);

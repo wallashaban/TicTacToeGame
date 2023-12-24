@@ -27,6 +27,7 @@ import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.SignUp.SignUpUI;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.data.Player;
+import tictactoegame.data.SharedData;
 
 public class LoginDesignUI extends BorderPane {
 
@@ -115,7 +116,7 @@ public class LoginDesignUI extends BorderPane {
         loginButton.setAlignment(javafx.geometry.Pos.CENTER);
         loginButton.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         loginButton.setMnemonicParsing(false);
-        loginButton.setStyle("-fx-background-color: CF8A9B; -fx-border-color: 111111; -fx-background-radius: 10; -fx-border-width: 5; -fx-border-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);");
+        loginButton.setStyle("-fx-background-color: #CF8A9B; -fx-border-color: #CF8A9B; -fx-background-radius: 10; -fx-border-width: 5; -fx-border-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);");
         loginButton.setText("Login");
         loginButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         loginButton.setTextFill(javafx.scene.paint.Color.WHITE);
@@ -150,6 +151,7 @@ public class LoginDesignUI extends BorderPane {
         });
 
         newPlayerQuestionLable.setText("New Player?  Sign UP");
+        newPlayerQuestionLable.setUnderline(true);
         newPlayerQuestionLable.setTextFill(javafx.scene.paint.Color.WHITE);
         newPlayerQuestionLable.setFont(new Font(18.0));
         FlowPane.setMargin(newPlayerQuestionLable, new Insets(10.0, 0.0, 0.0, 55.0));
@@ -160,8 +162,7 @@ public class LoginDesignUI extends BorderPane {
             public void handle(MouseEvent event) {
                 Parent root = new SignUpUI();
                 Scene scene = new Scene(root);
-                Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                stage.initStyle(StageStyle.UNDECORATED); 
+                Stage stage = SharedData.getStage();
                 stage.setScene(scene);
                 stage.show();
             }});

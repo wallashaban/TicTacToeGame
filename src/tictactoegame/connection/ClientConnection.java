@@ -29,6 +29,9 @@ import javafx.stage.Stage;
 import tictactoegame.data.SharedData;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.data.Player;
+import tictactoegame.dialogs.DisconnectedDialogBase;
+import tictactoegame.dialogs.NoConnectionDialogBase;
+import tictactoegame.dialogs.drawDialogBase;
 
 
 /**
@@ -40,22 +43,6 @@ public class ClientConnection {
     DataInputStream in;
     PrintStream out;
     ArrayList responceData;
-    
-    protected final Dialog<String> noConnectionDialog;
-    protected final Dialog<String> disconnectedDialog;
-    
-    public ClientConnection(){
-        noConnectionDialog = new Dialog<String>();
-        noConnectionDialog.setTitle("No Connection");
-        ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
-        noConnectionDialog.setContentText("Couldn't Connect to Server.\nPlease make sure server is connected and try again.");
-        noConnectionDialog.getDialogPane().getButtonTypes().add(type);
-        disconnectedDialog = new Dialog<String>();
-        disconnectedDialog.setTitle("No Connection");
-        disconnectedDialog.setContentText("It seems you are disconnected.");
-        disconnectedDialog.getDialogPane().getButtonTypes().add(type);
-
-    }
 
     public void connect() {
         try {
@@ -64,7 +51,7 @@ public class ClientConnection {
             out = new PrintStream(mySocket.getOutputStream());
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
-            noConnectionDialog.showAndWait();
+            showNoConnectionDialog();
         }
         startListening();
     }
@@ -95,7 +82,7 @@ public class ClientConnection {
                 Platform.runLater(new Runnable(){
                             @Override
                             public void run(){
-                                disconnectedDialog.showAndWait();
+                                showDisconnectedDialog();
                             }
                         });
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
@@ -178,6 +165,21 @@ public class ClientConnection {
     
     private void startGame(ArrayList<String> response){
         //navigate to online game screen
+    }
+
+    private void showNoConnectionDialog() {
+        Parent parent = new NoConnectionDialogBase();
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+    private void showDisconnectedDialog() {
+        Parent parent = new DisconnectedDialogBase();
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 } 
 
