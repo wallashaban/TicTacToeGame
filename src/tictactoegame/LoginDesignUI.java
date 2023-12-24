@@ -115,7 +115,7 @@ public class LoginDesignUI extends BorderPane {
             @Override
             public void handle(MouseEvent event) {
                 Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                Parent root = new AvailableUsersScreen(stage) ;
+                Parent root = new AvailbleUsersScreenUI();
                 Scene scene = new Scene(root);
 
                 stage.setTitle("Text Editor app");
@@ -179,7 +179,12 @@ public class LoginDesignUI extends BorderPane {
         buttonExit.setText("X");
         buttonExit.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
         setTop(pane);
-        buttonExit.setOnAction((e)-> {Platform.exit();});
+        buttonExit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Platform.exit();
+            }
+        });
 
         contentFlowView.getChildren().add(welcomeLabel);
         contentFlowView.getChildren().add(subTitleLabel);

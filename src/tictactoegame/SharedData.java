@@ -18,6 +18,7 @@ public class SharedData {
     public static boolean connectionStatus;
     public static Socket socket;
     public static Stage stage;
+    public static GameReplay gameReplay;
     
     HashMap<String, String> StringData;
     HashMap<String, Integer> IntData;

@@ -6,6 +6,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -201,19 +203,7 @@ public class SignUpUI extends Pane {
                             showDialog("Please enter your password...");
                         } else {
                             // System.out.println("id "+Player.setId());
-                            Player player = new Player(txtFFullName.getText(), txtFPasword.getText(),
-                                    txtFEmail.getText(), true, null);
-                            SharedData.currentPlayer = player;
-                            Gson gson = new GsonBuilder().create();
-                            printStream.println(gson.toJson(player));
-                            // System.out.println(gson.toJson(player));
-                            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            Parent root = new AvailbleUsersScreenUI();
-                            Scene scene = new Scene(root);
-
-                            stage.setTitle("Text Editor app");
-                            stage.setScene(scene);
-                            stage.show();
+                            signUpUser();
                         }
 
                     }
@@ -232,6 +222,53 @@ public class SignUpUI extends Pane {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
+    }
+     
+     private void signUpUser() {
+        Player player = new Player(txtFFullName.getText(), txtFPasword.getText(),
+                txtFEmail.getText(), true, null);
+        SharedData.currentPlayer = player;
+        Gson gson = new GsonBuilder().create();
+        String signupMessage = gson.toJson(player);
+        ArrayList<String> response = new ArrayList<>();
+        response.add("signup");
+        response.add(signupMessage);
+        String responseJson = gson.toJson(response);
+         System.err.println(signupMessage);
+        handleSigupResponse(responseJson);
+    }
+     
+     
+    private  void handleSigupResponse(String signUpResponse)
+    {
+        try {
+            printStream.println(signUpResponse);
+            System.out.println("first print");
+            String signUpStatus = dataInputStream.readLine(); // thread
+            Gson gson = new GsonBuilder().create();
+            ArrayList< String>messages = gson.fromJson(signUpStatus, ArrayList.class);
+                        System.out.println("first response");
+            String response = messages.get(0);
+            switch(response)
+            {
+                case("signup"):
+                    if(messages.get(1)=="success")
+                    {
+                        System.out.print("logined");
+                        Stage stage = new Stage();
+                            Parent root = new AvailbleUsersScreenUI();
+                            Scene scene = new Scene(root);
+
+                            stage.setTitle("Text Editor app");
+                            stage.setScene(scene);
+                            stage.show();
+                    }else{
+                        
+                    }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

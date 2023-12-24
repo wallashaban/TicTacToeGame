@@ -5,6 +5,9 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -150,19 +153,10 @@ public class SignUpBase extends Pane {
                             showDialog("Please enter your password...");
                         } else {
                             // System.out.println("id "+Player.setId());
-                            Player player = new Player(txtFFullName.getText(), txtFPasword.getText(),
-                                    txtFEmail.getText(), true, null);
-                            SharedData.currentPlayer = player;
-                            Gson gson = new GsonBuilder().create();
-                            printStream.println(gson.toJson(player));
+                              
+                             
                             // System.out.println(gson.toJson(player));
-                            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            Parent root = new AvailableUsersScreen(stage);
-                            Scene scene = new Scene(root);
-
-                            stage.setTitle("Text Editor app");
-                            stage.setScene(scene);
-                            stage.show();
+                            
                         }
 
                     }
@@ -193,4 +187,6 @@ public class SignUpBase extends Pane {
         stage.setScene(scene);
         stage.showAndWait();
     }
+
+    
 }

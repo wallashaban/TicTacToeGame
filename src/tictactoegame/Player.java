@@ -14,6 +14,10 @@ import java.util.LinkedHashMap;
  */
 public class Player {
 
+    public Player(String userName) {
+        this.userName = userName;
+    }
+
    
     public String getUserName() {
         return userName;

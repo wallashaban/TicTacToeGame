@@ -1,57 +1,155 @@
 package tictactoegame;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
-public  class AvailbleUsersScreenUI extends AnchorPane {
+public class AvailbleUsersScreenUI extends AnchorPane {
 
-    protected final FlowPane flowPane;
-    protected final Pane availableUsersPane;
-    protected final Label nameLabel;
-    protected final Hyperlink chalengeNowLink;
     protected final Pane pane;
-    protected final Pane pane0;
     protected final Label label;
-    protected final Hyperlink hyperlink;
-    protected final Pane pane1;
-    protected final Label label0;
-    protected final Hyperlink hyperlink0;
-    protected final Pane pane2;
-    protected final Label label1;
     protected final Pane closePane;
-    protected final Label label2;
+    protected final Label label0;
     protected final Pane minimisePane;
-    protected final Label label3;
+    protected final Label label1;
+    protected final ScrollPane scrollPane;
+    protected final FlowPane flowPane;
+
+    DataInputStream dataInputStream;
+    PrintStream printStream;
+    Socket socket;
+    ArrayList<Player> players;
 
     public AvailbleUsersScreenUI() {
+        players = new ArrayList<Player>();
+        try {
+            socket = new Socket("127.0.0.1", 7777);
+            dataInputStream = new DataInputStream(socket.getInputStream());
+            printStream = new PrintStream(socket.getOutputStream());
+            ArrayList<String> messages = new ArrayList<>();
+            messages.add("getOnlineUsers");
+            Gson gson = new GsonBuilder().create();
+            String jsonMessage = gson.toJson(messages);
+            printStream.println(jsonMessage);
+            new Thread() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            String response = dataInputStream.readLine();
+                            ArrayList<String> responseList = new ArrayList<>();
+                            responseList = gson.fromJson(response, ArrayList.class);
+                            switch (responseList.get(0)) {
+                                case ("getOnlineUsers"):
 
-        flowPane = new FlowPane();
-        availableUsersPane = new Pane();
-        nameLabel = new Label();
-        chalengeNowLink = new Hyperlink();
+                                    java.lang.reflect.Type playerListType = new TypeToken<List<Player>>() {
+                                    }.getType();
+                                    players = gson.fromJson(responseList.get(1), playerListType);
+                                    System.err.println("length " + players.size());
+                                    break;
+                            }
+                        } catch (IOException ex) {
+                            Logger.getLogger(AvailbleUsersScreenUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        Platform.runLater(() -> {
+                            for (int i = 0; i < players.size(); i++) {
+                                Pane availableUsersPane = new Pane();
+                                Label nameLabel = new Label();
+                                Label scoreLabel = new Label();
+                                final Hyperlink chalengeNowLink = new Hyperlink();
+
+                                availableUsersPane.setPrefHeight(105.0);
+                                availableUsersPane.setPrefWidth(221.0);
+                                availableUsersPane.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
+
+                                nameLabel.setLayoutX(24.0);
+                                nameLabel.setLayoutY(14.0);
+                                nameLabel.setPrefHeight(21.0);
+                                nameLabel.setPrefWidth(146.0);
+                                nameLabel.setText(players.get(i).getUserName());
+                                nameLabel.setTextFill(javafx.scene.paint.Color.WHITE);
+                                nameLabel.setFont(new Font("Gill Sans MT Bold", 18.0));
+
+                                scoreLabel.setLayoutX(24.0);
+                                scoreLabel.setLayoutY(38.0);
+                                scoreLabel.setPrefHeight(21.0);
+                                scoreLabel.setPrefWidth(146.0);
+                                scoreLabel.setText("Score : " + players.get(i).getScore());
+                                scoreLabel.setTextFill(javafx.scene.paint.Color.WHITE);
+                                scoreLabel.setFont(new Font("Gill Sans MT Bold", 18.0));
+
+                                chalengeNowLink.setLayoutX(24.0);
+                                chalengeNowLink.setLayoutY(68.0);
+                                chalengeNowLink.setPrefHeight(23.0);
+                                chalengeNowLink.setPrefWidth(106.0);
+                                chalengeNowLink.setText("Challenge Now");
+                                chalengeNowLink.setFont(new Font("Gill Sans MT", 14.0));
+                                String userName = players.get(i).getUserName();
+                                chalengeNowLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        ArrayList<String> requestMessages = new ArrayList<String>();
+                                        requestMessages.add("request");
+                                        requestMessages.add(userName);
+                                        Gson gson = new GsonBuilder().create();
+                                        String requestJson = gson.toJson(requestMessages);
+                                        printStream.println(requestJson);
+                                    }
+
+                                });
+                                FlowPane.setMargin(availableUsersPane,
+                                        new Insets(30.0, 20.0, 0.0, 20.0));
+
+                                availableUsersPane.getChildren()
+                                        .add(nameLabel);
+                                availableUsersPane.getChildren()
+                                        .add(scoreLabel);
+                                availableUsersPane.getChildren()
+                                        .add(chalengeNowLink);
+                                flowPane.getChildren()
+                                        .add(availableUsersPane);
+                            }
+
+                            scrollPane.setContent(flowPane);
+                        });
+                    }
+
+                }
+
+            }
+                    .start();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
         pane = new Pane();
-        pane0 = new Pane();
         label = new Label();
-        hyperlink = new Hyperlink();
-        pane1 = new Pane();
-        label0 = new Label();
-        hyperlink0 = new Hyperlink();
-        pane2 = new Pane();
-        label1 = new Label();
         closePane = new Pane();
-        label2 = new Label();
+        label0 = new Label();
         minimisePane = new Pane();
-        label3 = new Label();
+        label1 = new Label();
+        scrollPane = new ScrollPane();
+        flowPane = new FlowPane();
 
         setId("AnchorPane");
         setMaxHeight(600.0);
@@ -59,96 +157,21 @@ public  class AvailbleUsersScreenUI extends AnchorPane {
         setPrefHeight(800.0);
         setPrefWidth(800.0);
         getStyleClass().add("backgroundColor");
-        getStylesheets().add("/tictactoegame/../css/style.css");
+        getStylesheets().add("/css/style.css");
 
-        flowPane.setLayoutX(1.0);
-        flowPane.setLayoutY(185.0);
-        flowPane.setPrefHeight(349.0);
-        flowPane.setPrefWidth(800.0);
+        pane.setLayoutX(265.0);
+        pane.setLayoutY(82.0);
+        pane.setPrefHeight(47.0);
+        pane.setPrefWidth(259.0);
+        pane.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
 
-        availableUsersPane.setPrefHeight(85.0);
-        availableUsersPane.setPrefWidth(221.0);
-        availableUsersPane.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
-
-        nameLabel.setLayoutX(24.0);
-        nameLabel.setLayoutY(14.0);
-        nameLabel.setPrefHeight(21.0);
-        nameLabel.setPrefWidth(146.0);
-        nameLabel.setText("Walaa Shaaban");
-        nameLabel.setTextFill(javafx.scene.paint.Color.WHITE);
-        nameLabel.setFont(new Font("Gill Sans MT Bold", 18.0));
-
-        chalengeNowLink.setLayoutX(24.0);
-        chalengeNowLink.setLayoutY(48.0);
-        chalengeNowLink.setPrefHeight(23.0);
-        chalengeNowLink.setPrefWidth(106.0);
-        chalengeNowLink.setText("Challenge Now");
-        chalengeNowLink.setFont(new Font("Gill Sans MT", 14.0));
-
-        pane.setLayoutX(183.0);
-        pane.setLayoutY(9.0);
-        pane.setPrefHeight(32.0);
-        pane.setPrefWidth(62.0);
-        pane.setStyle("-fx-background-color: freen;");
-        FlowPane.setMargin(availableUsersPane, new Insets(30.0, 10.0, 0.0, 40.0));
-
-        pane0.setLayoutX(30.0);
-        pane0.setLayoutY(10.0);
-        pane0.setPrefHeight(85.0);
-        pane0.setPrefWidth(221.0);
-        pane0.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
-
-        label.setLayoutX(24.0);
-        label.setLayoutY(14.0);
+        label.setLayoutX(57.0);
+        label.setLayoutY(13.0);
         label.setPrefHeight(21.0);
         label.setPrefWidth(146.0);
-        label.setText("Walaa Shaaban");
+        label.setText("Available Users");
         label.setTextFill(javafx.scene.paint.Color.WHITE);
         label.setFont(new Font("Gill Sans MT Bold", 18.0));
-
-        hyperlink.setLayoutX(24.0);
-        hyperlink.setLayoutY(48.0);
-        hyperlink.setPrefHeight(23.0);
-        hyperlink.setPrefWidth(106.0);
-        hyperlink.setText("Challenge Now");
-        hyperlink.setFont(new Font("Gill Sans MT", 14.0));
-        FlowPane.setMargin(pane0, new Insets(30.0, 10.0, 0.0, 10.0));
-
-        pane1.setLayoutX(309.0);
-        pane1.setLayoutY(10.0);
-        pane1.setPrefHeight(85.0);
-        pane1.setPrefWidth(221.0);
-        pane1.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
-
-        label0.setLayoutX(24.0);
-        label0.setLayoutY(14.0);
-        label0.setPrefHeight(21.0);
-        label0.setPrefWidth(146.0);
-        label0.setText("Walaa Shaaban");
-        label0.setTextFill(javafx.scene.paint.Color.WHITE);
-        label0.setFont(new Font("Gill Sans MT Bold", 18.0));
-
-        hyperlink0.setLayoutX(24.0);
-        hyperlink0.setLayoutY(48.0);
-        hyperlink0.setPrefHeight(23.0);
-        hyperlink0.setPrefWidth(106.0);
-        hyperlink0.setText("Challenge Now");
-        hyperlink0.setFont(new Font("Gill Sans MT", 14.0));
-        FlowPane.setMargin(pane1, new Insets(30.0, 10.0, 0.0, 10.0));
-
-        pane2.setLayoutX(265.0);
-        pane2.setLayoutY(82.0);
-        pane2.setPrefHeight(47.0);
-        pane2.setPrefWidth(259.0);
-        pane2.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
-
-        label1.setLayoutX(57.0);
-        label1.setLayoutY(13.0);
-        label1.setPrefHeight(21.0);
-        label1.setPrefWidth(146.0);
-        label1.setText("Available Users");
-        label1.setTextFill(javafx.scene.paint.Color.WHITE);
-        label1.setFont(new Font("Gill Sans MT Bold", 18.0));
 
         closePane.setLayoutX(729.0);
         closePane.setLayoutY(14.0);
@@ -156,13 +179,13 @@ public  class AvailbleUsersScreenUI extends AnchorPane {
         closePane.setPrefWidth(50.0);
         closePane.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
 
-        label2.setLayoutX(10.0);
-        label2.setLayoutY(4.0);
-        label2.setPrefHeight(21.0);
-        label2.setPrefWidth(18.0);
-        label2.setText("X");
-        label2.setTextFill(javafx.scene.paint.Color.WHITE);
-        label2.setFont(new Font("Gill Sans MT Bold", 36.0));
+        label0.setLayoutX(10.0);
+        label0.setLayoutY(4.0);
+        label0.setPrefHeight(21.0);
+        label0.setPrefWidth(18.0);
+        label0.setText("X");
+        label0.setTextFill(javafx.scene.paint.Color.WHITE);
+        label0.setFont(new Font("Gill Sans MT Bold", 36.0));
 
         minimisePane.setLayoutX(660.0);
         minimisePane.setLayoutY(14.0);
@@ -170,45 +193,34 @@ public  class AvailbleUsersScreenUI extends AnchorPane {
         minimisePane.setPrefWidth(50.0);
         minimisePane.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
 
-        label3.setLayoutX(13.0);
-        label3.setLayoutY(-28.0);
-        label3.setPrefHeight(60.0);
-        label3.setPrefWidth(24.0);
-        label3.setText("-");
-        label3.setTextFill(javafx.scene.paint.Color.WHITE);
-        label3.setFont(new Font("Gill Sans MT Bold", 72.0));
+        label1.setLayoutX(13.0);
+        label1.setLayoutY(-28.0);
+        label1.setPrefHeight(60.0);
+        label1.setPrefWidth(24.0);
+        label1.setText("-");
+        label1.setTextFill(javafx.scene.paint.Color.WHITE);
+        label1.setFont(new Font("Gill Sans MT Bold", 72.0));
 
-        availableUsersPane.getChildren().add(nameLabel);
-        availableUsersPane.getChildren().add(chalengeNowLink);
-        availableUsersPane.getChildren().add(pane);
-        flowPane.getChildren().add(availableUsersPane);
-        pane0.getChildren().add(label);
-        pane0.getChildren().add(hyperlink);
-        flowPane.getChildren().add(pane0);
-        pane1.getChildren().add(label0);
-        pane1.getChildren().add(hyperlink0);
-        flowPane.getChildren().add(pane1);
-        getChildren().add(flowPane);
-        pane2.getChildren().add(label1);
-        getChildren().add(pane2);
-        closePane.getChildren().add(label2);
+        scrollPane.setLayoutY(138.0);
+        scrollPane.setPrefHeight(460.0);
+        scrollPane.setPrefWidth(800.0);
+        scrollPane.getStyleClass().add("backgroundColor");
+        scrollPane.getStylesheets().add("/tictactoegame/../css/style.css");
+
+        flowPane.setMaxHeight(USE_PREF_SIZE);
+        flowPane.setPrefHeight(460.0);
+        flowPane.setPrefWidth(800.0);
+        flowPane.getStyleClass().add("backgroundColor");
+        flowPane.getStylesheets().add("/css/style.css");
+
+        pane.getChildren().add(label);
+        getChildren().add(pane);
+        closePane.getChildren().add(label0);
         getChildren().add(closePane);
-        minimisePane.getChildren().add(label3);
+        minimisePane.getChildren().add(label1);
         getChildren().add(minimisePane);
-        
-                 closePane.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Platform.exit();
-                    }});
-                 
-                 minimisePane.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Stage stage = (Stage) minimisePane.getScene().getWindow();
-            stage.setIconified(true);
-                    }});
-                         
-                            
+
+        getChildren().add(scrollPane);
+
     }
 }

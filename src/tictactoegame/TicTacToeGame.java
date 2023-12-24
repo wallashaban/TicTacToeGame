@@ -5,6 +5,25 @@
  */
 package tictactoegame;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +31,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Pair;
 
 /**
  *
@@ -36,7 +56,7 @@ public class TicTacToeGame extends Application {
 //         BorderPane rootb = new BorderPane();
 //        GameRoomDesignBase teb= new GameRoomDesignBase();
 //        rootb.getChildren().add(teb);
-        Scene scene = new Scene(root);
+          Scene scene = new Scene(root);
 
         stage.initStyle(StageStyle.UNDECORATED); 
         stage.setTitle("Text Editor app");
@@ -48,8 +68,11 @@ public class TicTacToeGame extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {    
+        
         launch(args);
+        
+
     }
     
 }
