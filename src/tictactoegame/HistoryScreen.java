@@ -15,15 +15,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.util.Pair;
+import tictactoegame.data.SharedData;
 
 public class HistoryScreen extends AnchorPane {
 
     protected final FlowPane historyPane;
-//    protected final Pane availableUsersPane;
-//    protected final Label nameLabel;
-//    protected final Hyperlink showLink;
-//    protected final Pane pane;
-//    protected final Label dateLabel;
 
     protected final Pane pane2;
     protected final Label label;
