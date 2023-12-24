@@ -17,7 +17,7 @@ import tictactoegame.data.MessageController;
 
 public class PlayAgainDialogBase extends Pane {
 
-    protected final MediaView mediaView;
+    //protected final MediaView mediaView;
     protected final Button btnReplay;
     protected final Button btnNotNow;
     protected final Button btnPlayAgain;
@@ -26,11 +26,11 @@ public class PlayAgainDialogBase extends Pane {
 
     public PlayAgainDialogBase(MessageController message) {
 
-        String path = "C:/Users/s/Desktop/celebration.mp4";  
-        Media media = new Media(new File(path).toURI().toString());   
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
-        mediaView = new MediaView(mediaPlayer);
+        //String path = "C:/Users/s/Desktop/celebration.mp4";  
+        //Media media = new Media(new File(path).toURI().toString());   
+        //MediaPlayer mediaPlayer = new MediaPlayer(media);
+       // mediaPlayer.setAutoPlay(true);
+       // mediaView = new MediaView(mediaPlayer);
         btnReplay = new Button();
         btnNotNow = new Button();
         btnPlayAgain = new Button();
@@ -47,10 +47,10 @@ public class PlayAgainDialogBase extends Pane {
         getStylesheets().add("/tictactoegame/BackGround.css");
         setPadding(new Insets(15.0));
 
-        mediaView.setFitHeight(330.0);
-        mediaView.setFitWidth(450.0);
-        mediaView.setLayoutX(68.0);
-        mediaView.setLayoutY(29.0);
+        //mediaView.setFitHeight(330.0);
+        //mediaView.setFitWidth(450.0);
+        //mediaView.setLayoutX(68.0);
+        //mediaView.setLayoutY(29.0);
 
         btnReplay.setLayoutX(73.0);
         btnReplay.setLayoutY(442.0);
@@ -130,7 +130,7 @@ public class PlayAgainDialogBase extends Pane {
         text.setText("Congratulations! You Won the Game!!");
         text.setFont(new Font("Segoe UI", 33.0));
 
-        getChildren().add(mediaView);
+        //getChildren().add(mediaView);
         getChildren().add(btnReplay);
         getChildren().add(btnNotNow);
         getChildren().add(btnPlayAgain);
