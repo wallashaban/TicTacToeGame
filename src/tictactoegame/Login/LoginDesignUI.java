@@ -1,5 +1,8 @@
 package tictactoegame.Login;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,6 +11,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -19,6 +25,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.SignUp.SignUpUI;
+import tictactoegame.connection.ClientConnection;
+import tictactoegame.data.Player;
+import tictactoegame.data.SharedData;
 
 public class LoginDesignUI extends BorderPane {
 
@@ -28,7 +37,7 @@ public class LoginDesignUI extends BorderPane {
     protected final Label label;
     protected final TextField emailTextField;
     protected final Label label0;
-    protected final TextField emailTextField1;
+    protected final TextField passwordTextField;
     protected final Button loginButton;
     protected final Label newPlayerQuestionLable;
     protected final FlowPane logoView;
@@ -46,7 +55,7 @@ public class LoginDesignUI extends BorderPane {
         label = new Label();
         emailTextField = new TextField();
         label0 = new Label();
-        emailTextField1 = new TextField();
+        passwordTextField = new TextField();
         loginButton = new Button();
         newPlayerQuestionLable = new Label();
         logoView = new FlowPane();
@@ -97,35 +106,52 @@ public class LoginDesignUI extends BorderPane {
         label0.setFont(new Font("Segoe UI Bold", 18.0));
         FlowPane.setMargin(label0, new Insets(20.0, 0.0, 0.0, 100.0));
 
-        emailTextField1.setAlignment(javafx.geometry.Pos.CENTER);
-        emailTextField1.setPromptText("password");
-        emailTextField1.setStyle("-fx-border-color: #56354A; -fx-background-color: EACCD6; -fx-background-radius: 20; -fx-border-width: 5; -fx-border-radius: 20;");
-        emailTextField1.setFont(new Font(20.0));
-        emailTextField1.setOpaqueInsets(new Insets(0.0));
-        FlowPane.setMargin(emailTextField1, new Insets(10.0, 0.0, 0.0, -60.0));
+        passwordTextField.setAlignment(javafx.geometry.Pos.CENTER);
+        passwordTextField.setPromptText("password");
+        passwordTextField.setStyle("-fx-border-color: #56354A; -fx-background-color: EACCD6; -fx-background-radius: 20; -fx-border-width: 5; -fx-border-radius: 20;");
+        passwordTextField.setFont(new Font(20.0));
+        passwordTextField.setOpaqueInsets(new Insets(0.0));
+        FlowPane.setMargin(passwordTextField, new Insets(10.0, 0.0, 0.0, -60.0));
 
         loginButton.setAlignment(javafx.geometry.Pos.CENTER);
         loginButton.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         loginButton.setMnemonicParsing(false);
-        loginButton.setStyle("-fx-background-color: CF8A9B; -fx-border-color: 111111; -fx-background-radius: 10; -fx-border-width: 5; -fx-border-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);");
+        loginButton.setStyle("-fx-background-color: #CF8A9B; -fx-border-color: #CF8A9B; -fx-background-radius: 10; -fx-border-width: 5; -fx-border-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);");
         loginButton.setText("Login");
         loginButton.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         loginButton.setTextFill(javafx.scene.paint.Color.WHITE);
         loginButton.setFont(new Font("Arial Bold", 25.0));
         FlowPane.setMargin(loginButton, new Insets(60.0, 0.0, 10.0, 90.0));
-        loginButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                Parent root = new AvailableUsersScreen();
-                Scene scene = new Scene(root);
-
-                stage.setTitle("Text Editor app");
-                stage.setScene(scene);
-                stage.show();
-            }});
+            public void handle(ActionEvent event) {
+                String email = emailTextField.getText();
+                String password = passwordTextField.getText();
+                if(email != null && password !=null){
+                    Player player = new Player(null, password, email, true, null);
+                    Gson gson = new GsonBuilder().create();
+                    String jsonMessage = gson.toJson(player);
+                    ClientConnection connection = new ClientConnection();
+                    connection.connect();
+                    ArrayList<String> requestArray = new ArrayList<String>();
+                    requestArray.add("login");
+                    requestArray.add(jsonMessage);
+                    String request = gson.toJson(requestArray);
+                    connection.sendRequest(request);
+                }
+                else{
+                    Dialog<String> invalidInputDialog;
+                    invalidInputDialog = new Dialog<String>();
+                    invalidInputDialog.setTitle("Invalid Data");
+                    ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+                    invalidInputDialog.setContentText("Please enter valid email and password.");
+                    invalidInputDialog.getDialogPane().getButtonTypes().add(type);
+                }
+            }
+        });
 
         newPlayerQuestionLable.setText("New Player?  Sign UP");
+        newPlayerQuestionLable.setUnderline(true);
         newPlayerQuestionLable.setTextFill(javafx.scene.paint.Color.WHITE);
         newPlayerQuestionLable.setFont(new Font(18.0));
         FlowPane.setMargin(newPlayerQuestionLable, new Insets(10.0, 0.0, 0.0, 55.0));
@@ -136,8 +162,7 @@ public class LoginDesignUI extends BorderPane {
             public void handle(MouseEvent event) {
                 Parent root = new SignUpUI();
                 Scene scene = new Scene(root);
-                Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                stage.initStyle(StageStyle.UNDECORATED); 
+                Stage stage = SharedData.getStage();
                 stage.setScene(scene);
                 stage.show();
             }});
@@ -193,26 +218,14 @@ public class LoginDesignUI extends BorderPane {
         contentFlowView.getChildren().add(label);
         contentFlowView.getChildren().add(emailTextField);
         contentFlowView.getChildren().add(label0);
-        contentFlowView.getChildren().add(emailTextField1);
+        contentFlowView.getChildren().add(passwordTextField);
         contentFlowView.getChildren().add(loginButton);
         contentFlowView.getChildren().add(newPlayerQuestionLable);
         logoView.getChildren().add(letterX);
         logoView.getChildren().add(letterY);
         pane.getChildren().add(buttonMinimize);
         pane.getChildren().add(buttonExit);
-        newPlayerQuestionLable.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                        Parent root = new SignUpUI();   
-                        Scene scene = new Scene(root);
-                        stage.setScene(scene);
-                        stage.show();
-                    }});
         
-        
-    
-
     }
     
 }

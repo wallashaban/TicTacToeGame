@@ -1,11 +1,15 @@
 package ClientGame;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -19,15 +23,18 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tictactoegame.GameVsPC.AlertDialog;
+import tictactoegame.connection.ClientConnection;
+import tictactoegame.connection.Constants;
 import tictactoegame.data.MessageController;
 import tictactoegame.dialogs.PlayAgainDialogBase;
+import tictactoegame.data.Move;
 
 public class ClientGameScreenBase extends AnchorPane {
 
     private final Button[] buttons = new Button[9];
     Socket mySocket;
     DataInputStream in;
-    DataOutputStream out;
+    PrintStream out;
     MessageController message;
 
     protected final Button btnExit;
@@ -385,7 +392,8 @@ public class ClientGameScreenBase extends AnchorPane {
         });
         // btn bac
         //I`m independ on input only avilable place
-
+        ClientConnection connection = new ClientConnection();
+        connection.connect();
         playGame();
     }
 
@@ -475,6 +483,39 @@ public class ClientGameScreenBase extends AnchorPane {
     }
     // ToDo <<<>>>
     public void reciveFromServerMovementsAndStates() {
+    }
+    
+    public void connect() {
+        try {
+            mySocket = new Socket(Constants.IP_ADDRESS, Constants.PORT);
+            in = new DataInputStream(mySocket.getInputStream());
+            out = new PrintStream(mySocket.getOutputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+//            showNoConnectionDialog();
+        }
+        startListening();
+    }
+    
+    public void startListening() {
+        new Thread(() -> {
+            try {
+                while (mySocket != null && !(mySocket.isClosed()) && in !=null) {
+                    String gsonResponse = in.readLine();
+                    Gson gson = new GsonBuilder().create();
+                    Move move = gson.fromJson(gsonResponse, Move.class);
+//                    handleResponse(gsonResponse);
+                }
+            } catch (IOException ex) {
+                Platform.runLater(new Runnable(){
+                            @Override
+                            public void run(){
+//                                showDisconnectedDialog();
+                            }
+                        });
+                Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }).start();
     }
 }
 

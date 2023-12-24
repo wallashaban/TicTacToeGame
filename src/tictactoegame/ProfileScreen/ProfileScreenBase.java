@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tictactoegame.data.Player;
+import tictactoegame.data.SharedData;
 
 public class ProfileScreenBase extends AnchorPane {
 
@@ -199,9 +200,14 @@ public class ProfileScreenBase extends AnchorPane {
         anchorPane.getChildren().add(textUsername);
         anchorPane.getChildren().add(textEmail);
         anchorPane.getChildren().add(textScore);
+        anchorPane.getChildren().add(buttonExit);
+        anchorPane.getChildren().add(buttonMinimize);
         getChildren().add(anchorPane);
         //getChildren().add(imgLogo);
-        
+        Player player = SharedData.getCurrentPlayer();
+        textUsername.setText(player.getUserName());
+        textEmail.setText(player.getEmail());
+        textScore.setText(""+ player.getScore());
 
         
         // Work

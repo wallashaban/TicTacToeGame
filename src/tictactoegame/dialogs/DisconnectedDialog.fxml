@@ -15,23 +15,14 @@
    </padding>
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e8ccd5" height="200.0" layoutX="72.0" layoutY="67.0" stroke="#d9d9d9" strokeType="INSIDE" style="-fx-arc-width: 40; -fx-arc-height: 40;" width="451.0" />
-      <Button fx:id="btnAccept" layoutX="156.0" layoutY="283.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="113.0" style="-fx-background-color: CF8A9B; -fx-background-radius: 40; -fx-font-style: Bold;" text="Accept" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="btnAccept" layoutX="253.0" layoutY="281.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="113.0" style="-fx-background-color: CF8A9B; -fx-background-radius: 40; -fx-font-style: Bold;" text="OK" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="Gill Sans MT Bold Italic" size="20.0" />
          </font></Button>
-      <Button fx:id="btnNotNow" layoutX="338.0" layoutY="283.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="121.0" style="-fx-background-color: CF8A9B; -fx-background-radius: 40;" text="Not Now" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font name="Gill Sans MT Bold Italic" size="20.0" />
-         </font></Button>
-      <Label fx:id="labelRequestMessage" layoutX="96.0" layoutY="94.0" lineSpacing="1.5" prefHeight="146.0" prefWidth="402.0" text="Ahmed, Anas challenges you to a game of Tic Tac Toe. Ready for the challenge? Click here to accept and play as Player Two!" wrapText="true">
+      <Label fx:id="labelRequestMessage" layoutX="139.0" layoutY="97.0" lineSpacing="1.5" prefHeight="140.0" prefWidth="317.0" text="It seems you are disconnected." textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="Gill Sans MT" size="24.0" />
          </font></Label>
-      <Button layoutX="549.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-radius: 30; -fx-background-color: e8ccd5;" text="-">
-         <font>
-            <Font name="Segoe UI Bold Italic" size="16.0" />
-         </font>
-      </Button>
    </children>
    <stylesheets>
       <URL value="@BackGround.css" />
