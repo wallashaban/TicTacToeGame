@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -33,8 +34,9 @@ public class ClientGameScreenBase extends AnchorPane {
     DataInputStream in;
     PrintStream out;
     MessageController message;
-    Move move;
-
+    Move move; // need to handle get move from server 
+    char t;
+            Gson gson;
     protected final Button btnExit;
     protected final Button btnMin;
     protected final Label txtPlay1Name;
@@ -70,7 +72,8 @@ public class ClientGameScreenBase extends AnchorPane {
     private int player2Score = 0;
     private int tieScore = 0;
     private boolean playerTurn = true;
-    private char playerSymbol = ' '; 
+    private char playerSymbol = ' ';
+    public ClientConnection connection = new ClientConnection();
 
     public ClientGameScreenBase() {
 
@@ -382,7 +385,9 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[7] = btn8;
         buttons[8] = btn9;
 
-        btnExit.setOnAction((ActionEvent event) -> { System.exit(0); }); // lmbada
+        btnExit.setOnAction((ActionEvent event) -> {
+            System.exit(0);
+        }); // lmbada
 
         btnMin.setOnAction((ActionEvent event) -> {
             Stage stage = (Stage) btnMin.getScene().getWindow();
@@ -392,8 +397,28 @@ public class ClientGameScreenBase extends AnchorPane {
         // box(1 - 12 "10 = win" "11 = draw" "12 = lose")                   <<<<><><>>>>
         //and sign( X , O) // in case 10,11,12 will send sign (d or w or l) <<<<><><>>>>
         //I`m independ on input only avilable place
-        ClientConnection connection = new ClientConnection();
-        connection.connect();
+        //connection.connect();
+        
+        connect();
+        
+        out.println("after Conne");
+
+        gson = new GsonBuilder().create();
+        String msg;
+        try {
+            System.out.println("before msg");
+            msg = in.readLine();
+            System.out.println("after");
+
+            Move m = gson.fromJson(msg, Move.class);
+            
+            if (m.getBox() == 0) {
+                t = m.getSign();
+                System.out.println("Player Sign is <><><><><> " + t);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ClientGameScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
         playGame();
     }
 
@@ -401,9 +426,11 @@ public class ClientGameScreenBase extends AnchorPane {
         // resetBoard();
         player1Score = 0;
         player2Score = 0;
-        tieScore = 0;
+        tieScore = 0;       // drawScore
         updateScores();
-        playerSymbol = move.getSign();
+        
+        //playerSymbol = 'X'; // TODO<><><>Bougs
+        
         playerTurn = true;
 
         for (int i = 0; i < 9; i++) {
@@ -412,43 +439,82 @@ public class ClientGameScreenBase extends AnchorPane {
         }
     }
 
-    private void onButtonClick(int index) {
+       private void onButtonClick(int index) {
         if (playerTurn && buttons[index].getText() == " ") {
-            buttons[index].setText("X");
+            if(t == 'x'){
+                t = '0';
+            buttons[index].setText("x");
             playerTurn = false;
-            
-            char myChar = playerSymbol;
-            String symbol = String.valueOf(myChar);
-            buttons[index].setText(symbol);
-            
-            out.write(index);
-            out.flush(); // sent imediately
-            Move movement = receiveFromServerMovementsAndStates();
-            switch (movement.getSign()) {
-                case 'W':
-                    showDialog('W');
-                    break;
-                case 'L':
-                    showDialog('L');
-                    break;
-                case 'D':
-                    showDialog('D');
-                    break;
-                default:
-                    //while (true) {
-                        try {
-                            int move = in.readInt(); 
-                            buttons[move].setText(symbol);
+            Move platerMove = new Move('x', index);
+            Gson gson = new Gson();
+            String moveJson = gson.toJson(platerMove);
+            out.println(moveJson);
+            } else {
+                t = 'x';
+                Move receivedMove = receiveFromServerMovementsAndStates();
+               // Move movement = receiveFromServerMovementsAndStates();
+                    switch (receivedMove.getSign()) {
+                        case 'w':
+                            showDialog('w');
+                            break;
+                        case 'l':
+                            showDialog('l');
+                            break;
+                        case 'd':
+                            showDialog('d');
+                            break;
+                        default:
+                            buttons[receivedMove.getBox()].setText(receivedMove.getSign() + "");
                             playerTurn = true;
-                        } catch (IOException e) {
-                            e.printStackTrace(); // case of closed the connection
-                        }
-                        break;
-                    //}
+                            break;
+                    }
             }
         }
     }
-        
+    
+//    private void onButtonClick(int index, PrintStream out) {
+//        if (playerTurn && buttons[index].getText() == " ") {
+//            buttons[index].setText("x");
+//            playerTurn = false;
+//            //char myChar = playerSymbol;
+//            //String symbol = String.valueOf(myChar);
+//            //out.write(index); // send Move and recive Move
+//            //out.flush(); // sent imediately
+//            Move platerMove = new Move('x', index);
+//            Gson gson = new Gson();
+//            String moveJson = gson.toJson(platerMove);
+//            connection.out.println(moveJson);
+//
+////            Gson gson = new Gson();
+////            ArrayList jsonRequest = new ArrayList();
+////            jsonRequest.add("update");
+////            jsonRequest.add(platerMove);
+//            //String gsonRequest = gson.toJson(jsonRequest);
+//            
+//            //connection.out.println(gsonRequest);
+//            Move receivedMove = receiveFromServerMovementsAndStates();
+//            Move movement = receiveFromServerMovementsAndStates();
+//            switch (movement.getSign()) {
+//                case 'w':
+//                    showDialog('w');
+//                    break;
+//                case 'l':
+//                    showDialog('l');
+//                    break;
+//                case 'd':
+//                    showDialog('d');
+//                    break;
+//                default:
+//                    //int move = in.readInt();
+////                    Move opponeantMove = receiveFromServerMovementsAndStates();
+//                    buttons[receivedMove.getBox()].setText(receivedMove.getSign() + "");
+//                    playerTurn = true;
+//                    break;
+//                //}                //}
+//            }
+//        }
+//    }
+
     private void updateScores() {
         txtPlay1Score.setText("" + player1Score);
         txtPlay2Score.setText(player2Score + "");
@@ -469,21 +535,24 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[secondButton].setStyle(style);
         buttons[thirdButton].setStyle(style);
     }
-    
+
     public int read() {
         return 0;
     }
+
     // ToDo <<<>>>
     public void sendToServerMovements() {
     }
+
     // ToDo <<<>>>
     public Move receiveFromServerMovementsAndStates() {
         try {
-        int code = in.readInt();
-        char sign = in.readChar();
-
-        return new Move(sign, code);
-
+            //int code = in.readInt();
+            //char sign = in.readChar();
+            String receivedJson = in.readLine();
+            
+            return gson.fromJson(receivedJson, Move.class);
+            //return new Move(sign, code);
         } catch (IOException e) {
             e.printStackTrace(); // case of a closed connection
             return null;
@@ -515,38 +584,40 @@ public class ClientGameScreenBase extends AnchorPane {
         stage.setScene(scene);
         stage.showAndWait();
     }
-    
+
     public void connect() {
         try {
+            System.out.println("test out");
             mySocket = new Socket(Constants.IP_ADDRESS, Constants.PORT);
+            System.out.println("test1");
             in = new DataInputStream(mySocket.getInputStream());
             out = new PrintStream(mySocket.getOutputStream());
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
 //            showNoConnectionDialog();
         }
-        startListening();
+        //  startListening();
     }
-    
+
     public void startListening() {
         new Thread(() -> {
             try {
-                while (mySocket != null && !(mySocket.isClosed()) && in !=null) {
+                while (mySocket != null && !(mySocket.isClosed()) && in != null) {
                     String gsonResponse = in.readLine();
                     Gson gson = new GsonBuilder().create();
                     Move move = gson.fromJson(gsonResponse, Move.class);
 //                    handleResponse(gsonResponse);
                 }
             } catch (IOException ex) {
-                Platform.runLater(new Runnable(){
-                            @Override
-                            public void run(){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
 //                                showDisconnectedDialog();
-                            }
-                        });
+                    }
+                });
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
         }).start();
     }
+    
 }
-
