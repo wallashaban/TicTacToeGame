@@ -113,6 +113,9 @@ public class ClientConnection {
             case "startGame":
                 startGame(response);
                 break;
+            case "AvailableUsers":
+                updateAvailableUsers(response);
+                break;
 //            case 5:
 //                //TODO updateBoard();
 //                break;
@@ -180,6 +183,14 @@ public class ClientConnection {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
+    }
+    private void updateAvailableUsers(ArrayList<String> response){
+        System.out.println(response.get(0));
+        Gson gson = new GsonBuilder().create();
+        String jsonArrayOFPlayers = response.get(1);
+        ArrayList<Player> availablePlayers = gson.fromJson(jsonArrayOFPlayers, ArrayList.class);
+        SharedData.availablePlayers = availablePlayers;
+        System.out.println("Available Players: "+ SharedData.availablePlayers.toString());
     }
 } 
 

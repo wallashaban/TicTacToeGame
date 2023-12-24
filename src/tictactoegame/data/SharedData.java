@@ -7,6 +7,7 @@ package tictactoegame.data;
 
 import tictactoegame.data.Player;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.stage.Stage;
 
@@ -19,6 +20,7 @@ public class SharedData {
     public static boolean connectionStatus;
     public static Socket socket;
     public static Stage stage;
+    public static ArrayList<Player> availablePlayers;
     
     HashMap<String, String> StringData;
     HashMap<String, Integer> IntData;
