@@ -39,10 +39,10 @@ import tictactoegame.dialogs.drawDialogBase;
  * @author anasn
  */
 public class ClientConnection {    
-    Socket mySocket;
-    DataInputStream in;
-    PrintStream out;
-    ArrayList responceData;
+    public Socket mySocket;
+    public DataInputStream in;
+    public PrintStream out;
+    public ArrayList responceData;
 
     public void connect() {
         try {
