@@ -1,3 +1,4 @@
+
 package tictactoegame.GameVsPC;
 
 import tictactoegame.GameVsPC.*;
@@ -608,7 +609,7 @@ public class GameVsPcBaseUI extends AnchorPane {
     private void updateScores() {
         playerScore.setText("" + player1Score);
         pcScore.setText(player2Score + "");
-        tieScore.setText("" + drawScore);
+        tie.setText("" + drawScore);
     }
 
     private void resetBoard() {
@@ -621,6 +622,8 @@ public class GameVsPcBaseUI extends AnchorPane {
             board[row][col] = "-";
         }
     }  
+    
+    
     
     private void replay() {
         // ToDo <<<>>> Bougs here anos
