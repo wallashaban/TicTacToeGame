@@ -3,7 +3,6 @@ package ClientGame;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -11,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,7 +20,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import tictactoegame.GameVsPC.AlertDialog;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
 import tictactoegame.data.MessageController;
@@ -36,6 +33,7 @@ public class ClientGameScreenBase extends AnchorPane {
     DataInputStream in;
     PrintStream out;
     MessageController message;
+    Move move;
 
     protected final Button btnExit;
     protected final Button btnMin;
@@ -72,7 +70,7 @@ public class ClientGameScreenBase extends AnchorPane {
     private int player2Score = 0;
     private int tieScore = 0;
     private boolean playerTurn = true;
-    private String playerSymbol = ""; // here know if it x or o 
+    private char playerSymbol = ' '; 
 
     public ClientGameScreenBase() {
 
@@ -391,6 +389,8 @@ public class ClientGameScreenBase extends AnchorPane {
             stage.setIconified(true);
         });
         // btn bac
+        // box(1 - 12 "10 = win" "11 = draw" "12 = lose")                   <<<<><><>>>>
+        //and sign( X , O) // in case 10,11,12 will send sign (d or w or l) <<<<><><>>>>
         //I`m independ on input only avilable place
         ClientConnection connection = new ClientConnection();
         connection.connect();
@@ -403,7 +403,7 @@ public class ClientGameScreenBase extends AnchorPane {
         player2Score = 0;
         tieScore = 0;
         updateScores();
-        playerSymbol = "X"; // i will get it from Objict 
+        playerSymbol = move.getSign();
         playerTurn = true;
 
         for (int i = 0; i < 9; i++) {
@@ -412,38 +412,43 @@ public class ClientGameScreenBase extends AnchorPane {
         }
     }
 
-    // X play first if u care for this info    
     private void onButtonClick(int index) {
         if (playerTurn && buttons[index].getText() == " ") {
-            try {
-                buttons[index].setText(playerSymbol);
-                playerTurn = false;
-
-                out.writeInt(index);
-                out.flush(); // sent imediately
-
-            } catch (IOException ex) {
-                Logger.getLogger(ClientGameScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+            buttons[index].setText("X");
+            playerTurn = false;
+            
+            char myChar = playerSymbol;
+            String symbol = String.valueOf(myChar);
+            buttons[index].setText(symbol);
+            
+            out.write(index);
+            out.flush(); // sent imediately
+            Move movement = receiveFromServerMovementsAndStates();
+            switch (movement.getSign()) {
+                case 'W':
+                    showDialog('W');
+                    break;
+                case 'L':
+                    showDialog('L');
+                    break;
+                case 'D':
+                    showDialog('D');
+                    break;
+                default:
+                    //while (true) {
+                        try {
+                            int move = in.readInt(); 
+                            buttons[move].setText(symbol);
+                            playerTurn = true;
+                        } catch (IOException e) {
+                            e.printStackTrace(); // case of closed the connection
+                        }
+                        break;
+                    //}
             }
-            /*
-            if state for input  W  {
-                show dialog winner()
-            } else if state L {
-                show dialog for Loser()
-            } else if state D {
-                show dialog for Draw()
-            } else {
-                while (true) {
-                    try {
-                        int move = in.readInt(); // it will be obict not int 
-                    } catch (IOException e) {
-                        e.printStackTrace(); // case of closed the connection
-                    }
-                }
-            }
-            */
         }
     }
+        
     private void updateScores() {
         txtPlay1Score.setText("" + player1Score);
         txtPlay2Score.setText(player2Score + "");
@@ -451,16 +456,6 @@ public class ClientGameScreenBase extends AnchorPane {
         txtTieScore.setText("" + tieScore);
     }
 
-    private void showDialog(char winner) {
-        message = new MessageController();
-        message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message);
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.showAndWait();
-    }
-    
     private void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
         String style = "-fx-text-fill: ";
 
@@ -482,7 +477,43 @@ public class ClientGameScreenBase extends AnchorPane {
     public void sendToServerMovements() {
     }
     // ToDo <<<>>>
-    public void reciveFromServerMovementsAndStates() {
+    public Move receiveFromServerMovementsAndStates() {
+        try {
+        int code = in.readInt();
+        char sign = in.readChar();
+
+        return new Move(sign, code);
+
+        } catch (IOException e) {
+            e.printStackTrace(); // case of a closed connection
+            return null;
+        }
+    }
+
+    private void showDialog(int code) {
+        String result;
+        switch (code) {
+            case 10:
+                result = "Winner";
+                break;
+            case 11:
+                result = "Draw";
+                break;
+            case 12:
+                result = "Loser"; // we need to handl dialog for loser <<<>>> TODO Bougs here
+                break;
+            default:
+                result = "Unknown Result";
+                break;
+        }
+
+        message = new MessageController();
+        message.setWinner(result.charAt(0)); // Assuming the first character represents the result
+        Parent parent = new PlayAgainDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
     }
     
     public void connect() {
