@@ -404,21 +404,6 @@ public class ClientGameScreenBase extends AnchorPane {
         out.println("after Conne");
 
         gson = new GsonBuilder().create();
-        String msg;
-        try {
-            System.out.println("before msg");
-            msg = in.readLine();
-            System.out.println("after");
-
-            Move m = gson.fromJson(msg, Move.class);
-            
-            if (m.getBox() == 0) {
-                t = m.getSign();
-                System.out.println("Player Sign is <><><><><> " + t);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ClientGameScreenBase.class.getName()).log(Level.SEVERE, null, ex);
-        }
         playGame();
     }
 
@@ -431,17 +416,51 @@ public class ClientGameScreenBase extends AnchorPane {
         
         //playerSymbol = 'X'; // TODO<><><>Bougs
         
+        
+       
+        
+        
         playerTurn = true;
 
         for (int i = 0; i < 9; i++) {
             int index = i;
             buttons[i].setOnAction((ActionEvent event) -> onButtonClick(index));
         }
+          String msg;
+        try {
+            System.out.println("before msg");
+            msg = in.readLine();
+            System.out.println("after");
+
+            Move m = gson.fromJson(msg, Move.class);
+            
+            if (m.getBox() == 0) {
+                t = m.getSign();
+                System.out.println("Player Sign is <><><><><> " + t);
+                new Thread(){
+                    @Override
+                    public void run() {
+                        
+                Move receivedMove = receiveFromServerMovementsAndStates();
+                 Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                buttons[receivedMove.getBox()].setText(receivedMove.getSign() + "");                    }
+                });
+                    }
+                };
+             
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ClientGameScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
        private void onButtonClick(int index) {
         if (playerTurn && buttons[index].getText() == " ") {
             if(t == 'x'){
+                System.out.println("enter t if condition");
                 t = '0';
             buttons[index].setText("x");
             playerTurn = false;
@@ -450,6 +469,8 @@ public class ClientGameScreenBase extends AnchorPane {
             String moveJson = gson.toJson(platerMove);
             out.println(moveJson);
             } else {
+                                System.out.println("t condition false");
+
                 t = 'x';
                 Move receivedMove = receiveFromServerMovementsAndStates();
                // Move movement = receiveFromServerMovementsAndStates();
