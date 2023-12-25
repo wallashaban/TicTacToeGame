@@ -22,8 +22,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.SignUp.SignUpUI;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.data.Player;
@@ -123,11 +121,10 @@ public class LoginDesignUI extends BorderPane {
         loginButton.setFont(new Font("Arial Bold", 25.0));
         FlowPane.setMargin(loginButton, new Insets(60.0, 0.0, 10.0, 90.0));
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
             public void handle(ActionEvent event) {
                 String email = emailTextField.getText();
                 String password = passwordTextField.getText();
-                if(email != null && password !=null){
+                if (email != null && password != null) {
                     Player player = new Player(null, password, email, true, null);
                     Gson gson = new GsonBuilder().create();
                     String jsonMessage = gson.toJson(player);
@@ -138,8 +135,7 @@ public class LoginDesignUI extends BorderPane {
                     requestArray.add(jsonMessage);
                     String request = gson.toJson(requestArray);
                     connection.sendRequest(request);
-                }
-                else{
+                } else {
                     Dialog<String> invalidInputDialog;
                     invalidInputDialog = new Dialog<String>();
                     invalidInputDialog.setTitle("Invalid Data");
@@ -157,7 +153,7 @@ public class LoginDesignUI extends BorderPane {
         FlowPane.setMargin(newPlayerQuestionLable, new Insets(10.0, 0.0, 0.0, 55.0));
         BorderPane.setMargin(contentFlowView, new Insets(20.0, 0.0, 0.0, 0.0));
         setCenter(contentFlowView);
-        newPlayerQuestionLable.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        newPlayerQuestionLable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 Parent root = new SignUpUI();
@@ -165,7 +161,8 @@ public class LoginDesignUI extends BorderPane {
                 Stage stage = SharedData.getStage();
                 stage.setScene(scene);
                 stage.show();
-            }});
+            }
+        });
 
         BorderPane.setAlignment(logoView, javafx.geometry.Pos.CENTER);
         logoView.setHgap(15.0);
@@ -225,7 +222,7 @@ public class LoginDesignUI extends BorderPane {
         logoView.getChildren().add(letterY);
         pane.getChildren().add(buttonMinimize);
         pane.getChildren().add(buttonExit);
-        
+
     }
-    
+
 }
