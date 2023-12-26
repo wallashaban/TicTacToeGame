@@ -22,6 +22,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import tictactoegame.connection.ClientConnection;
+import tictactoegame.connection.Constants;
 import tictactoegame.data.Player;
 
 public class AvailbleUsersScreenUI extends AnchorPane {
@@ -34,55 +36,46 @@ public class AvailbleUsersScreenUI extends AnchorPane {
     protected final Label label1;
     protected final ScrollPane scrollPane;
     protected final FlowPane flowPane;
-
-    DataInputStream dataInputStream;
-    PrintStream printStream;
-    Socket socket;
     ArrayList<Player> players;
 
     public AvailbleUsersScreenUI() {
         players = new ArrayList<Player>();
-        try {
-            socket = new Socket("127.0.0.1", 7777);
-            dataInputStream = new DataInputStream(socket.getInputStream());
-            printStream = new PrintStream(socket.getOutputStream());
-            ArrayList<String> messages = new ArrayList<>();
-            messages.add("getOnlineUsers");
-            Gson gson = new GsonBuilder().create();
-            String jsonMessage = gson.toJson(messages);
-            printStream.println(jsonMessage);
-            new Thread() {
-                @Override
-                public void run() {
-                    while (true) {
-                        try {
-                            String response = dataInputStream.readLine();
-                            ArrayList<String> responseList = new ArrayList<>();
-                            responseList = gson.fromJson(response, ArrayList.class);
-                            switch (responseList.get(0)) {
-                                case ("getOnlineUsers"):
-
-                                    java.lang.reflect.Type playerListType = new TypeToken<List<Player>>() {
-                                    }.getType();
-                                    players = gson.fromJson(responseList.get(1), playerListType);
-                                    System.err.println("length " + players.size());
-                                    break;
-                            }
-                        } catch (IOException ex) {
-                            Logger.getLogger(AvailbleUsersScreenUI.class.getName()).log(Level.SEVERE, null, ex);
+        ArrayList<String> messages = new ArrayList<>();
+        messages.add("getAvailableUsers");
+        Gson gson = new GsonBuilder().create();
+        String jsonMessage = gson.toJson(messages);
+        //printStream.println(jsonMessage);
+        ClientConnection.sendRequest(jsonMessage);
+        new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        String response = ClientConnection.in.readLine();
+                        ArrayList<String> responseList = new ArrayList<>();
+                        responseList = gson.fromJson(response, ArrayList.class);
+                        switch (responseList.get(0)) {
+                            case ("AvailableUsers"):
+                                
+                                java.lang.reflect.Type playerListType = new TypeToken<List<Player>>() {
+                                }.getType();
+                                players = gson.fromJson(responseList.get(1), playerListType);
+                                System.err.println("length " + players.size());
+                                break;
                         }
-
+                        
+                        
                         Platform.runLater(() -> {
                             for (int i = 0; i < players.size(); i++) {
                                 Pane availableUsersPane = new Pane();
                                 Label nameLabel = new Label();
                                 Label scoreLabel = new Label();
                                 final Hyperlink chalengeNowLink = new Hyperlink();
-
+                                
                                 availableUsersPane.setPrefHeight(105.0);
                                 availableUsersPane.setPrefWidth(221.0);
                                 availableUsersPane.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
-
+                                
                                 nameLabel.setLayoutX(24.0);
                                 nameLabel.setLayoutY(14.0);
                                 nameLabel.setPrefHeight(21.0);
@@ -90,7 +83,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                 nameLabel.setText(players.get(i).getUserName());
                                 nameLabel.setTextFill(javafx.scene.paint.Color.WHITE);
                                 nameLabel.setFont(new Font("Gill Sans MT Bold", 18.0));
-
+                                
                                 scoreLabel.setLayoutX(24.0);
                                 scoreLabel.setLayoutY(38.0);
                                 scoreLabel.setPrefHeight(21.0);
@@ -98,7 +91,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                 scoreLabel.setText("Score : " + players.get(i).getScore());
                                 scoreLabel.setTextFill(javafx.scene.paint.Color.WHITE);
                                 scoreLabel.setFont(new Font("Gill Sans MT Bold", 18.0));
-
+                                
                                 chalengeNowLink.setLayoutX(24.0);
                                 chalengeNowLink.setLayoutY(68.0);
                                 chalengeNowLink.setPrefHeight(23.0);
@@ -114,13 +107,13 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                         requestMessages.add(userName);
                                         Gson gson = new GsonBuilder().create();
                                         String requestJson = gson.toJson(requestMessages);
-                                        printStream.println(requestJson);
+                                        ClientConnection.sendRequest(requestJson);
                                     }
-
+                                    
                                 });
                                 FlowPane.setMargin(availableUsersPane,
                                         new Insets(30.0, 20.0, 0.0, 20.0));
-
+                                
                                 availableUsersPane.getChildren()
                                         .add(nameLabel);
                                 availableUsersPane.getChildren()
@@ -130,18 +123,18 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                 flowPane.getChildren()
                                         .add(availableUsersPane);
                             }
-
+                            
                             scrollPane.setContent(flowPane);
                         });
+                    } catch (IOException ex) {
+                        Logger.getLogger(AvailbleUsersScreenUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 }
 
             }
-                    .start();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+
+        };
+                //.start();
 
         pane = new Pane();
         label = new Label();

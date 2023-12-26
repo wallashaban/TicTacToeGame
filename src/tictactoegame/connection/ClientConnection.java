@@ -8,6 +8,7 @@ package tictactoegame.connection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.sun.rmi.rmid.ExecOptionPermission;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -26,11 +27,13 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import tictactoegame.data.SharedData;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.data.Player;
 import tictactoegame.dialogs.DisconnectedDialogBase;
+import tictactoegame.dialogs.ExceptionDialog;
 import tictactoegame.dialogs.NoConnectionDialogBase;
 import tictactoegame.dialogs.drawDialogBase;
 
@@ -40,10 +43,10 @@ import tictactoegame.dialogs.drawDialogBase;
  */
 public class ClientConnection {
 
-    private static Socket mySocket;
-    private static DataInputStream in;
-    private static PrintStream out;
-    private static ArrayList responceData;
+    public static Socket mySocket;
+    public static DataInputStream in;
+    public static PrintStream out;
+    public static ArrayList responceData;
 
     public static void connect() {
         try {
@@ -191,6 +194,7 @@ public class ClientConnection {
         stage.showAndWait();
     }
 
+    
     private static void showDisconnectedDialog() {
         Parent parent = new DisconnectedDialogBase();
         Scene scene = new Scene(parent);

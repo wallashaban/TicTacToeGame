@@ -25,8 +25,10 @@ import javafx.stage.Stage;
 import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.Login.LoginDesignUI;
 import tictactoegame.connection.ClientConnection;
+import tictactoegame.connection.Constants;
 import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
+import tictactoegame.dialogs.ExceptionDialog;
 import tictactoegame.dialogs.errorDialogBase;
 
 public class SignUpUI extends Pane {
@@ -56,7 +58,6 @@ public class SignUpUI extends Pane {
 //        } catch (IOException ex) {
 //            ex.printStackTrace();
 //        }
-
         labelSignUp = new Label();
         labelsubtitle = new Label();
         txtFFullName = new TextField();
@@ -69,7 +70,6 @@ public class SignUpUI extends Pane {
         letterY = new Label();
         buttonExit = new Button();
         buttonMinimize = new Button();
-        
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -146,7 +146,7 @@ public class SignUpUI extends Pane {
         alreadyHaveAccLabel.setUnderline(true);
         alreadyHaveAccLabel.setTextFill(javafx.scene.paint.Color.WHITE);
         alreadyHaveAccLabel.setFont(new Font("Segoe UI", 20.0));
-        alreadyHaveAccLabel.setOnMouseClicked((e)->{
+        alreadyHaveAccLabel.setOnMouseClicked((e) -> {
             Parent root = new LoginDesignUI();
             Scene scene = new Scene(root);
             Stage stage = SharedData.getStage();
@@ -174,7 +174,9 @@ public class SignUpUI extends Pane {
         buttonExit.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
         buttonExit.setText("X");
         buttonExit.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
-        buttonExit.setOnAction((e) ->{Platform.exit();});
+        buttonExit.setOnAction((e) -> {
+            Platform.exit();
+        });
 
         buttonMinimize.setLayoutX(707.0);
         buttonMinimize.setLayoutY(11.0);
@@ -201,44 +203,42 @@ public class SignUpUI extends Pane {
         getChildren().add(letterY);
         getChildren().add(buttonExit);
         getChildren().add(buttonMinimize);
-        
-        
-         btnSignUp.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+        btnSignUp.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                System.out.println("name" + txtFFullName.getText());
-                if (txtFFullName.getText().length() < 1) {
-                    showDialog("Please enter your name...");
-                } else {
-                    if (txtFEmail.getText().length() < 1) {
-                        showDialog("Please enter your email...");
-                    } else {
-                        if (txtFPasword.getText().length() < 1) {
-                            showDialog("Please enter your password...");
-                        } else {
-                            // System.out.println("id "+Player.setId());
-                            signUpUser();
-                        }
+                handleSignupCases();
+            }
+        });
 
-                    }
+    }
+
+    private void handleSignupCases() {
+        if (txtFFullName.getText().length() < 3) {
+            Constants.showDialog("Please enter your name properly...");
+        } else {
+            if (txtFEmail.getText().length() < 3) {
+                Constants.showDialog("Please enter your email properly...");
+            } else {
+                if (!(txtFEmail.getText().contains("@")) || !(txtFEmail.getText().contains("."))) {
+                            Constants.showDialog("You should add (.) and @ in your email");
+                        } else {
+                if (txtFPasword.getText().length() < 3) {
+                    Constants.showDialog("Please enter your password properly...");
+                } else {
+                    
+                    if (!(txtFConfirmPassword.getText().equals( txtFPasword.getText()))) {
+                        Constants.showDialog("Your password and confirm password should be the same...");
+                    } else {
+                            signUpUser();
+                    }}
                 }
+
             }
         }
-        );
+    }
 
-    }
-    
-     private void showDialog(String message) {
-//        message = new MessageController();
-//        message.setWinner(winner);
-        Parent parent = new errorDialogBase(message);
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.showAndWait();
-    }
-     
-     private void signUpUser() {
+    private void signUpUser() {
         Player player = new Player(txtFFullName.getText(), txtFPasword.getText(),
                 txtFEmail.getText(), true, null);
         SharedData.currentPlayer = player;
@@ -248,11 +248,10 @@ public class SignUpUI extends Pane {
         response.add("signup");
         response.add(signupMessage);
         String responseJson = gson.toJson(response);
-         System.err.println(signupMessage);
+        System.err.println(signupMessage);
         ClientConnection.sendRequest(responseJson);
     }
-     
-     
+
 //    private  void handleSigupResponse(String signUpResponse)
 //    {
 //        try {
@@ -284,5 +283,4 @@ public class SignUpUI extends Pane {
 //            ex.printStackTrace();
 //        }
 //    }
-
 }
