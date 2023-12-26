@@ -18,8 +18,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.LocalGame.GameRoomScreen;
 import tictactoegame.data.Player;
+import tictactoegame.data.SharedData;
 
 public class MainScreenUI extends AnchorPane {
 
@@ -231,8 +233,6 @@ public class MainScreenUI extends AnchorPane {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Parent root = new GameRoomScreen();
                 Scene scene = new Scene(root);
-
-                stage.setTitle("Text Editor app");
                 stage.setScene(scene);
                 stage.show();
             }
@@ -243,8 +243,6 @@ public class MainScreenUI extends AnchorPane {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Parent root = new GameRoomScreen();
                 Scene scene = new Scene(root);
-
-                stage.setTitle("Text Editor app");
                 stage.setScene(scene);
                 stage.show();
             }
@@ -252,11 +250,15 @@ public class MainScreenUI extends AnchorPane {
         onlinePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Parent root = new LoginDesignUI();
+                Stage stage = SharedData.getStage();
+                Parent root;
+                if(SharedData.getCurrentPlayer() == null){
+                    root = new LoginDesignUI();
+                }
+                else{
+                    root = new AvailableUsersScreen();
+                }
                 Scene scene = new Scene(root);
-
-                stage.setTitle("Text Editor app");
                 stage.setScene(scene);
                 stage.show();
             }
@@ -269,7 +271,6 @@ public class MainScreenUI extends AnchorPane {
                 Scene scene = new Scene(root);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setTitle("Text Editor app");
                 stage.setScene(scene);
                 stage.show();
             }

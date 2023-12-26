@@ -5,11 +5,11 @@
  */
 package tictactoegame.data;
 
-import tictactoegame.data.Player;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.stage.Stage;
+import tictactoegame.GameReplay;
 
 /**
  *
@@ -21,7 +21,7 @@ public class SharedData {
     public static Socket socket;
     public static Stage stage;
     public static ArrayList<Player> availablePlayers;
-    
+    public static GameReplay gameReplay;
     HashMap<String, String> StringData;
     HashMap<String, Integer> IntData;
 
