@@ -1,5 +1,6 @@
 package tictactoegame.MainScreen;
 
+import ClientGame.ClientGameScreenBase;
 import tictactoegame.Login.LoginDesignUI;
 import tictactoegame.ProfileScreen.ProfileScreenBase;
 import javafx.application.Platform;
@@ -253,7 +254,7 @@ public class MainScreenUI extends AnchorPane {
             @Override
             public void handle(MouseEvent event) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Parent root = new LoginDesignUI();
+                Parent root = new ClientGameScreenBase();
                 Scene scene = new Scene(root);
 
                 stage.setTitle("Text Editor app");

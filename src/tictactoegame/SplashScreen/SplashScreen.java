@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.connection.ClientConnection;
 
 public class SplashScreen extends AnchorPane {
 
@@ -31,6 +32,7 @@ public class SplashScreen extends AnchorPane {
 
     public SplashScreen() {
 
+        ClientConnection.connect();
         pane = new Pane();
         label = new Label();
         imageView = new ImageView();

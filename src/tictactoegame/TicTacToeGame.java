@@ -23,8 +23,8 @@ public class TicTacToeGame extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        //Parent root = new SplashScreen();
-        Parent root = new ClientGameScreenBase();
+        Parent root = new SplashScreen();
+       // Parent root = new ClientGameScreenBase();
         SharedData.setStage(stage);
         Scene scene = new Scene(root);
          
