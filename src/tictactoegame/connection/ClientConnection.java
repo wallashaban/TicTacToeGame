@@ -40,10 +40,12 @@ import tictactoegame.dialogs.drawDialogBase;
  */
 public class ClientConnection {
 
+    private static Thread thread;
     private static Socket mySocket;
     private static DataInputStream in;
     private static PrintStream out;
     private static ArrayList responceData;
+
     public static void connect() {
         try {
             mySocket = new Socket(Constants.IP_ADDRESS, Constants.PORT);
@@ -58,9 +60,24 @@ public class ClientConnection {
 
     public static void closeConnection() {
         try {
-            in.close();
-            out.close();
-            mySocket.close();
+            if(!mySocket.isClosed()){
+            thread.stop();
+            ArrayList<String> requestArray = new ArrayList<String>();
+            requestArray.add("logout");
+            Gson gson = new GsonBuilder().create();
+            String request = gson.toJson(requestArray);
+            sendRequest(request);
+            //out.println("logout");
+           String msgArray = in.readLine();
+//           System.out.println(msgArray);
+//            ArrayList<String> messages = gson.fromJson(msgArray, ArrayList.class);
+//            String msg = messages.get(0);
+            if (msgArray.equals("exit")) {
+                in.close();
+                out.close();
+                mySocket.close();
+            }
+            }
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -73,22 +90,42 @@ public class ClientConnection {
     }
 
     public static void startListening() {
-        new Thread(() -> {
-            try {
-                while (mySocket != null && !(mySocket.isClosed()) && in != null) {
-                    String gsonResponse = in.readLine();
-                    handleResponse(gsonResponse);
-                }
-            } catch (IOException ex) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        showDisconnectedDialog();
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (mySocket != null && !(mySocket.isClosed()) && in != null) {
+                        String gsonResponse = in.readLine();
+                        handleResponse(gsonResponse);
                     }
-                });
-                Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            showDisconnectedDialog();
+                        }
+                    });
+                    Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        }).start();
+        });
+        thread.start();
+//        new Thread(() -> {
+//            try {
+//                while (mySocket != null && !(mySocket.isClosed()) && in != null) {
+//                    String gsonResponse = in.readLine();
+//                    handleResponse(gsonResponse);
+//                }
+//            } catch (IOException ex) {
+//                Platform.runLater(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        showDisconnectedDialog();
+//                    }
+//                });
+//                Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }).start();
     }
 
     public static void handleResponse(String gsonResponse) {

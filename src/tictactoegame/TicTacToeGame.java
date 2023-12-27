@@ -20,15 +20,21 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tictactoegame.data.SharedData;
 import tictactoegame.SplashScreen.SplashScreen;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 import tictactoegame.GameVsPC.GameVsPcBaseUI;
+import tictactoegame.connection.ClientConnection;
 /**
  *
  * @author Dr.Wlaa
@@ -47,6 +53,23 @@ public class TicTacToeGame extends Application {
         stage.setScene(scene);
         //stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
+        
+        
+        
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                            //ClientConnection.closeConnection();
+                            Platform.exit();
+                    }
+          });
+        
+        
+    }
+
+    @Override
+    public void stop() throws Exception {
+    ClientConnection.closeConnection();
     }
 
     /**

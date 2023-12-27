@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tictactoegame.LocalGame.GameRoomScreen;
+import tictactoegame.connection.ClientConnection;
 import tictactoegame.data.Player;
 
 public class MainScreenUI extends AnchorPane {
@@ -278,6 +279,7 @@ public class MainScreenUI extends AnchorPane {
         closePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+              //  ClientConnection.closeConnection();
                 Platform.exit();
             }
         });
