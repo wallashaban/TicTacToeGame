@@ -21,9 +21,14 @@ import javafx.stage.Stage;
 import tictactoegame.data.SharedData;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.AvailbleUsersScreenUI;
+//import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.data.Player;
 import tictactoegame.dialogs.DisconnectedDialogBase;
+//import tictactoegame.dialogs.NoConnectionDialogBase;
+import tictactoegame.dialogs.drawDialogBase;
 import tictactoegame.dialogs.AlertDialogBase;
+
+
 /**
  *
  * @author anasn
@@ -31,10 +36,10 @@ import tictactoegame.dialogs.AlertDialogBase;
 public class ClientConnection {
 
     private static Socket mySocket;
-    private static DataInputStream in;
-    private static PrintStream out;
+    public static DataInputStream in;
+    public static PrintStream out;
     private static ArrayList responceData;
-
+    public static Thread listeningThread;
     public static void connect() {
         try {
             mySocket = new Socket(Constants.IP_ADDRESS, Constants.PORT);
@@ -58,6 +63,8 @@ public class ClientConnection {
         }
     }
 
+
+
     public static void sendRequest(String gson) {
         if (out != null) {
             out.println(gson);
@@ -65,8 +72,10 @@ public class ClientConnection {
     }
 
     public static void startListening() {
-        new Thread(() -> {
-            try {
+         listeningThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+        try {
                 while (mySocket != null && !(mySocket.isClosed()) && in != null) {
                     String gsonResponse = in.readLine();
                     handleResponse(gsonResponse);
@@ -78,9 +87,16 @@ public class ClientConnection {
                         showDisconnectedDialog();
                     }
                 });
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDisconnectedDialog();
+                    }
+                });
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }).start();
+            }            }
+        });
+       listeningThread.start();
     }
 
     public static void handleResponse(String gsonResponse) {
@@ -91,6 +107,7 @@ public class ClientConnection {
             System.out.println("Response is null");
             return;
         }
+
 
         String action = response.get(0);
         switch (action) {

@@ -45,7 +45,7 @@ public class TicTacToeGame extends Application {
         Scene scene = new Scene(root);
          
         stage.setScene(scene);
-        stage.initStyle(StageStyle.UNDECORATED);
+        //stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
     }
 

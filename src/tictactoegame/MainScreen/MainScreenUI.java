@@ -1,5 +1,6 @@
 package tictactoegame.MainScreen;
 
+import ClientGame.ClientGameScreenBase;
 import tictactoegame.Login.LoginDesignUI;
 import tictactoegame.ProfileScreen.ProfileScreenBase;
 import javafx.application.Platform;
