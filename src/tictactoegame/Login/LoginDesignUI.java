@@ -3,6 +3,7 @@ package tictactoegame.Login;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,6 +16,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -22,12 +24,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.SignUp.SignUpUI;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
+import tictactoegame.dialogs.AlertDialogBase;
 
 public class LoginDesignUI extends BorderPane {
 
@@ -55,7 +56,7 @@ public class LoginDesignUI extends BorderPane {
         label = new Label();
         emailTextField = new TextField();
         label0 = new Label();
-        passwordTextField = new TextField();
+        passwordTextField = new PasswordField();
         loginButton = new Button();
         newPlayerQuestionLable = new Label();
         logoView = new FlowPane();
@@ -123,29 +124,27 @@ public class LoginDesignUI extends BorderPane {
         loginButton.setFont(new Font("Arial Bold", 25.0));
         FlowPane.setMargin(loginButton, new Insets(60.0, 0.0, 10.0, 90.0));
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
             public void handle(ActionEvent event) {
                 String email = emailTextField.getText();
                 String password = passwordTextField.getText();
-                if(email != null && password !=null){
+                if(email.length() < 1){
+                    showAlertDialog("Please Enter Your Email");
+                }
+                else if (password.length() < 1){
+                    showAlertDialog("Please Enter Your Password");
+                }
+                else if (! validateEmail(email)){
+                    showAlertDialog("Please Enter Valid Email Address");
+                }
+                else{
                     Player player = new Player(null, password, email, true, null);
                     Gson gson = new GsonBuilder().create();
                     String jsonMessage = gson.toJson(player);
-                    ClientConnection connection = new ClientConnection();
-                    connection.connect();
                     ArrayList<String> requestArray = new ArrayList<String>();
                     requestArray.add("login");
                     requestArray.add(jsonMessage);
                     String request = gson.toJson(requestArray);
-                    connection.sendRequest(request);
-                }
-                else{
-                    Dialog<String> invalidInputDialog;
-                    invalidInputDialog = new Dialog<String>();
-                    invalidInputDialog.setTitle("Invalid Data");
-                    ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
-                    invalidInputDialog.setContentText("Please enter valid email and password.");
-                    invalidInputDialog.getDialogPane().getButtonTypes().add(type);
+                    ClientConnection.sendRequest(request);
                 }
             }
         });
@@ -157,7 +156,7 @@ public class LoginDesignUI extends BorderPane {
         FlowPane.setMargin(newPlayerQuestionLable, new Insets(10.0, 0.0, 0.0, 55.0));
         BorderPane.setMargin(contentFlowView, new Insets(20.0, 0.0, 0.0, 0.0));
         setCenter(contentFlowView);
-        newPlayerQuestionLable.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        newPlayerQuestionLable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 Parent root = new SignUpUI();
@@ -165,7 +164,8 @@ public class LoginDesignUI extends BorderPane {
                 Stage stage = SharedData.getStage();
                 stage.setScene(scene);
                 stage.show();
-            }});
+            }
+        });
 
         BorderPane.setAlignment(logoView, javafx.geometry.Pos.CENTER);
         logoView.setHgap(15.0);
@@ -225,7 +225,29 @@ public class LoginDesignUI extends BorderPane {
         logoView.getChildren().add(letterY);
         pane.getChildren().add(buttonMinimize);
         pane.getChildren().add(buttonExit);
-        
+
     }
-    
+    private void showAlertDialog(String message) {
+        Parent parent = new AlertDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+    private boolean validateEmail(String email){
+        String regex = "@";
+        String regex2 = ".";
+        StringTokenizer stringTokenizer1 = new StringTokenizer(email, regex);
+        StringTokenizer stringTokenizer2 = new StringTokenizer(email, regex2);
+        stringTokenizer1.nextToken();
+        stringTokenizer2.nextToken();
+        if(stringTokenizer1.hasMoreTokens()){
+            if(stringTokenizer2.hasMoreTokens())
+                return true;
+            else
+                return false;
+        }
+        else
+             return false;
+    }
 }

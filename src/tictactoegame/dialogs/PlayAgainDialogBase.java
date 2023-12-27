@@ -17,7 +17,7 @@ import tictactoegame.data.MessageController;
 
 public class PlayAgainDialogBase extends Pane {
 
-    //protected final MediaView mediaView;
+    protected final MediaView mediaView;
     protected final Button btnReplay;
     protected final Button btnNotNow;
     protected final Button btnPlayAgain;
@@ -25,6 +25,12 @@ public class PlayAgainDialogBase extends Pane {
     protected final Text text;
 
     public PlayAgainDialogBase(MessageController message) {
+
+        String path = "C:/Users/Dr.Wlaa/Desktop/celebration.mp4";  
+        Media media = new Media(new File(path).toURI().toString());   
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+        mediaView = new MediaView(mediaPlayer);
 
         //String path = "C:/Users/s/Desktop/celebration.mp4";  
         //Media media = new Media(new File(path).toURI().toString());   

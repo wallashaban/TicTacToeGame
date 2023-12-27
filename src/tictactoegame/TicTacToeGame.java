@@ -4,8 +4,22 @@
  * and open the template in the editor.
  */
 package tictactoegame;
-
-import ClientGame.ClientGameScreenBase;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 import tictactoegame.data.SharedData;
 import tictactoegame.SplashScreen.SplashScreen;
 import javafx.application.Application;
@@ -13,6 +27,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import tictactoegame.GameVsPC.GameVsPcBaseUI;
 /**
  *
@@ -24,7 +39,8 @@ public class TicTacToeGame extends Application {
     public void start(Stage stage) throws Exception {
 
         Parent root = new SplashScreen();
-       // Parent root = new ClientGameScreenBase();
+
+        stage.initStyle(StageStyle.UNDECORATED); 
         SharedData.setStage(stage);
         Scene scene = new Scene(root);
          
@@ -36,7 +52,8 @@ public class TicTacToeGame extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {    
+        
         launch(args);
     }
     

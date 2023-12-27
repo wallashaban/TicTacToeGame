@@ -1,18 +1,36 @@
 package tictactoegame.SignUp;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.Login.LoginDesignUI;
+import tictactoegame.connection.ClientConnection;
+import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
+import tictactoegame.dialogs.AlertDialogBase;
+import tictactoegame.dialogs.errorDialogBase;
 
 public class SignUpUI extends Pane {
 
@@ -28,21 +46,33 @@ public class SignUpUI extends Pane {
     protected final Label letterY;
     protected final Button buttonExit;
     protected final Button buttonMinimize;
+//    Socket s;
+//    DataInputStream dataInputStream;
+//    PrintStream printStream;
 
     public SignUpUI() {
+
+//        try {
+//            s = new Socket("127.0.0.1", 7777);
+//            dataInputStream = new DataInputStream(s.getInputStream());
+//            printStream = new PrintStream(s.getOutputStream());
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
 
         labelSignUp = new Label();
         labelsubtitle = new Label();
         txtFFullName = new TextField();
         txtFEmail = new TextField();
-        txtFPasword = new TextField();
-        txtFConfirmPassword = new TextField();
+        txtFPasword = new PasswordField();
+        txtFConfirmPassword = new PasswordField();
         btnSignUp = new Button();
         alreadyHaveAccLabel = new Label();
         letterX = new Label();
         letterY = new Label();
         buttonExit = new Button();
         buttonMinimize = new Button();
+        
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -174,6 +204,117 @@ public class SignUpUI extends Pane {
         getChildren().add(letterY);
         getChildren().add(buttonExit);
         getChildren().add(buttonMinimize);
+        
+        
+         btnSignUp.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("name" + txtFFullName.getText());
+                if (txtFFullName.getText().length() < 1) {
+                    showAlertDialog("Please enter your name...");
+                } else {
+                    if (txtFEmail.getText().length() < 1) {
+                        showAlertDialog("Please enter your email...");
+                    } else {
+                        if (txtFPasword.getText().length() < 1) {
+                            showAlertDialog("Please enter your password...");
+                        }
+                        else if(! (txtFPasword.getText().equals(txtFConfirmPassword.getText()))){
+                            showAlertDialog("Password & Confirm don't match");
+                        }
+                        else if(! validateEmail(txtFEmail.getText())){
+                            showAlertDialog("This email is not valid");
+                        }
+                        else {
+                            // System.out.println("id "+Player.setId());
+                            signUpUser();
+                        }
+
+                    }
+                }
+            }
+        }
+        );
 
     }
+    
+     private void showDialog(String message) {
+        Parent parent = new errorDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+     
+     private void signUpUser() {
+        Player player = new Player(txtFFullName.getText(), txtFPasword.getText(),
+                txtFEmail.getText(), true, null);
+        SharedData.currentPlayer = player;
+        Gson gson = new GsonBuilder().create();
+        String signupMessage = gson.toJson(player);
+        ArrayList<String> response = new ArrayList<>();
+        response.add("signup");
+        response.add(signupMessage);
+        String responseJson = gson.toJson(response);
+         System.err.println(signupMessage);
+        ClientConnection.sendRequest(responseJson);
+    }
+    private boolean validateEmail(String email){
+        String regex = "@";
+        String regex2 = ".";
+        StringTokenizer stringTokenizer1 = new StringTokenizer(email, regex);
+        StringTokenizer stringTokenizer2 = new StringTokenizer(email, regex2);
+        stringTokenizer1.nextToken();
+        stringTokenizer2.nextToken();
+        if(stringTokenizer1.hasMoreTokens()){
+            if(stringTokenizer2.hasMoreTokens())
+                return true;
+            else
+                return false;
+        }
+        else
+             return false;
+    }
+    
+    private void showAlertDialog(String message) {
+        Parent parent = new AlertDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+     
+     
+//    private  void handleSigupResponse(String signUpResponse)
+//    {
+//        try {
+//            printStream.println(signUpResponse);
+//            System.out.println("first print");
+//            String signUpStatus = dataInputStream.readLine(); // thread
+//            Gson gson = new GsonBuilder().create();
+//            ArrayList< String>messages = gson.fromJson(signUpStatus, ArrayList.class);
+//                        System.out.println("first response");
+//            String response = messages.get(0);
+//            switch(response)
+//            {
+//                case("signup"):
+//                    if(messages.get(1)=="success")
+//                    {
+//                        System.out.print("logined");
+//                        Stage stage = new Stage();
+//                            Parent root = new AvailbleUsersScreenUI();
+//                            Scene scene = new Scene(root);
+//
+//                            stage.setTitle("Text Editor app");
+//                            stage.setScene(scene);
+//                            stage.show();
+//                    }else{
+//                        
+//                    }
+//            }
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
 }

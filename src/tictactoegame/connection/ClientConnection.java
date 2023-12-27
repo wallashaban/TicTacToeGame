@@ -7,32 +7,27 @@ package tictactoegame.connection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
 import tictactoegame.data.SharedData;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
+import tictactoegame.AvailbleUsersScreenUI;
 //import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.data.Player;
 import tictactoegame.dialogs.DisconnectedDialogBase;
-import tictactoegame.dialogs.NoConnectionDialogBase;
+//import tictactoegame.dialogs.NoConnectionDialogBase;
 import tictactoegame.dialogs.drawDialogBase;
+import tictactoegame.dialogs.AlertDialogBase;
+
 
 /**
  *
@@ -55,6 +50,7 @@ public class ClientConnection {
             showNoConnectionDialog();
         }
         startListening();
+        SharedData.setConnectionStatus(true);
     }
 
     public static void closeConnection() {
@@ -66,6 +62,8 @@ public class ClientConnection {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+
 
     public static void sendRequest(String gson) {
         if (out != null) {
@@ -89,6 +87,12 @@ public class ClientConnection {
                         showDisconnectedDialog();
                     }
                 });
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDisconnectedDialog();
+                    }
+                });
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
             }            }
         });
@@ -104,6 +108,7 @@ public class ClientConnection {
             return;
         }
 
+
         String action = response.get(0);
         switch (action) {
             case "signup":
@@ -118,6 +123,12 @@ public class ClientConnection {
                 break;
             case "startGame":
                 startGame(response);
+                break;
+            case "AvailableUsers":
+                updateAvailableUsers(response);
+                break;
+            case "refuse":
+                requestRefused(response);
                 break;
 //            case 5:
 //                //TODO updateBoard();
@@ -145,36 +156,49 @@ public class ClientConnection {
         if (response.get(1).equals("Success")) {
             System.out.print("logined");
             Platform.runLater(() -> {
-
                 Stage stage = SharedData.getStage();
-            //    Parent root = new AvailbleUsersScreenUI();
-            //    Scene scene = new Scene(root);
-            //    stage.setScene(scene);
+                Parent root = new AvailbleUsersScreenUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
                 stage.show();
             });
-        } else {
-            System.out.println("signupresponse else");
+        } else if(response.get(1).equals("Duplicate Username")) {
+            Platform.runLater(()->{
+                showAlertDialog("This Username already exists in another account.");
+            });
+        }
+        else if(response.get(1).equals("Duplicate Email")){
+            Platform.runLater(()->{
+                showAlertDialog("This Email already exists in another account.\n If it's yours, you can log in");
+            });
+        }
+        else if(response.get(1).equals("Failure")){
+            Platform.runLater(()->{
+                showAlertDialog("Registration Failed.. Please Try Again");
+            });
         }
         System.out.println("signupresponse after");
     }
 
     private static void login(ArrayList<String> response) {
         if (response.get(1).equals("Success")) {
-            System.out.println("Login Successfully");
+//            System.out.println("Login Successfully");
             Gson gson = new GsonBuilder().create();
             Player player = gson.fromJson(response.get(2), Player.class);
             if (player != null) {
                 SharedData.setCurrentPlayer(player);
-                System.out.println(player.toString());
-                Stage stage = SharedData.getStage();
-                Parent root = new AvailableUsersScreen();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                Platform.runLater(()->{
+                    Stage stage = SharedData.getStage();
+                    Parent root = new AvailableUsersScreen();
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                });
             }
         } else {
-            System.out.println("Login Failed");
-            System.out.println(response.get(1));
+            Platform.runLater(()->{
+                showAlertDialog("Login Failed. Please check your email and password and try again");
+            });
         }
     }
 
@@ -187,7 +211,8 @@ public class ClientConnection {
     }
 
     private static void showNoConnectionDialog() {
-        Parent parent = new NoConnectionDialogBase();
+        String message = "Couldn't Connect to Server. Please check your conncection and try again.";
+        Parent parent = new AlertDialogBase(message);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -201,4 +226,26 @@ public class ClientConnection {
         stage.setScene(scene);
         stage.showAndWait();
     }
-}
+    private static void updateAvailableUsers(ArrayList<String> response){
+        System.out.println(response.get(0));
+        Gson gson = new GsonBuilder().create();
+        String jsonArrayOFPlayers = response.get(1);
+        ArrayList<Player> availablePlayers = gson.fromJson(jsonArrayOFPlayers, ArrayList.class);
+        SharedData.availablePlayers = availablePlayers;
+        System.out.println("Available Players: "+ SharedData.availablePlayers.toString());
+    }
+    private static void showAlertDialog(String message) {
+            Parent parent = new AlertDialogBase(message);
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.showAndWait();
+        }
+    private static void requestRefused(ArrayList<String> response){
+        //Show dialog that sayas request is refuse
+        //return to available users screen
+        Platform.runLater(()->{
+                showAlertDialog(response.get(1)+" refused your request to play. You can request him again or try playing with another player");
+            });
+    }
+} 
