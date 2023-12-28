@@ -234,6 +234,7 @@ public class SignUpUI extends Pane {
                     if (!(txtFConfirmPassword.getText().equals( txtFPasword.getText()))) {
                         Constants.showDialog("Your password and confirm password should be the same...");
                     } else {
+                        System.out.print("Hola");
                             signUpUser();
                     }}
                 }
