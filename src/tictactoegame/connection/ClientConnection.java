@@ -39,7 +39,8 @@ import tictactoegame.dialogs.DisconnectedDialogBase;
  * @author anasn
  */
 public class ClientConnection {
-    
+
+    private static Thread thread;
     private static Socket mySocket;
     public static DataInputStream in;
     public static PrintStream out;
@@ -60,9 +61,24 @@ public class ClientConnection {
 
     public static void closeConnection() {
         try {
-            in.close();
-            out.close();
-            mySocket.close();
+            if(!mySocket.isClosed()){
+            thread.stop();
+            ArrayList<String> requestArray = new ArrayList<String>();
+            requestArray.add("logout");
+            Gson gson = new GsonBuilder().create();
+            String request = gson.toJson(requestArray);
+            sendRequest(request);
+            //out.println("logout");
+           String msgArray = in.readLine();
+//           System.out.println(msgArray);
+//            ArrayList<String> messages = gson.fromJson(msgArray, ArrayList.class);
+//            String msg = messages.get(0);
+            if (msgArray.equals("exit")) {
+                in.close();
+                out.close();
+                mySocket.close();
+            }
+            }
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
