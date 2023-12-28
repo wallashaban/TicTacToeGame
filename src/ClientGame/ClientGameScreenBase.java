@@ -396,7 +396,7 @@ public class ClientGameScreenBase extends AnchorPane {
     private void setupButtonClicked() {
         for (int i = 0; i < buttons.length; i++) {
             int index = i;
-            buttons[i].setOnAction((ActionEvent event) -> onButtonClick(index));
+            buttons[i].setOnAction((ActionEvent event) -> handleButtonClick(index));
         }
     }
 
