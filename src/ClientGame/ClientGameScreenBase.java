@@ -2,17 +2,15 @@ package ClientGame;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -23,20 +21,14 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
-import tictactoegame.data.MessageController;
-import tictactoegame.dialogs.PlayAgainDialogBase;
 import tictactoegame.data.Move;
 
 public class ClientGameScreenBase extends AnchorPane {
 
     private final Button[] buttons = new Button[9];
-    Socket mySocket;
-    DataInputStream in;
-    PrintStream out;
-    MessageController message;
-    Move move; // need to handle get move from server 
-    char t;
-            Gson gson;
+    Socket clientSocket;
+    private char currentPlayerSymbol = 'z';
+
     protected final Button btnExit;
     protected final Button btnMin;
     protected final Label txtPlay1Name;
@@ -71,11 +63,12 @@ public class ClientGameScreenBase extends AnchorPane {
     private int player1Score = 0;
     private int player2Score = 0;
     private int tieScore = 0;
-    private boolean playerTurn = true;
-    private char playerSymbol = ' ';
-    public ClientConnection connection = new ClientConnection();
+
+    private boolean isInitialPlayer = false;
+    private boolean playerTurn;
 
     public ClientGameScreenBase() {
+        ClientConnection.listeningThread.suspend();
 
         btnExit = new Button();
         btnMin = new Button();
@@ -387,258 +380,152 @@ public class ClientGameScreenBase extends AnchorPane {
 
         btnExit.setOnAction((ActionEvent event) -> {
             System.exit(0);
-        }); // lmbada
+        });
 
         btnMin.setOnAction((ActionEvent event) -> {
             Stage stage = (Stage) btnMin.getScene().getWindow();
             stage.setIconified(true);
         });
-        // btn bac
-        // box(1 - 12 "10 = win" "11 = draw" "12 = lose")                   <<<<><><>>>>
-        //and sign( X , O) // in case 10,11,12 will send sign (d or w or l) <<<<><><>>>>
-        //I`m independ on input only avilable place
-        //connection.connect();
-        
-        connect();
-        
-        out.println("after Conne");
 
-        gson = new GsonBuilder().create();
-        playGame();
+        setupButtonClicked();
+
+        startListeningForServerMoves();
     }
 
-    private void playGame() {
-        // resetBoard();
-        player1Score = 0;
-        player2Score = 0;
-        tieScore = 0;       // drawScore
-        updateScores();
-        
-        //playerSymbol = 'X'; // TODO<><><>Bougs
-        
-        
-       
-        
-        
-        playerTurn = true;
-
-        for (int i = 0; i < 9; i++) {
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private void setupButtonClicked() {
+        for (int i = 0; i < buttons.length; i++) {
             int index = i;
             buttons[i].setOnAction((ActionEvent event) -> onButtonClick(index));
         }
-          String msg;
-        try {
-            System.out.println("before msg");
-            msg = in.readLine();
-            System.out.println("after");
-
-            Move m = gson.fromJson(msg, Move.class);
-            
-            if (m.getBox() == 0) {
-                t = m.getSign();
-                System.out.println("Player Sign is <><><><><> " + t);
-                new Thread(){
-                    @Override
-                    public void run() {
-                        
-                Move receivedMove = receiveFromServerMovementsAndStates();
-                 Platform.runLater(new Runnable(){
-                    @Override
-                    public void run() {
-                buttons[receivedMove.getBox()].setText(receivedMove.getSign() + "");                    }
-                });
-                    }
-                };
-             
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ClientGameScreenBase.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
     }
 
-       private void onButtonClick(int index) {
-        if (playerTurn && buttons[index].getText() == " ") {
-            if(t == 'x'){
-                System.out.println("enter t if condition");
-                t = '0';
-            buttons[index].setText("x");
-            playerTurn = false;
-            Move platerMove = new Move('x', index);
-            Gson gson = new Gson();
-            String moveJson = gson.toJson(platerMove);
-            out.println(moveJson);
-            } else {
-                                System.out.println("t condition false");
-
-                t = 'x';
-                Move receivedMove = receiveFromServerMovementsAndStates();
-               // Move movement = receiveFromServerMovementsAndStates();
-                    switch (receivedMove.getSign()) {
-                        case 'w':
-                            showDialog('w');
-                            break;
-                        case 'l':
-                            showDialog('l');
-                            break;
-                        case 'd':
-                            showDialog('d');
-                            break;
-                        default:
-                            buttons[receivedMove.getBox()].setText(receivedMove.getSign() + "");
-                            playerTurn = true;
-                            break;
-                    }
-            }
-        }
-    }
-    
-//    private void onButtonClick(int index, PrintStream out) {
-//        if (playerTurn && buttons[index].getText() == " ") {
-//            buttons[index].setText("x");
-//            playerTurn = false;
-//            //char myChar = playerSymbol;
-//            //String symbol = String.valueOf(myChar);
-//            //out.write(index); // send Move and recive Move
-//            //out.flush(); // sent imediately
-//            Move platerMove = new Move('x', index);
-//            Gson gson = new Gson();
-//            String moveJson = gson.toJson(platerMove);
-//            connection.out.println(moveJson);
-//
-////            Gson gson = new Gson();
-////            ArrayList jsonRequest = new ArrayList();
-////            jsonRequest.add("update");
-////            jsonRequest.add(platerMove);
-//            //String gsonRequest = gson.toJson(jsonRequest);
-//            
-//            //connection.out.println(gsonRequest);
-//            Move receivedMove = receiveFromServerMovementsAndStates();
-//            Move movement = receiveFromServerMovementsAndStates();
-//            switch (movement.getSign()) {
-//                case 'w':
-//                    showDialog('w');
-//                    break;
-//                case 'l':
-//                    showDialog('l');
-//                    break;
-//                case 'd':
-//                    showDialog('d');
-//                    break;
-//                default:
-//                    //int move = in.readInt();
-////                    Move opponeantMove = receiveFromServerMovementsAndStates();
-//                    buttons[receivedMove.getBox()].setText(receivedMove.getSign() + "");
-//                    playerTurn = true;
-//                    break;
-//                //}                //}
-//            }
-//        }
-//    }
-
-    private void updateScores() {
-        txtPlay1Score.setText("" + player1Score);
-        txtPlay2Score.setText(player2Score + "");
-        btn9.setStyle("-fx-background-color: EACCD6; -fx-background-radius: 7;");
-        txtTieScore.setText("" + tieScore);
-    }
-
-    private void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
-        String style = "-fx-text-fill: ";
-
-        if (player.equals("X")) {
-            style += "blue; -fx-font-weight: bold;";
-        } else if (player.equals("O")) {
-            style += "red; -fx-font-weight: bold;";
+    private void handleButtonClick(int index) {
+        System.out.println("Button clicked: " + index + " symbol is " + currentPlayerSymbol);
+        if (!playerTurn || !isValidMove(index)) {
+            // Ignore clicks if it's not the player's turn or the move is not valid
+            return;
         }
 
-        buttons[firstButton].setStyle(style);
-        buttons[secondButton].setStyle(style);
-        buttons[thirdButton].setStyle(style);
+        sendMoveToServer(index + 1, currentPlayerSymbol);
+
+        updateButton(index, String.valueOf(currentPlayerSymbol));
+        System.out.println("After update, symbol on UI should be: " + currentPlayerSymbol);
+        playerTurn = false;
     }
 
-    public int read() {
-        return 0;
+    private boolean isValidMove(int index) {
+        return buttons[index].getText().equals(" ");
     }
 
-    // ToDo <<<>>>
-    public void sendToServerMovements() {
+    private void sendMoveToServer(int index, char symbol) {
+        Move move = new Move(symbol, index);
+        String moveJson = convertMoveToJson(move);
+        System.out.println(moveJson);
+        ClientConnection.out.println(moveJson);
     }
 
-    // ToDo <<<>>>
-    public Move receiveFromServerMovementsAndStates() {
-        try {
-            //int code = in.readInt();
-            //char sign = in.readChar();
-            String receivedJson = in.readLine();
-            
-            return gson.fromJson(receivedJson, Move.class);
-            //return new Move(sign, code);
-        } catch (IOException e) {
-            e.printStackTrace(); // case of a closed connection
-            return null;
-        }
+    private void updateButton(int index, String symbol) {
+        System.out.println("Updating button on UI: " + index + ", " + symbol);
+        buttons[index].setText(symbol);
+        buttons[index].setDisable(true);
     }
 
-    private void showDialog(int code) {
-        String result;
-        switch (code) {
-            case 10:
-                result = "Winner";
-                break;
-            case 11:
-                result = "Draw";
-                break;
-            case 12:
-                result = "Loser"; // we need to handl dialog for loser <<<>>> TODO Bougs here
-                break;
-            default:
-                result = "Unknown Result";
-                break;
-        }
-
-        message = new MessageController();
-        message.setWinner(result.charAt(0)); // Assuming the first character represents the result
-        Parent parent = new PlayAgainDialogBase(message);
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.showAndWait();
+    private String convertMoveToJson(Move move) {
+        Gson gson = new GsonBuilder().create();
+        return gson.toJson(move);
     }
 
-    public void connect() {
-        try {
-            System.out.println("test out");
-            mySocket = new Socket(Constants.IP_ADDRESS, Constants.PORT);
-            System.out.println("test1");
-            in = new DataInputStream(mySocket.getInputStream());
-            out = new PrintStream(mySocket.getOutputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
-//            showNoConnectionDialog();
-        }
-        //  startListening();
-    }
-
-    public void startListening() {
+    private void startListeningForServerMoves() {
         new Thread(() -> {
             try {
-                while (mySocket != null && !(mySocket.isClosed()) && in != null) {
-                    String gsonResponse = in.readLine();
-                    Gson gson = new GsonBuilder().create();
-                    Move move = gson.fromJson(gsonResponse, Move.class);
-//                    handleResponse(gsonResponse);
+                //symbol information from the server
+                Gson gson = new GsonBuilder().create();
+                String msg = ClientConnection.in.readLine();
+                System.out.println(msg);
+                if(!msg.startsWith("{")){
+                    msg = "{"+msg;
                 }
-            } catch (IOException ex) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-//                                showDisconnectedDialog();
-                    }
+                Move move = gson.fromJson(msg, Move.class);
+                char initialSymbol = move.getSign();
+                System.out.println("Received initial symbol from server: <><><><><><><>" + initialSymbol);
+
+                currentPlayerSymbol = initialSymbol;
+                if (currentPlayerSymbol == 'x') {
+                    playerTurn = true;
+                } else if (currentPlayerSymbol == 'o') {
+                    playerTurn = false;
+                }
+                Platform.runLater(() -> {
+                    txtplayer1Type.setText(String.valueOf(currentPlayerSymbol).toUpperCase());
+                    txtplayer2Type.setText((currentPlayerSymbol == 'x') ? "O" : "X");
                 });
-                Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+
+                // Continue listening for moves
+                while (true) {
+                    String receivedData = ClientConnection.in.readLine();
+                    System.out.println("we are here at actual move reception " + receivedData);
+                    if (receivedData != null) {
+                        handleServerMove(receivedData);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }).start();
     }
-    
+
+    private void handleServerMove(String moveJson) {
+        try {
+            Gson gson = new GsonBuilder().create();
+            Move move = gson.fromJson(moveJson, Move.class);
+
+            int boxVal = move.getBox();
+            int gameState = move.getGameState();
+            switch (boxVal) {
+                case 99:
+                    // Handle the case where the move is not valid (box = 99)
+                    System.out.println("Received an invalid move from the server.");
+                    break;
+
+                default:
+                    // Process a valid move
+                    Platform.runLater(() -> {
+                        updateButton(move.getBox() - 1, String.valueOf(move.getSign()));
+                    });
+                    playerTurn = !playerTurn;
+                    break;
+            }
+            switch (gameState) {
+                case 10:
+                    //Handel Winning Case
+                    System.out.println("Player Win");
+                    ClientConnection.listeningThread.resume();
+                    break;
+                case 11:
+                    // handel Draw Case
+                    System.out.println("Player Draw");
+                    ClientConnection.listeningThread.resume();
+                    break;
+                case 12:
+                    // handel Lose Case
+                    System.out.println("Player Lose");
+                    ClientConnection.listeningThread.resume();
+                    break;
+            }
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //            if (move.getBox() == 99) {
+//                // Handle the case where the move is not valid (box = 99)
+//                System.out.println("Received an invalid move from the server.");
+//                // You may want to display a message to the user or take other actions.
+//            } else {
+//                // Process a valid move
+//                Platform.runLater(() -> {updateButton(move.getBox()-1, String.valueOf(move.getSign()));});
+//                playerTurn = !playerTurn;
+//            }
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }

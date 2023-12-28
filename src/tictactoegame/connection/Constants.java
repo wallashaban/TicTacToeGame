@@ -5,6 +5,14 @@
  */
 package tictactoegame.connection;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import tictactoegame.data.Request;
+import tictactoegame.dialogs.ExceptionDialog;
+import tictactoegame.dialogs.RequestDialogBase;
+
 /**
  *
  * @author anasn
@@ -17,4 +25,22 @@ public class Constants {
     
     public static final int REGISTER = 1;
     public static final int LOGIN = 2;
+    
+    public static void showDialog(String message) {
+        Parent parent = new ExceptionDialog(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+                stage.initStyle(StageStyle.UNDECORATED); 
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+    
+    public static void showRequestDialog(String name , Request request) {
+        Parent parent = new RequestDialogBase(name,request);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+                stage.initStyle(StageStyle.UNDECORATED); 
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
 }
