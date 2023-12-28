@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="backgroundColor" stylesheets="@../../BackGround.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="txtfPlayer" layoutX="46.0" layoutY="91.0" prefHeight="31.0" prefWidth="148.0" promptText="Enter Your Name!" />
+      <Label layoutX="14.0" layoutY="76.0" prefHeight="53.0" prefWidth="20.0" text="X" textFill="#8a559b" fx:id="xAsLogoPlayer">
+         <font>
+            <Font name="Serif Regular" size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="playerScore" layoutX="196.0" layoutY="89.0" prefHeight="35.0" prefWidth="53.0" text="   0" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="oAsLogoPlayer" layoutX="756.0" layoutY="78.0" prefHeight="53.0" prefWidth="30.0" text="O" textFill="#db4f7e">
+         <font>
+            <Font name="Serif Regular" size="36.0" />
+         </font>
+      </Label>
+      <SplitMenuButton fx:id="selectlvlSplitMenu" layoutX="638.0" layoutY="91.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="109.0" text="Select lvl">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Easy" />
+          <MenuItem mnemonicParsing="false" text="Medium" />
+            <MenuItem mnemonicParsing="false" text="Hard" />
+        </items>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+         <effect>
+            <Lighting diffuseConstant="1.46" specularConstant="0.2" specularExponent="0.0" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow color="#a83b3b" height="145.39" radius="86.38" width="202.13" />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#ffd4d4" />
+               </light>
+            </Lighting>
+         </effect>
+      </SplitMenuButton>
+      <Label fx:id="pcScore" layoutX="578.0" layoutY="89.0" prefHeight="35.0" prefWidth="59.0" text="  0" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="tieScore" layoutX="381.0" layoutY="85.0" prefHeight="31.0" prefWidth="44.0" text="0">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="tie" layoutX="373.0" layoutY="48.0" prefHeight="31.0" prefWidth="44.0" text="Tie" textFill="WHITE">
+         <font>
+            <Font name="Segoe UI Bold Italic" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="btn0" cancelButton="true" layoutX="151.0" layoutY="167.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn1" cancelButton="true" layoutX="321.0" layoutY="167.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn2" cancelButton="true" layoutX="491.0" layoutY="167.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" styleClass="backgroundColor" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#8d7272" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn3" cancelButton="true" layoutX="151.0" layoutY="298.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn4" cancelButton="true" layoutX="321.0" layoutY="298.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn5" cancelButton="true" layoutX="491.0" layoutY="298.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn6" cancelButton="true" layoutX="151.0" layoutY="429.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn7" cancelButton="true" layoutX="321.0" layoutY="429.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn8" cancelButton="true" layoutX="491.0" layoutY="429.0" minHeight="130.0" minWidth="170.0" mnemonicParsing="false" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="48.0" />
+         </font>
+      </Button>
+      <Line endX="261.0" layoutX="400.0" layoutY="298.0" startX="-249.0" stroke="WHITE" strokeWidth="2.0" />
+      <Line endX="261.0" layoutX="400.0" layoutY="428.0" startX="-249.0" stroke="WHITE" strokeWidth="2.0" />
+      <Line endX="-89.0" endY="-141.0" layoutX="410.0" layoutY="308.0" startX="-89.0" startY="249.0" stroke="WHITE" strokeWidth="2.0" />
+      <Line endX="-89.0" endY="-141.0" layoutX="580.0" layoutY="309.0" startX="-89.0" startY="249.0" stroke="WHITE" strokeWidth="2.0" />
+      <Button fx:id="btnExit" cancelButton="true" layoutX="747.0" layoutY="14.0" minHeight="35.0" minWidth="36.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="36.0" style="-fx-background-radius: 30;" text="X">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnMin" cancelButton="true" layoutX="702.0" layoutY="14.0" minHeight="35.0" minWidth="36.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="36.0" style="-fx-background-radius: 30;" text="-">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="2.0" specularExponent="19.02" surfaceScale="0.0">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#e8ccd5" />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="600.0" maxWidth="800.0" prefHeight="800.0" prefWidth="800.0" styleClass="backgroundColor" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoegame.AvailbleUserscreenfxmlController">
+   <children>
+      <Pane layoutX="265.0" layoutY="82.0" prefHeight="47.0" prefWidth="259.0" style="-fx-background-color: #EACCD6; -fx-background-radius: 30;">
+         <children>
+            <Label layoutX="57.0" layoutY="13.0" prefHeight="21.0" prefWidth="146.0" text="Available Users" textFill="WHITE">
+               <font>
+                  <Font name="Gill Sans MT Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="closePane" layoutX="729.0" layoutY="14.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #EACCD6; -fx-background-radius: 30;">
+         <children>
+            <Label layoutX="10.0" layoutY="4.0" prefHeight="21.0" prefWidth="18.0" text="X" textFill="WHITE">
+               <font>
+                  <Font name="Gill Sans MT Bold" size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="minimisePane" layoutX="660.0" layoutY="14.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #EACCD6; -fx-background-radius: 30;">
+         <children>
+            <Label layoutX="13.0" layoutY="-28.0" prefHeight="60.0" prefWidth="24.0" text="-" textFill="WHITE">
+               <font>
+                  <Font name="Gill Sans MT Bold" size="72.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <ScrollPane layoutY="138.0" prefHeight="460.0" prefWidth="800.0" styleClass="backgroundColor" stylesheets="@../css/style.css">
+         <content>
+            <FlowPane maxHeight="-Infinity" prefHeight="460.0" prefWidth="800.0" styleClass="backgroundColor" stylesheets="@../css/style.css">
+               <children>
+                  <Pane fx:id="availableUsersPane" prefHeight="85.0" prefWidth="221.0" style="-fx-background-color: #EACCD6; -fx-background-radius: 30;">
+                     <children>
+                        <Label fx:id="nameLabel" layoutX="24.0" layoutY="14.0" prefHeight="21.0" prefWidth="146.0" text="Walaa Shaaban" textFill="WHITE">
+                           <font>
+                              <Font name="Gill Sans MT Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Hyperlink fx:id="chalengeNowLink" layoutX="24.0" layoutY="48.0" prefHeight="23.0" prefWidth="106.0" text="Challenge Now">
+                           <font>
+                              <Font name="Gill Sans MT" size="14.0" />
+                           </font>
+                        </Hyperlink>
+                     </children>
+                     <FlowPane.margin>
+                        <Insets left="10.0" right="10.0" top="30.0" />
+                     </FlowPane.margin>
+                  </Pane>
+               </children>
+            </FlowPane>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
