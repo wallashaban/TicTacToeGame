@@ -27,20 +27,23 @@ import tictactoegame.LocalGame.GameRoomScreen;
 import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.data.Player;
 import tictactoegame.data.Request;
-import tictactoegame.dialogs.DisconnectedDialogBase;
-import tictactoegame.dialogs.ExceptionDialog;
+
+//import tictactoegame.dialogs.NoConnectionDialogBase;
 import tictactoegame.dialogs.drawDialogBase;
 import tictactoegame.dialogs.AlertDialogBase;
+import tictactoegame.dialogs.DisconnectedDialogBase;
+
+
 /**
  *
  * @author anasn
  */
 public class ClientConnection {
-
-    public static Socket mySocket;
+    
+    private static Socket mySocket;
     public static DataInputStream in;
     public static PrintStream out;
-    public static ArrayList responceData;
+    private static ArrayList responceData;
     public static Thread listeningThread;
     public static void connect() {
         try {
@@ -65,6 +68,8 @@ public class ClientConnection {
         }
     }
 
+
+
     public static void sendRequest(String gson) {
         if (out != null) {
             out.println(gson);
@@ -74,6 +79,7 @@ public class ClientConnection {
     public static void startListening() {
         listeningThread = new Thread(() -> {
             try {
+
                 while (mySocket != null && !(mySocket.isClosed()) && in != null) {
                     String gsonResponse = in.readLine();
                     handleResponse(gsonResponse);
@@ -85,10 +91,17 @@ public class ClientConnection {
                         showDisconnectedDialog();
                     }
                 });
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDisconnectedDialog();
+                    }
+                });
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         listeningThread.start();
+
     }
 
     public static void handleResponse(String gsonResponse) {
@@ -99,6 +112,7 @@ public class ClientConnection {
             System.out.println("Response is null");
             return;
         }
+
 
         String action = response.get(0);
         switch (action) {
