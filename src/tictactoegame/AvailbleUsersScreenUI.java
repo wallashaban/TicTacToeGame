@@ -25,6 +25,7 @@ import javafx.scene.text.Font;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
 import tictactoegame.data.Player;
+import tictactoegame.data.SharedData;
 
 public class AvailbleUsersScreenUI extends AnchorPane {
 
@@ -45,6 +46,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         Gson gson = new GsonBuilder().create();
         String jsonMessage = gson.toJson(messages);
         //printStream.println(jsonMessage);
+        ClientConnection.listeningThread.suspend();
         ClientConnection.sendRequest(jsonMessage);
         new Thread() {
             @Override
@@ -52,7 +54,9 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                 while (true) {
                     try {
                         String response = ClientConnection.in.readLine();
-                        ArrayList<String> responseList = new ArrayList<>();
+                        response = "["+response;
+                        ArrayList<String> responseList;
+                        System.err.println("list" + response);
                         responseList = gson.fromJson(response, ArrayList.class);
                         switch (responseList.get(0)) {
                             case ("AvailableUsers"):
@@ -67,6 +71,10 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                         
                         Platform.runLater(() -> {
                             for (int i = 0; i < players.size(); i++) {
+                                if(players.get(i).getUserName().equals(SharedData.currentPlayer.getUserName()))
+                                {
+                                    continue;
+                                }
                                 Pane availableUsersPane = new Pane();
                                 Label nameLabel = new Label();
                                 Label scoreLabel = new Label();
@@ -133,8 +141,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
 
             }
 
-        };
-                //.start();
+        }
+                .start();
 
         pane = new Pane();
         label = new Label();
@@ -215,6 +223,6 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         getChildren().add(minimisePane);
 
         getChildren().add(scrollPane);
-
+        
     }
 }

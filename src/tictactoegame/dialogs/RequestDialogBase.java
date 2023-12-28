@@ -5,10 +5,13 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.data.Request;
+import tictactoegame.data.SharedData;
 
 public class RequestDialogBase extends Pane {
 
@@ -18,7 +21,7 @@ public class RequestDialogBase extends Pane {
     protected final Label labelRequestMessage;
     protected final Button buttonMinimize;
 
-    public RequestDialogBase() {
+    public RequestDialogBase(String name, Request request) {
 
         rectangle = new Rectangle();
         btnAccept = new Button();
@@ -74,7 +77,7 @@ public class RequestDialogBase extends Pane {
         labelRequestMessage.setLineSpacing(1.5);
         labelRequestMessage.setPrefHeight(146.0);
         labelRequestMessage.setPrefWidth(402.0);
-        labelRequestMessage.setText("Ahmed, Anas challenges you to a game of Tic Tac Toe. Ready for the challenge? Click here to accept and play as Player Two!");
+        labelRequestMessage.setText(SharedData.currentPlayer.getUserName() + ", " + name + " challenges you to a game of Tic Tac Toe. Ready for the challenge? Click here to accept and play as Player Two!");
         labelRequestMessage.setWrapText(true);
         labelRequestMessage.setFont(new Font("Segoe UI", 24.0));
 
@@ -95,5 +98,17 @@ public class RequestDialogBase extends Pane {
         getChildren().add(labelRequestMessage);
         getChildren().add(buttonMinimize);
 
+        btnAccept.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                request.setResponse(1);
+            }
+        });
+         btnNotNow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                request.setResponse(0);
+            }
+        });
     }
 }

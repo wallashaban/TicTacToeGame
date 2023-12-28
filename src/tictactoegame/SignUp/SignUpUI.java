@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -28,7 +30,9 @@ import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
 import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
+
 import tictactoegame.dialogs.ExceptionDialog;
+import tictactoegame.dialogs.AlertDialogBase;
 import tictactoegame.dialogs.errorDialogBase;
 
 public class SignUpUI extends Pane {
@@ -62,8 +66,8 @@ public class SignUpUI extends Pane {
         labelsubtitle = new Label();
         txtFFullName = new TextField();
         txtFEmail = new TextField();
-        txtFPasword = new TextField();
-        txtFConfirmPassword = new TextField();
+        txtFPasword = new PasswordField();
+        txtFConfirmPassword = new PasswordField();
         btnSignUp = new Button();
         alreadyHaveAccLabel = new Label();
         letterX = new Label();
@@ -238,7 +242,16 @@ public class SignUpUI extends Pane {
         }
     }
 
-    private void signUpUser() {
+    
+     private void showDialog(String message) {
+        Parent parent = new errorDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+     
+     private void signUpUser() {
         Player player = new Player(txtFFullName.getText(), txtFPasword.getText(),
                 txtFEmail.getText(), true, null);
         SharedData.currentPlayer = player;
@@ -251,7 +264,31 @@ public class SignUpUI extends Pane {
         System.err.println(signupMessage);
         ClientConnection.sendRequest(responseJson);
     }
-
+    private boolean validateEmail(String email){
+        String regex = "@";
+        String regex2 = ".";
+        StringTokenizer stringTokenizer1 = new StringTokenizer(email, regex);
+        StringTokenizer stringTokenizer2 = new StringTokenizer(email, regex2);
+        stringTokenizer1.nextToken();
+        stringTokenizer2.nextToken();
+        if(stringTokenizer1.hasMoreTokens()){
+            if(stringTokenizer2.hasMoreTokens())
+                return true;
+            else
+                return false;
+        }
+        else
+             return false;
+    }
+    
+    private void showAlertDialog(String message) {
+        Parent parent = new AlertDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+     
 //    private  void handleSigupResponse(String signUpResponse)
 //    {
 //        try {
