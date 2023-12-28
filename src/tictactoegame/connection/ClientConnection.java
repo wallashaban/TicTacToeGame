@@ -15,18 +15,23 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import tictactoegame.data.SharedData;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.AvailbleUsersScreenUI;
-//import tictactoegame.AvailbleUsersScreenUI;
+import tictactoegame.LocalGame.GameRoomScreen;
+import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.data.Player;
-import tictactoegame.dialogs.DisconnectedDialogBase;
+import tictactoegame.data.Request;
+
 //import tictactoegame.dialogs.NoConnectionDialogBase;
 import tictactoegame.dialogs.drawDialogBase;
 import tictactoegame.dialogs.AlertDialogBase;
+import tictactoegame.dialogs.DisconnectedDialogBase;
 
 
 /**
@@ -34,7 +39,7 @@ import tictactoegame.dialogs.AlertDialogBase;
  * @author anasn
  */
 public class ClientConnection {
-
+    
     private static Socket mySocket;
     public static DataInputStream in;
     public static PrintStream out;
@@ -72,10 +77,9 @@ public class ClientConnection {
     }
 
     public static void startListening() {
-         listeningThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-        try {
+        listeningThread = new Thread(() -> {
+            try {
+
                 while (mySocket != null && !(mySocket.isClosed()) && in != null) {
                     String gsonResponse = in.readLine();
                     handleResponse(gsonResponse);
@@ -94,9 +98,10 @@ public class ClientConnection {
                     }
                 });
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }            }
+            }
         });
-       listeningThread.start();
+        listeningThread.start();
+
     }
 
     public static void handleResponse(String gsonResponse) {
@@ -203,11 +208,33 @@ public class ClientConnection {
     }
 
     private static void handlePlayRequest(ArrayList<String> response) {
-        //show request dialog and wait for response to send it to server
+        String name = response.get(1);
+        Request request = new Request();
+        Constants.showRequestDialog(name, request);
+        if(request.getResponse()==1)
+        {
+            response.add("accept");
+            response.add(name);
+            Gson gson = new GsonBuilder().create();
+            String responseJSon = gson.toJson(response);
+            sendRequest(responseJSon);   
+        }else
+        {
+            response.add("refuse");
+            response.add(name);
+            Gson gson = new GsonBuilder().create();
+            String responseJSon = gson.toJson(response);
+            sendRequest(responseJSon);   
+        }
     }
 
     private static void startGame(ArrayList<String> response) {
-        //navigate to online game screen
+        Parent root = new GameRoomScreen();
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setTitle("Text Editor app");
+                stage.setScene(scene);
+                stage.show();
     }
 
     private static void showNoConnectionDialog() {
@@ -219,6 +246,7 @@ public class ClientConnection {
         stage.showAndWait();
     }
 
+    
     private static void showDisconnectedDialog() {
         Parent parent = new DisconnectedDialogBase();
         Scene scene = new Scene(parent);
@@ -242,8 +270,6 @@ public class ClientConnection {
             stage.showAndWait();
         }
     private static void requestRefused(ArrayList<String> response){
-        //Show dialog that sayas request is refuse
-        //return to available users screen
         Platform.runLater(()->{
                 showAlertDialog(response.get(1)+" refused your request to play. You can request him again or try playing with another player");
             });
