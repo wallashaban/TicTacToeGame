@@ -62,7 +62,7 @@ public class ClientConnection {
     public static void closeConnection() {
         try {
             if(!mySocket.isClosed()){
-            thread.stop();
+            listeningThread.stop();
             ArrayList<String> requestArray = new ArrayList<String>();
             requestArray.add("logout");
             Gson gson = new GsonBuilder().create();
@@ -124,6 +124,11 @@ public class ClientConnection {
         Gson gson = new GsonBuilder().create();
         ArrayList<String> response;
         response = gson.fromJson(gsonResponse, ArrayList.class);
+        
+        if (!gsonResponse.startsWith("[")) {
+            gsonResponse = "[" + gsonResponse;
+        }
+        
         if (response == null) {
             System.out.println("Response is null");
             return;
@@ -210,7 +215,7 @@ public class ClientConnection {
                 SharedData.setCurrentPlayer(player);
                 Platform.runLater(()->{
                     Stage stage = SharedData.getStage();
-                    Parent root = new AvailableUsersScreen();
+                    Parent root = new AvailbleUsersScreenUI();
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
