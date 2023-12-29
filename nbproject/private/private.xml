@@ -20,5 +20,11 @@
         <group name="TicTacToeBestTeam">
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
         </group>
+<<<<<<< Updated upstream
+=======
+        <group name="TicTacToeBestTeam">
+            <file>file:/D:/javaproject/TicTacToeGame/src/ClientGame/ClientGameScreenBase.java</file>
+        </group>
+>>>>>>> Stashed changes
     </open-files>
 </project-private>
