@@ -32,6 +32,16 @@
                   <Font name="Segoe UI Bold" size="24.0" />
                </font>
             </Button>
+            <ImageView fx:id="connectImg" fitHeight="50.0" fitWidth="59.0" layoutX="498.0" layoutY="415.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/connection.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="connectionLabel" layoutX="458.0" layoutY="470.0" text="Connect to network.." textFill="#5b5757">
+               <font>
+                  <Font name="Segoe UI Bold" size="15.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <Pane layoutX="736.0" layoutY="6.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #EACCD6; -fx-background-radius: 30;">
