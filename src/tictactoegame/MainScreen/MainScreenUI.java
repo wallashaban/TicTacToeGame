@@ -18,12 +18,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.LocalGame.GameRoomScreen;
 import tictactoegame.connection.ClientConnection;
+import tictactoegame.connection.Constants;
+import tictactoegame.data.MessageController;
 import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
+import tictactoegame.dialogs.IPDialogBase;
 
 public class MainScreenUI extends AnchorPane {
 
@@ -46,6 +50,9 @@ public class MainScreenUI extends AnchorPane {
     protected final Label label3;
     protected final Pane minimizePane;
     protected final Label label4;
+    protected final Pane pane1;
+    protected final ImageView refreshImg;
+    protected final Label connectionLabel;
 
     public MainScreenUI() {
 
@@ -68,6 +75,9 @@ public class MainScreenUI extends AnchorPane {
         label3 = new Label();
         minimizePane = new Pane();
         label4 = new Label();
+        pane1 = new Pane();
+        refreshImg = new ImageView();
+        connectionLabel = new Label();
 
         setId("AnchorPane");
         setPrefHeight(600.0);
@@ -213,6 +223,27 @@ public class MainScreenUI extends AnchorPane {
         label4.setFont(new Font("Gill Sans MT Bold", 72.0));
         borderPane.setTop(pane);
 
+        BorderPane.setAlignment(pane1, javafx.geometry.Pos.CENTER);
+        pane1.setPrefHeight(68.0);
+        pane1.setPrefWidth(818.0);
+
+        refreshImg.setFitHeight(70.0);
+        refreshImg.setFitWidth(82.0);
+        refreshImg.setLayoutX(70.0);
+        refreshImg.setLayoutY(-20.0);
+        refreshImg.setPickOnBounds(true);
+        refreshImg.setPreserveRatio(true);
+        refreshImg.setImage(new Image(getClass().getResource("/images/refresh.png").toExternalForm()));
+
+        connectionLabel.setLayoutX(181.0);
+        connectionLabel.setLayoutY(5.0);
+        connectionLabel.setText("Refresh Connection...");
+        connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#5b5757"));
+        connectionLabel.setFont(new Font("Segoe UI Bold", 15.0));
+        borderPane.setBottom(pane1);
+        connectionLabel.setVisible(false);
+        connectionLabel.setTextAlignment(TextAlignment.CENTER);
+
         onlinePane.getChildren().add(imageView);
         onlinePane.getChildren().add(label);
         computerPane.getChildren().add(label0);
@@ -227,8 +258,10 @@ public class MainScreenUI extends AnchorPane {
         pane.getChildren().add(closePane);
         pane.getChildren().add(minimizePane);
         pane.getChildren().add(label4);
+        pane1.getChildren().add(refreshImg);
+        pane1.getChildren().add(connectionLabel);
         getChildren().add(borderPane);
-
+        
         computerPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -292,6 +325,58 @@ public class MainScreenUI extends AnchorPane {
                 stage.setIconified(true);
             }
         });
-
+        
+        refreshImg.setOnMouseClicked((event)->{
+            MessageController message = new MessageController();
+            Parent root = new IPDialogBase(message);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.showAndWait();
+            System.out.println("Response is   " +message.getResponse());
+            boolean isConnected = false;
+            switch(message.getResponse()){
+                case -1:
+                    isConnected = false;
+                    break;
+                case 0:
+                {
+                    String IPAddress = message.getIpAddress();
+                    isConnected = ClientConnection.connect(IPAddress);
+                    break;
+                }
+                case 1:
+                    isConnected = ClientConnection.connect(Constants.IP_ADDRESS);
+                    break;
+                case 2:
+                    isConnected = ClientConnection.connect("127.0.0.1");
+                    break;
+            }
+            if(isConnected){
+                onlinePane.setDisable(false);
+                menuImageView.setDisable(false);
+                connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#00ff00"));
+                connectionLabel.setText("Connected Successfully");
+            }
+            else{
+                onlinePane.setDisable(true);
+                menuImageView.setDisable(true);
+                connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#5b5757"));
+                connectionLabel.setText("Not Connected \nYou Can still play locally");
+            }
+            connectionLabel.setVisible(true);
+        });
+        refreshImg.setOnMouseEntered((event)->{
+            connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#5b5757"));
+            connectionLabel.setText("Refresh Connection...");
+            connectionLabel.setVisible(true);
+        });
+        refreshImg.setOnMouseExited((event)->{
+            connectionLabel.setVisible(false);
+        });
+        
+        onlinePane.setDisable(!(SharedData.isConnectionStatus()));
+        menuImageView.setDisable(!(SharedData.isConnectionStatus()));
+        refreshImg.setVisible(!(SharedData.isConnectionStatus()));
     }
 }

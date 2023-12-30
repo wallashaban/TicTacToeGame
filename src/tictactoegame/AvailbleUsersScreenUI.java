@@ -55,13 +55,14 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                 while (true) {
                     try {
                         String response = ClientConnection.in.readLine();
-
-                        if (!(response.startsWith("["))) {
-                            response = "[" + response;
+                        if(!response.startsWith("[")) {
+                            response = "["+response;
                         }
+
                         ArrayList<String> responseList;
                         System.err.println("list" + response);
                         responseList = gson.fromJson(response, ArrayList.class);
+                        
                         switch (responseList.get(0)) {
                             case ("AvailableUsers"):
 
@@ -108,11 +109,14 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                 chalengeNowLink.setPrefWidth(106.0);
                                 chalengeNowLink.setText("Challenge Now");
                                 chalengeNowLink.setFont(new Font("Gill Sans MT", 14.0));
+                                
                                 String userName = players.get(i).getUserName();
                                 chalengeNowLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
                                     @Override
                                     public void handle(MouseEvent event) {
 
+                                       chalengeNowLink.setDisable(true);
                                         ArrayList<String> requestMessages = new ArrayList<String>();
                                         requestMessages.add("request");
                                         requestMessages.add(userName);
@@ -137,12 +141,13 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                             scrollPane.setContent(flowPane);
                             this.stop();
                             ClientConnection.listeningThread.resume();
+
                         });
                     } catch (IOException ex) {
                         Logger.getLogger(AvailbleUsersScreenUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
+                
             }
 
         }
@@ -241,6 +246,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                 stage.setIconified(true);
             }
         });
+
+        
 
     }
 }
