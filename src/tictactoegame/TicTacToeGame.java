@@ -53,9 +53,6 @@ public class TicTacToeGame extends Application {
         stage.setScene(scene);
         //stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
-        
-        
-        
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent event) {
@@ -63,8 +60,6 @@ public class TicTacToeGame extends Application {
                             Platform.exit();
                     }
           });
-        
-        
     }
 
     @Override

@@ -62,7 +62,7 @@ public class ClientConnection {
     public static void closeConnection() {
         try {
             if(!mySocket.isClosed()){
-            thread.stop();
+            listeningThread.stop();
             ArrayList<String> requestArray = new ArrayList<String>();
             requestArray.add("logout");
             Gson gson = new GsonBuilder().create();
@@ -123,6 +123,10 @@ public class ClientConnection {
     public static void handleResponse(String gsonResponse) {
         Gson gson = new GsonBuilder().create();
         ArrayList<String> response;
+        System.out.println(gsonResponse);
+        if(!gsonResponse.startsWith("[")){
+        gsonResponse="["+gsonResponse;
+        }
         response = gson.fromJson(gsonResponse, ArrayList.class);
         if (response == null) {
             System.out.println("Response is null");
@@ -131,6 +135,10 @@ public class ClientConnection {
 
 
         String action = response.get(0);
+                                        System.out.println(action+"this is my action");
+                                     //   if()
+                                     //  String result = action.replaceAll("^\"|\"$", ""); 
+
         switch (action) {
             case "signup":
                 System.err.println("signupresponse switch case");
@@ -139,7 +147,8 @@ public class ClientConnection {
             case "login":
                 login(response);
                 break;
-            case "request":
+            case "\"request\"":
+                System.out.println("in case request");
                 handlePlayRequest(response);
                 break;
             case "startGame":
@@ -210,7 +219,7 @@ public class ClientConnection {
                 SharedData.setCurrentPlayer(player);
                 Platform.runLater(()->{
                     Stage stage = SharedData.getStage();
-                    Parent root = new AvailableUsersScreen();
+                    Parent root = new AvailbleUsersScreenUI();
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
@@ -226,7 +235,8 @@ public class ClientConnection {
     private static void handlePlayRequest(ArrayList<String> response) {
         String name = response.get(1);
         Request request = new Request();
-        Constants.showRequestDialog(name, request);
+        Constants.showRequestDialog25(name, request);
+       System.out.println("i am requesting a game");
         if(request.getResponse()==1)
         {
             response.add("accept");
