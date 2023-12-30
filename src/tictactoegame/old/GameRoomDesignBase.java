@@ -27,7 +27,8 @@ import tictactoegame.data.MessageController;
 import tictactoegame.dialogs.PlayAgainDialogBase;
 
 public class GameRoomDesignBase extends BorderPane {
-
+    
+    private char state;
     protected boolean isX = true;
     protected char[][] matrix;  // remove it later
     protected int player1Cases[];
@@ -638,7 +639,7 @@ public class GameRoomDesignBase extends BorderPane {
     private void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message);
+        Parent parent = new PlayAgainDialogBase(message, state);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
