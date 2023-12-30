@@ -17,9 +17,9 @@
                   <Font name="Gill Sans MT Bold Italic" size="48.0" />
                </font>
             </Label>
-            <ImageView fitHeight="188.0" fitWidth="112.0" layoutX="301.0" layoutY="184.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="305.0" fitWidth="346.0" layoutX="194.0" layoutY="155.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/Layer_1.png" />
+                  <Image url="@../../images/images.png" />
                </image>
             </ImageView>
             <Button fx:id="letsPlaybtn" layoutX="287.0" layoutY="417.0" mnemonicParsing="false" style="-fx-background-color: #CF8A9B;" text="Let's Play :)" textFill="WHITE">
@@ -27,6 +27,7 @@
                   <Font name="Segoe UI Bold" size="24.0" />
                </font>
             </Button>
+
             <Button layoutX="393.0" layoutY="184.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="91.0" style="-fx-background-color: #CF8A9B; -fx-background-radius: 30;" text="Hi :)" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Bold" size="24.0" />

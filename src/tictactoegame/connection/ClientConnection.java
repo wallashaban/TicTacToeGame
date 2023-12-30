@@ -33,6 +33,7 @@ import tictactoegame.data.Request;
 import tictactoegame.dialogs.drawDialogBase;
 import tictactoegame.dialogs.AlertDialogBase;
 import tictactoegame.dialogs.DisconnectedDialogBase;
+import tictactoegame.dialogs.ExceptionDialog;
 
 
 /**
@@ -68,6 +69,7 @@ public class ClientConnection {
     public static void closeConnection() {
         try {
             if(!mySocket.isClosed()){
+            listeningThread.stop();
             listeningThread.stop();
             ArrayList<String> requestArray = new ArrayList<String>();
             requestArray.add("logout");
@@ -152,7 +154,8 @@ public class ClientConnection {
             case "login":
                 login(response);
                 break;
-            case "request":
+            case "\"request\"":
+                System.out.println("in case request");
                 handlePlayRequest(response);
                 break;
             case "startGame":
@@ -164,9 +167,9 @@ public class ClientConnection {
             case "refuse":
                 requestRefused(response);
                 break;
-//            case 5:
-//                //TODO updateBoard();
-//                break;
+            case "closed":
+                handleServerClosed();
+                break;
 //            case 6:
 //                //TODO logout();
 //                break;
@@ -185,6 +188,14 @@ public class ClientConnection {
         }
     }
 
+    private static void handleServerClosed()
+    {
+         Platform.runLater(()->{
+             Constants.showDialog("Sorry ... \nThe Server is down", true);
+             SharedData.connectionStatus=false;
+             //listeningThread.stop();
+         });
+    }
     private static void signUp(ArrayList<String> response) {
         System.out.println("signupresponse");
         if (response.get(1).equals("Success")) {

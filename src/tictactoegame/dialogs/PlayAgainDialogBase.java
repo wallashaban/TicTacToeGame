@@ -1,6 +1,8 @@
 package tictactoegame.dialogs;
 
 import java.io.File;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,18 +27,20 @@ public class PlayAgainDialogBase extends Pane {
     protected final Text text;
 
     public PlayAgainDialogBase(MessageController message) {
-
-//        String path = "C:/Users/Dr.Wlaa/Desktop/celebration.mp4";  
-//        Media media = new Media(new File(path).toURI().toString());   
-//        MediaPlayer mediaPlayer = new MediaPlayer(media);
-//        mediaPlayer.setAutoPlay(true);
-//        mediaView = new MediaView(mediaPlayer);
-
-        String path = "C:/Users/s/Desktop/celebration.mp4";  
+        
+        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner3.mp4";  
         Media media = new Media(new File(path).toURI().toString());   
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
         mediaView = new MediaView(mediaPlayer);
+
+        // Assuming primaryStage is your primary Stage
+        
+        //String path = "C:/Users/s/Desktop/celebration.mp4";  
+        //Media media = new Media(new File(path).toURI().toString());   
+        //MediaPlayer mediaPlayer = new MediaPlayer(media);
+       // mediaPlayer.setAutoPlay(true);
+       // mediaView = new MediaView(mediaPlayer);
         btnReplay = new Button();
         btnNotNow = new Button();
         btnPlayAgain = new Button();
@@ -143,6 +147,10 @@ public class PlayAgainDialogBase extends Pane {
         getChildren().add(buttonMinimize);
         getChildren().add(text);
 
+    }
+
+    private void Random() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
