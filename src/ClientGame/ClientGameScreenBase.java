@@ -37,8 +37,8 @@ public class ClientGameScreenBase extends AnchorPane {
     private final Button[] buttons = new Button[9];
     Socket clientSocket;
     private char currentPlayerSymbol = 'z';
-    
-     final int col0 = 2;
+    private char state;
+    final int col0 = 2;
     final int col1 = 3;
     final int col2 = 4;
     final int row0 = 5;
@@ -52,7 +52,6 @@ public class ClientGameScreenBase extends AnchorPane {
     MessageController message;
     protected MediaView mediaView;
 
-    
     protected final Button btnExit;
     protected final Button btnMin;
     protected final Label txtPlay1Name;
@@ -467,8 +466,8 @@ public class ClientGameScreenBase extends AnchorPane {
                 Gson gson = new GsonBuilder().create();
                 String msg = ClientConnection.in.readLine();
                 System.out.println(msg);
-                if(!msg.startsWith("{")){
-                    msg = "{"+msg;
+                if (!msg.startsWith("{")) {
+                    msg = "{" + msg;
                 }
                 Move move = gson.fromJson(msg, Move.class);
                 char initialSymbol = move.getSign();
@@ -506,6 +505,7 @@ public class ClientGameScreenBase extends AnchorPane {
 
             int boxVal = move.getBox();
             int gameState = move.getGameState();
+            char playeSymbole = move.getSign();
             switch (boxVal) {
                 case 99:
                     // Handle the case where the move is not valid (box = 99)
@@ -522,9 +522,10 @@ public class ClientGameScreenBase extends AnchorPane {
             }
             switch (gameState) {
                 case 10:
+                    state = 'W';
                     //Handel Winning Case
                     updateScores();
-                    winnerOrLoserOrTieVideo('W');
+                    //winnerOrLoserOrTieVideo('W');
                     showDialog('W');
                     resetBoard();
 
@@ -533,8 +534,10 @@ public class ClientGameScreenBase extends AnchorPane {
                     ClientConnection.listeningThread.resume();
                     break;
                 case 11:
+                    state = 't';
+
                     updateScores();
-                    winnerOrLoserOrTieVideo('T');
+                    //winnerOrLoserOrTieVideo('T');
                     showDialog('D');
                     // handel Draw Case
                     System.out.println("Player Draw");
@@ -543,8 +546,10 @@ public class ClientGameScreenBase extends AnchorPane {
                     ClientConnection.listeningThread.resume();
                     break;
                 case 12:
+                    state = 'L';
+
                     updateScores();
-                    winnerOrLoserOrTieVideo('L');
+                    // winnerOrLoserOrTieVideo('L');
                     showDialog('L');
                     resetBoard();
                     // handel Lose Case
@@ -557,16 +562,17 @@ public class ClientGameScreenBase extends AnchorPane {
             e.printStackTrace();
         }
     }
+
     void celebrateWinner(int c) {
         switch (c) {
             case diagonalLeft:
-                for (int i = 2; i < 9; i+=2) {
-                            buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                    }
+                for (int i = 2; i < 9; i += 2) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
                 break;
             case diagonalRight:
-                for (int i = 0; i < 9; i+=4) {
-                            buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                for (int i = 0; i < 9; i += 4) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
                 }
                 break;
             case row0:
@@ -585,40 +591,68 @@ public class ClientGameScreenBase extends AnchorPane {
                 }
                 break;
             case col0:
-                for (int i = 0; i < 9; i=i+3) {
+                for (int i = 0; i < 9; i = i + 3) {
                     buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
                 }
                 break;
             case col1:
-                for (int i = 1; i < 9; i=i+3) {
+                for (int i = 1; i < 9; i = i + 3) {
                     buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
                 }
                 break;
             case col2:
-                for (int i = 2; i < 9; i=i+3) {
+                for (int i = 2; i < 9; i = i + 3) {
                     buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
                 }
                 break;
             default:
                 break;
-        }       
+        }
     }
-     void converter(int x){
-        switch(x+1){
-            case 1:i=0; j=0; break;
-            case 2:i=0; j=1; break;
-            case 3:i=0; j=2; break;
-            case 4:i=1; j=0; break;
-            case 5:i=1; j=1; break;
-            case 6:i=1; j=2; break;
-            case 7:i=2; j=0; break;
-            case 8:i=2; j=1; break;
-            case 9:i=2; j=2; break;
+
+    void converter(int x) {
+        switch (x + 1) {
+            case 1:
+                i = 0;
+                j = 0;
+                break;
+            case 2:
+                i = 0;
+                j = 1;
+                break;
+            case 3:
+                i = 0;
+                j = 2;
+                break;
+            case 4:
+                i = 1;
+                j = 0;
+                break;
+            case 5:
+                i = 1;
+                j = 1;
+                break;
+            case 6:
+                i = 1;
+                j = 2;
+                break;
+            case 7:
+                i = 2;
+                j = 0;
+                break;
+            case 8:
+                i = 2;
+                j = 1;
+                break;
+            case 9:
+                i = 2;
+                j = 2;
+                break;
 
         }
     }
-     
-             public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
+
+    public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
         String style = "-fx-text-fill: ";
 
         if (player.equals("X")) {
@@ -631,68 +665,67 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[secondButton].setStyle(style);
         buttons[thirdButton].setStyle(style);
     }
-        
+
     private void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message);
+        Parent parent = new PlayAgainDialogBase(message, state);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
     }
-    
-        private void resetBoard() {
+
+    private void resetBoard() {
         for (int i = 0; i < 9; i++) {
             buttons[i].setText(" ");
             buttons[i].setStyle("-fx-font: bold 36.0 'System';");
             playerTurn = true;
         }
     }
-        
+
     private void updateScores() {
         txtPlay1Score.setText("" + player1Score);
         txtPlay2Score.setText(player2Score + "");
         txtTieScore.setText("" + tieScore);
     }
-    
-    private void winnerOrLoserOrTieVideo(char state) {
-        switch (state) {
-            case 'W':
-                {
-                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 5);
-                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
-                    Media media = new Media(new File(path).toURI().toString());
-                    MediaPlayer mediaPlayer = new MediaPlayer(media);
-                    mediaPlayer.setAutoPlay(true);
-                    mediaView = new MediaView(mediaPlayer);
-                    break;
-                }
-            case 'L':
-                {
-                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 8);
-                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Loser" + randomNumWinner + ".mp4";
-                    Media media = new Media(new File(path).toURI().toString());
-                    MediaPlayer mediaPlayer = new MediaPlayer(media);
-                    mediaPlayer.setAutoPlay(true);
-                    mediaView = new MediaView(mediaPlayer);
-                    break;
-                }
-            case 'T':
-                {
-                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 2);
-                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Tie" + randomNumWinner + ".mp4";
-                    Media media = new Media(new File(path).toURI().toString());
-                    MediaPlayer mediaPlayer = new MediaPlayer(media);
-                    mediaPlayer.setAutoPlay(true);
-                    mediaView = new MediaView(mediaPlayer);
-                    break;
-                }
-            default:
-                break;
-        }
-    }
 
+//    private void winnerOrLoserOrTieVideo(char state) {
+//        switch (state) {
+//            case 'W':
+//                {
+//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 5);
+//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
+//                    Media media = new Media(new File(path).toURI().toString());
+//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+//                    mediaPlayer.setAutoPlay(true);
+//                    mediaView = new MediaView(mediaPlayer);
+//                    break;
+//                }
+//            case 'L':
+//                {
+//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 8);
+//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Loser" + randomNumWinner + ".mp4";
+//                    Media media = new Media(new File(path).toURI().toString());
+//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+//                    mediaPlayer.setAutoPlay(true);
+//                    mediaView = new MediaView(mediaPlayer);
+//                    break;
+//                }
+//            case 'T':
+//                {
+//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 2);
+//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Tie" + randomNumWinner + ".mp4";
+//                    Media media = new Media(new File(path).toURI().toString());
+//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+//                    mediaPlayer.setAutoPlay(true);
+//                    mediaView = new MediaView(mediaPlayer);
+//                    break;
+//                }
+//            default:
+//                break;
+//        }
+//    }
     //            if (move.getBox() == 99) {
 //                // Handle the case where the move is not valid (box = 99)
 //                System.out.println("Received an invalid move from the server.");
