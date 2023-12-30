@@ -121,6 +121,11 @@
                   <Font name="Gill Sans MT Bold Italic" size="19.0" />
                </font>
             </Button>
+            <Button fx:id="buttonBack" layoutX="14.0" layoutY="4.0" mnemonicParsing="false" style="-fx-background-color: e8ccd5; -fx-background-radius: 30;" text="&lt;">
+               <font>
+                  <Font name="Gill Sans MT Bold Italic" size="19.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </top>
