@@ -567,7 +567,7 @@ public class GameVsPcBaseUI extends AnchorPane {
         return state;
     }
 
-    private void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
+    public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
         String style = "-fx-text-fill: ";
 
         if (player.equals("X")) {

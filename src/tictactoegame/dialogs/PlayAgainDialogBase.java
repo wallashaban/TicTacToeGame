@@ -1,6 +1,8 @@
 package tictactoegame.dialogs;
 
 import java.io.File;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,13 +27,15 @@ public class PlayAgainDialogBase extends Pane {
     protected final Text text;
 
     public PlayAgainDialogBase(MessageController message) {
-
-        String path = "C:/Users/Dr.Wlaa/Desktop/celebration.mp4";  
+        
+        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner3.mp4";  
         Media media = new Media(new File(path).toURI().toString());   
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
         mediaView = new MediaView(mediaPlayer);
 
+        // Assuming primaryStage is your primary Stage
+        
         //String path = "C:/Users/s/Desktop/celebration.mp4";  
         //Media media = new Media(new File(path).toURI().toString());   
         //MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -53,10 +57,10 @@ public class PlayAgainDialogBase extends Pane {
         getStylesheets().add("/tictactoegame/BackGround.css");
         setPadding(new Insets(15.0));
 
-        //mediaView.setFitHeight(330.0);
-        //mediaView.setFitWidth(450.0);
-        //mediaView.setLayoutX(68.0);
-        //mediaView.setLayoutY(29.0);
+        mediaView.setFitHeight(330.0);
+        mediaView.setFitWidth(450.0);
+        mediaView.setLayoutX(68.0);
+        mediaView.setLayoutY(29.0);
 
         btnReplay.setLayoutX(73.0);
         btnReplay.setLayoutY(442.0);
@@ -136,13 +140,17 @@ public class PlayAgainDialogBase extends Pane {
         text.setText("Congratulations! You Won the Game!!");
         text.setFont(new Font("Segoe UI", 33.0));
 
-        //getChildren().add(mediaView);
+        getChildren().add(mediaView);
         getChildren().add(btnReplay);
         getChildren().add(btnNotNow);
         getChildren().add(btnPlayAgain);
         getChildren().add(buttonMinimize);
         getChildren().add(text);
 
+    }
+
+    private void Random() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
