@@ -54,7 +54,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                 while (true) {
                     try {
                         String response = ClientConnection.in.readLine();
-                        response = "["+response;
+                        if(!(response.startsWith("[")))
+                            response = "["+response;
                         ArrayList<String> responseList;
                         System.err.println("list" + response);
                         responseList = gson.fromJson(response, ArrayList.class);
@@ -110,6 +111,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                 chalengeNowLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent event) {
+                                        chalengeNowLink.setDisable(true);
                                         ArrayList<String> requestMessages = new ArrayList<String>();
                                         requestMessages.add("request");
                                         requestMessages.add(userName);
@@ -133,12 +135,14 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                             }
                             
                             scrollPane.setContent(flowPane);
+                            this.stop();
+                            ClientConnection.listeningThread.resume();
                         });
                     } catch (IOException ex) {
                         Logger.getLogger(AvailbleUsersScreenUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
+                
             }
 
         }
@@ -223,6 +227,10 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         getChildren().add(minimisePane);
 
         getChildren().add(scrollPane);
+        
+        closePane.setOnMouseClicked((event)->{
+            Platform.exit();
+        });
         
     }
 }
