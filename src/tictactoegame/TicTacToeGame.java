@@ -27,7 +27,7 @@ public class TicTacToeGame extends Application {
 
         Parent root = new SplashScreen();
 
-        stage.initStyle(StageStyle.UNDECORATED); 
+//        stage.initStyle(StageStyle.UNDECORATED); 
         SharedData.setStage(stage);
         Scene scene = new Scene(root);
          
