@@ -69,6 +69,7 @@ public class ClientConnection {
         try {
             if(!mySocket.isClosed()){
             listeningThread.stop();
+            listeningThread.stop();
             ArrayList<String> requestArray = new ArrayList<String>();
             requestArray.add("logout");
             Gson gson = new GsonBuilder().create();
@@ -152,7 +153,8 @@ public class ClientConnection {
             case "login":
                 login(response);
                 break;
-            case "request":
+            case "\"request\"":
+                System.out.println("in case request");
                 handlePlayRequest(response);
                 break;
             case "startGame":

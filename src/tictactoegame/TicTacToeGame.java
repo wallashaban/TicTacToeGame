@@ -71,7 +71,6 @@ public class TicTacToeGame extends Application {
     public void stop() throws Exception {
     ClientConnection.closeConnection();
     }
-    
 
     /**
      * @param args the command line arguments
