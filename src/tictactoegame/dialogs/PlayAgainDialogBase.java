@@ -32,7 +32,7 @@ public class PlayAgainDialogBase extends Pane {
 //        mediaPlayer.setAutoPlay(true);
 //        mediaView = new MediaView(mediaPlayer);
 
-        String path = "C:/Users/s/Desktop/celebration.mp4";  
+        String path = "C:/Users/Dr.Wlaa/Desktop/celebration.mp4";  
         Media media = new Media(new File(path).toURI().toString());   
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
@@ -64,7 +64,7 @@ public class PlayAgainDialogBase extends Pane {
         btnReplay.setPrefHeight(39.0);
         btnReplay.setPrefWidth(131.0);
         btnReplay.setStyle("-fx-background-color: CF8A9B; -fx-background-radius: 40;");
-        btnReplay.setText("Replay");
+        btnReplay.setText("Save");
         btnReplay.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         btnReplay.setTextFill(javafx.scene.paint.Color.WHITE);
         btnReplay.setFont(new Font("Segoe UI", 20.0));

@@ -6,7 +6,9 @@
 package tictactoegame.data;
 
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -38,9 +40,11 @@ public class HistoryFile {
         }
     }
 
-    public void saveToFile(Player player) {
+    public void saveToFile(String filePath,Player player,String moves) {
         try {
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true)));
             System.out.println("lines");
+            writer.write(moves);
             writer.newLine();
             Date d = new Date();
             writer.write(d.toString());

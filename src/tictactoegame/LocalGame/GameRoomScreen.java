@@ -117,27 +117,26 @@ public class GameRoomScreen extends BorderPane {
 
     Player player;
     HistoryFile historyFile;
-
+    String filePath;
     public GameRoomScreen() {
         historyFile = new HistoryFile();
-        player = new Player("ali");
+        player = new Player("ahmed");
         this.stage = stage;
         currentp1Index = 0;
         currentp2Index = 0;
 
-        String filePath = "D:/ITI/Java/Java Final Project/Project/TicTacToeGame/src/files/" + player.getUserName() + ".txt";
+         filePath = "E:/java/TicTacToeGame/src/files/" + player.getUserName() + ".txt";
         File file = new File(filePath);
         if (!file.exists()) {
             historyFile.createFile(filePath);
         }
-        try {
-            historyFile.setWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true))));//writer =      
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GameRoomScreen.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            historyFile.setWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true))));//writer =      
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(GameRoomScreen.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
-        sb = null;
-        //sb = new StringBuilder();
+        sb="";
         message = new MessageController();
         matrix = new char[3][3];
         boxArray = new Label[3][3];
@@ -540,11 +539,7 @@ public class GameRoomScreen extends BorderPane {
                                 player1Moves.add((finalI * 10) + finalJ);
                                 //int res = ((finalI * 10) + finalJ);
                                 sb += ((finalI * 10) + finalJ);
-                                try {
-                                   historyFile.getWriter().write(((finalI * 10) + finalJ) + " ");
-                                } catch (IOException ex) {
-                                    Logger.getLogger(GameRoomScreen.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                                
                                 playerMoves.add((finalI * 10) + finalJ);
                                 sb += ' ';
                             } else {
@@ -552,11 +547,7 @@ public class GameRoomScreen extends BorderPane {
                                 player2Moves.add((finalI * 10) + finalJ);
                                 playerMoves.add((finalI * 10) + finalJ);
                                 sb += ((finalI * 10) + finalJ);
-                                try {
-                                    historyFile.getWriter().write(((finalI * 10) + finalJ) + " ");
-                                } catch (IOException ex) {
-                                    Logger.getLogger(GameRoomScreen.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                               
                                 sb += ' ';
                             }
                             updateCases(finalI, finalJ);
@@ -725,8 +716,8 @@ public class GameRoomScreen extends BorderPane {
                 isX = true;
                 player2Moves.clear();
                 player1Moves.clear();
-                sb += "\n";
-                historyFile.saveToFile(player);
+                //sb += "\n";
+                sb="";
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
                         boxEnabled[i][j] = true;
@@ -744,10 +735,11 @@ public class GameRoomScreen extends BorderPane {
             case 1:
                 isX = true;
                 review();
-                historyFile.saveToFile(player);
+                historyFile.saveToFile(filePath,player,sb);
+                sb="";
                 break;
             case 0:
-                historyFile.saveToFile(player);
+                sb="";
                 Parent root = new MainScreenUI();
                 Scene scene = new Scene(root);
 
@@ -757,7 +749,8 @@ public class GameRoomScreen extends BorderPane {
 
                 break;
             default:
-                historyFile.saveToFile(player);
+                historyFile.saveToFile(filePath,player,sb);
+                sb="";
                 break;
         }
     }
