@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
+import tictactoegame.GameVsPC.GameVsPcBaseUI;
 import tictactoegame.LocalGame.GameRoomScreen;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
@@ -266,7 +267,7 @@ public class MainScreenUI extends AnchorPane {
             @Override
             public void handle(MouseEvent event) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Parent root = new GameRoomScreen();
+                Parent root = new GameVsPcBaseUI();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();

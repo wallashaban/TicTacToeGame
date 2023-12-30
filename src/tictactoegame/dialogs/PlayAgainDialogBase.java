@@ -28,6 +28,8 @@ public class PlayAgainDialogBase extends Pane {
 
     public PlayAgainDialogBase(MessageController message, char state) {
         
+        System.out.println("hello state"+ state);
+        
         
 
 //        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner3.mp4";  
@@ -160,16 +162,15 @@ public class PlayAgainDialogBase extends Pane {
         getChildren().add(btnPlayAgain);
         getChildren().add(buttonMinimize);
         getChildren().add(text);
-        
-        winnerOrLoserOrTieVideo(state = 'W');
 
+        winnerOrLoserOrTieVideo(state);
     }
     
             public void winnerOrLoserOrTieVideo(char state) {
             switch (state) {
                 case 'W':
                     {
-                        int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 4);
+                        int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 5);
                         String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
                         Media media = new Media(new File(path).toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
