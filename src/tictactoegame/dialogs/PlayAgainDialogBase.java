@@ -32,7 +32,7 @@ public class PlayAgainDialogBase extends Pane {
 //        mediaPlayer.setAutoPlay(true);
 //        mediaView = new MediaView(mediaPlayer);
 
-        String path = "C:/Users/s/Desktop/celebration.mp4";  
+        String path = "src/images/cele.mp4";  
         Media media = new Media(new File(path).toURI().toString());   
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);

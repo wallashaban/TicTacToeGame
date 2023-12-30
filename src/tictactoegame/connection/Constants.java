@@ -36,7 +36,7 @@ public class Constants {
         stage.showAndWait();
     }
     
-    public static void showRequestDialog25(String name , Request request) {
+    public static void showRequestDialog(String name , Request request) {
         Parent parent = new RequestDialogBase(name,request);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
