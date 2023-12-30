@@ -25,6 +25,7 @@ import tictactoegame.data.SharedData;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.LocalGame.GameRoomScreen;
+import tictactoegame.Login.LoginDesignUI;
 import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.data.Player;
 import tictactoegame.data.Request;
@@ -202,7 +203,7 @@ public class ClientConnection {
             System.out.print("logined");
             Platform.runLater(() -> {
                 Stage stage = SharedData.getStage();
-                Parent root = new AvailbleUsersScreenUI();
+                Parent root = new LoginDesignUI();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
