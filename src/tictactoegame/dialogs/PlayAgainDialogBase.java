@@ -19,26 +19,22 @@ import tictactoegame.data.MessageController;
 
 public class PlayAgainDialogBase extends Pane {
 
-    protected final MediaView mediaView;
+    protected MediaView mediaView;
     protected final Button btnReplay;
     protected final Button btnNotNow;
     protected final Button btnPlayAgain;
     protected final Button buttonMinimize;
     protected final Text text;
 
-    public PlayAgainDialogBase(MessageController message) {
+    public PlayAgainDialogBase(MessageController message, char state) {
+        
+        
 
-//        String path = "C:/Users/Dr.Wlaa/Desktop/celebration.mp4";  
+//        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner3.mp4";  
 //        Media media = new Media(new File(path).toURI().toString());   
 //        MediaPlayer mediaPlayer = new MediaPlayer(media);
 //        mediaPlayer.setAutoPlay(true);
 //        mediaView = new MediaView(mediaPlayer);
-
-        String path = "src/images/cele.mp4";  
-        Media media = new Media(new File(path).toURI().toString());   
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
-        mediaView = new MediaView(mediaPlayer);
 
         // Assuming primaryStage is your primary Stage
         
@@ -46,7 +42,7 @@ public class PlayAgainDialogBase extends Pane {
         //Media media = new Media(new File(path).toURI().toString());   
         //MediaPlayer mediaPlayer = new MediaPlayer(media);
        // mediaPlayer.setAutoPlay(true);
-       // mediaView = new MediaView(mediaPlayer);
+        mediaView = new MediaView();
         btnReplay = new Button();
         btnNotNow = new Button();
         btnPlayAgain = new Button();
@@ -82,8 +78,13 @@ public class PlayAgainDialogBase extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(1);
+                message.setResponse(2);
+                if (mediaView.getMediaPlayer() != null) {
+                    mediaView.getMediaPlayer().stop();
+                }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.close();
+               
             }
         });
 
@@ -101,6 +102,10 @@ public class PlayAgainDialogBase extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(0);
+                message.setResponse(2);
+                if (mediaView.getMediaPlayer() != null) {
+                    mediaView.getMediaPlayer().stop();
+                }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.close();
             }
@@ -120,6 +125,9 @@ public class PlayAgainDialogBase extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(2);
+                if (mediaView.getMediaPlayer() != null) {
+                    mediaView.getMediaPlayer().stop();
+                }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.close();
             }
@@ -152,8 +160,52 @@ public class PlayAgainDialogBase extends Pane {
         getChildren().add(btnPlayAgain);
         getChildren().add(buttonMinimize);
         getChildren().add(text);
+        
+        winnerOrLoserOrTieVideo(state = 'W');
 
     }
+    
+            public void winnerOrLoserOrTieVideo(char state) {
+            switch (state) {
+                case 'W':
+                    {
+                        int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 4);
+                        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
+                        Media media = new Media(new File(path).toURI().toString());
+                        MediaPlayer mediaPlayer = new MediaPlayer(media);
+                        mediaPlayer.setAutoPlay(true);
+                        mediaView.setMediaPlayer(mediaPlayer);
+                            text.setText("Winner Winner Falafel Dinner ^_*");
+
+                        break;
+                    }
+                case 'L':
+                    {
+                        int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 8);
+                        String path = "src/Videos/Loser" + randomNumWinner + ".mp4";
+                        Media media = new Media(new File(path).toURI().toString());
+                        MediaPlayer mediaPlayer = new MediaPlayer(media);
+                        mediaPlayer.setAutoPlay(true);
+                        mediaView.setMediaPlayer(mediaPlayer);
+                        text.setText("Loser :P");
+                        break;
+                    }
+                case 'T':
+                    {
+                        int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 1);
+                        String path = "src/Videos/Tie" + randomNumWinner + ".mp4";
+                        Media media = new Media(new File(path).toURI().toString());
+                        MediaPlayer mediaPlayer = new MediaPlayer(media);
+                        mediaPlayer.setAutoPlay(true);
+                        mediaView.setMediaPlayer(mediaPlayer);
+                            text.setText(" rly -_-!!");
+
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
 
     private void Random() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
