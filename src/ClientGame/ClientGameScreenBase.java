@@ -4,24 +4,34 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
+import tictactoegame.data.MessageController;
 import tictactoegame.data.Move;
+import tictactoegame.dialogs.PlayAgainDialogBase;
 
 public class ClientGameScreenBase extends AnchorPane {
 
@@ -40,6 +50,10 @@ public class ClientGameScreenBase extends AnchorPane {
     int i;
     int j;
 
+    MessageController message;
+    protected MediaView mediaView;
+
+    
     protected final Button btnExit;
     protected final Button btnMin;
     protected final Label txtPlay1Name;
@@ -78,9 +92,9 @@ public class ClientGameScreenBase extends AnchorPane {
     private boolean isInitialPlayer = false;
     private boolean playerTurn;
 
-    public ClientGameScreenBase() {
+    public ClientGameScreenBase(String opponentName) {
         ClientConnection.listeningThread.suspend();
-
+        sendAcknowledgment(opponentName);
         btnExit = new Button();
         btnMin = new Button();
         txtPlay1Name = new Label();
@@ -510,16 +524,30 @@ public class ClientGameScreenBase extends AnchorPane {
             switch (gameState) {
                 case 10:
                     //Handel Winning Case
+                    updateScores();
+                    winnerOrLoserOrTieVideo('W');
+                    showDialog('W');
+                    resetBoard();
+
                     System.out.println("Player Win");
                     celebrateWinner(move.getWinningCase());
                     ClientConnection.listeningThread.resume();
                     break;
                 case 11:
+                    updateScores();
+                    winnerOrLoserOrTieVideo('T');
+                    showDialog('D');
                     // handel Draw Case
                     System.out.println("Player Draw");
+                    resetBoard();
+
                     ClientConnection.listeningThread.resume();
                     break;
                 case 12:
+                    updateScores();
+                    winnerOrLoserOrTieVideo('L');
+                    showDialog('L');
+                    resetBoard();
                     // handel Lose Case
                     System.out.println("Player Lose");
                     celebrateWinner(move.getWinningCase());
@@ -590,6 +618,81 @@ public class ClientGameScreenBase extends AnchorPane {
 
         }
     }
+     
+             public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
+        String style = "-fx-text-fill: ";
+
+        if (player.equals("X")) {
+            style += "blue; -fx-font-weight: bold;";
+        } else if (player.equals("O")) {
+            style += "red; -fx-font-weight: bold;";
+        }
+
+        buttons[firstButton].setStyle(style);
+        buttons[secondButton].setStyle(style);
+        buttons[thirdButton].setStyle(style);
+    }
+        
+    private void showDialog(char winner) {
+        message = new MessageController();
+        message.setWinner(winner);
+        Parent parent = new PlayAgainDialogBase(message);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+    
+        private void resetBoard() {
+        for (int i = 0; i < 9; i++) {
+            buttons[i].setText(" ");
+            buttons[i].setStyle("-fx-font: bold 36.0 'System';");
+            playerTurn = true;
+        }
+    }
+        
+    private void updateScores() {
+        txtPlay1Score.setText("" + player1Score);
+        txtPlay2Score.setText(player2Score + "");
+        txtTieScore.setText("" + tieScore);
+    }
+    
+    private void winnerOrLoserOrTieVideo(char state) {
+        switch (state) {
+            case 'W':
+                {
+                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 5);
+                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
+                    Media media = new Media(new File(path).toURI().toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+                    mediaPlayer.setAutoPlay(true);
+                    mediaView = new MediaView(mediaPlayer);
+                    break;
+                }
+            case 'L':
+                {
+                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 8);
+                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Loser" + randomNumWinner + ".mp4";
+                    Media media = new Media(new File(path).toURI().toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+                    mediaPlayer.setAutoPlay(true);
+                    mediaView = new MediaView(mediaPlayer);
+                    break;
+                }
+            case 'T':
+                {
+                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 2);
+                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Tie" + randomNumWinner + ".mp4";
+                    Media media = new Media(new File(path).toURI().toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+                    mediaPlayer.setAutoPlay(true);
+                    mediaView = new MediaView(mediaPlayer);
+                    break;
+                }
+            default:
+                break;
+        }
+    }
 
     //            if (move.getBox() == 99) {
 //                // Handle the case where the move is not valid (box = 99)
@@ -601,4 +704,13 @@ public class ClientGameScreenBase extends AnchorPane {
 //                playerTurn = !playerTurn;
 //            }
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
+    private void sendAcknowledgment(String opponentName){
+        ArrayList<String> requestMessages = new ArrayList<String>();
+        requestMessages.add("startedGame");
+        requestMessages.add(opponentName);
+        Gson gson = new GsonBuilder().create();
+        String requestJson = gson.toJson(requestMessages);
+        ClientConnection.sendRequest(requestJson);
+    }
 }

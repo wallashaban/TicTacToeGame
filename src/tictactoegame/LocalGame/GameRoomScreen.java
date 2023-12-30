@@ -123,9 +123,9 @@ public class GameRoomScreen extends BorderPane {
         historyFile = new HistoryFile();
         player = new Player("ali");
         this.stage = stage;
-       
 
-        String filePath = "src/files/" + player.getUserName() + ".txt";
+
+        String filePath = "D:/javaproject/TicTacToeGame/src/files/" + player.getUserName() + ".txt";
         File file = new File(filePath);
         if (!file.exists()) {
             historyFile.createFile(filePath);
