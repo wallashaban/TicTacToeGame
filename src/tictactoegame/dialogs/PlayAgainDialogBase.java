@@ -53,10 +53,10 @@ public class PlayAgainDialogBase extends Pane {
         getStylesheets().add("/tictactoegame/BackGround.css");
         setPadding(new Insets(15.0));
 
-        //mediaView.setFitHeight(330.0);
-        //mediaView.setFitWidth(450.0);
-        //mediaView.setLayoutX(68.0);
-        //mediaView.setLayoutY(29.0);
+        mediaView.setFitHeight(330.0);
+        mediaView.setFitWidth(450.0);
+        mediaView.setLayoutX(68.0);
+        mediaView.setLayoutY(29.0);
 
         btnReplay.setLayoutX(73.0);
         btnReplay.setLayoutY(442.0);
@@ -136,7 +136,7 @@ public class PlayAgainDialogBase extends Pane {
         text.setText("Congratulations! You Won the Game!!");
         text.setFont(new Font("Segoe UI", 33.0));
 
-        //getChildren().add(mediaView);
+        getChildren().add(mediaView);
         getChildren().add(btnReplay);
         getChildren().add(btnNotNow);
         getChildren().add(btnPlayAgain);

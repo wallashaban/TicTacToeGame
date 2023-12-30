@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -67,9 +68,9 @@ public class ClientGameScreenBase extends AnchorPane {
     private boolean isInitialPlayer = false;
     private boolean playerTurn;
 
-    public ClientGameScreenBase() {
+    public ClientGameScreenBase(String opponentName) {
         ClientConnection.listeningThread.suspend();
-
+        sendAcknowledgment(opponentName);
         btnExit = new Button();
         btnMin = new Button();
         txtPlay1Name = new Label();
@@ -528,4 +529,13 @@ public class ClientGameScreenBase extends AnchorPane {
 //                playerTurn = !playerTurn;
 //            }
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
+    private void sendAcknowledgment(String opponentName){
+        ArrayList<String> requestMessages = new ArrayList<String>();
+        requestMessages.add("startedGame");
+        requestMessages.add(opponentName);
+        Gson gson = new GsonBuilder().create();
+        String requestJson = gson.toJson(requestMessages);
+        ClientConnection.sendRequest(requestJson);
+    }
 }
