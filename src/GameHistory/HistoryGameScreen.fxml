@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="backgroundColor" stylesheets="@../BackGround.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientGame.ClientGameScreenController">
+   <children>
+      <Button fx:id="btnExit" layoutX="753.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: EACCD6; -fx-background-radius: 20;" text="X">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnMin" layoutX="714.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: EACCD6; -fx-background-radius: 20;" text="-">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+      <Label fx:id="txtPlay1Name" layoutX="648.0" layoutY="91.0" prefHeight="22.0" prefWidth="111.0" text="             Tom" textAlignment="CENTER">
+         <font>
+            <Font name="Impact" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtPlay2Name" layoutX="51.0" layoutY="91.0" text="            jerry">
+         <font>
+            <Font name="Impact" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtplayer2Type" layoutX="28.0" layoutY="80.0" text="x" textFill="#8a559b">
+         <font>
+            <Font name="Impact" size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtplayer1Type" layoutX="763.0" layoutY="80.0" text="O" textFill="#db4f7e">
+         <font>
+            <Font name="Impact" size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtTie" layoutX="391.0" layoutY="46.0" text="Tie" textFill="WHITE">
+         <font>
+            <Font name="Impact" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtTieScore" layoutX="400.0" layoutY="81.0" text="0" textFill="WHITE">
+         <font>
+            <Font name="Impact" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtPlay1Score" layoutX="618.0" layoutY="88.0" text="0" textFill="WHITE">
+         <font>
+            <Font name="Impact" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtPlay2Score" layoutX="168.0" layoutY="88.0" text="0" textFill="WHITE">
+         <font>
+            <Font name="Impact" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="btn1" layoutX="148.0" layoutY="171.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Button fx:id="btn2" layoutX="326.0" layoutY="171.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Button fx:id="btn3" layoutX="502.0" layoutY="171.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Button fx:id="btn4" layoutX="148.0" layoutY="292.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Button fx:id="btn5" layoutX="326.0" layoutY="292.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Button fx:id="btn6" layoutX="503.0" layoutY="292.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Button fx:id="btn7" layoutX="148.0" layoutY="413.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Button fx:id="btn8" layoutX="325.0" layoutY="413.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Button fx:id="btn9" layoutX="503.0" layoutY="413.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="174.0" style="-fx-background-color: EACCD6; -fx-background-radius: 7;" text=" ">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Button>
+      <Line endX="-100.0" endY="358.0" layoutX="424.0" layoutY="171.0" startX="-100.0" stroke="WHITE" strokeWidth="3.0" />
+      <Line endX="-100.0" endY="356.0" layoutX="600.0" layoutY="173.0" startX="-100.0" stroke="WHITE" strokeWidth="3.0" />
+      <Line endX="65.0" endY="111.0" layoutX="610.0" layoutY="179.0" startX="-459.0" startY="111.0" stroke="WHITE" strokeWidth="3.0" />
+      <Line endX="66.0" endY="111.0" layoutX="610.0" layoutY="300.0" startX="-459.0" startY="111.0" stroke="WHITE" strokeWidth="3.0" />
+      <ImageView fx:id="backImgae" fitHeight="45.0" fitWidth="62.0" layoutX="22.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/left.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="backImgae1" fitHeight="29.0" fitWidth="30.0" layoutX="127.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/1840745.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="backImgae11" fitHeight="29.0" fitWidth="30.0" layoutX="648.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/1840745.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="txtPlayr1TotalScore" layoutX="692.0" layoutY="117.0" text="7777" textFill="WHITE">
+         <font>
+            <Font name="Cambria Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtPlayr2TotalScore" layoutX="67.0" layoutY="117.0" text="7777" textFill="WHITE">
+         <font>
+            <Font name="Cambria Bold" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="imgPlayer2" fitHeight="106.0" fitWidth="94.0" layoutX="188.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/klipartz.com.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgPlayer1" fitHeight="106.0" fitWidth="94.0" layoutX="516.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/klipartz.com%20(1).png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

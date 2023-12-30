@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
+import tictactoegame.HistoryScreen;
 import tictactoegame.LocalGame.GameRoomScreen;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
@@ -45,7 +46,9 @@ public class MainScreenUI extends AnchorPane {
     protected final Pane pane;
     protected final Label label2;
     protected final Pane pane0;
-    protected final ImageView menuImageView;
+     protected final Label menuText;
+    protected final Pane menuPane;
+   // protected final ImageView menuImageView;
     protected final Pane closePane;
     protected final Label label3;
     protected final Pane minimizePane;
@@ -70,7 +73,9 @@ public class MainScreenUI extends AnchorPane {
         pane = new Pane();
         label2 = new Label();
         pane0 = new Pane();
-        menuImageView = new ImageView();
+        menuText = new Label();
+        menuPane = new Pane();
+       // menuImageView = new ImageView();
         closePane = new Pane();
         label3 = new Label();
         minimizePane = new Pane();
@@ -175,7 +180,7 @@ public class MainScreenUI extends AnchorPane {
         pane.setPrefHeight(200.0);
         pane.setPrefWidth(200.0);
 
-        label2.setLayoutX(78.0);
+        label2.setLayoutX(340.0);
         label2.setLayoutY(40.0);
         label2.setPrefHeight(21.0);
         label2.setPrefWidth(135.0);
@@ -184,19 +189,36 @@ public class MainScreenUI extends AnchorPane {
         label2.setTextFill(javafx.scene.paint.Color.WHITE);
         label2.setFont(new Font("Gill Sans MT Bold", 18.0));
 
-        pane0.setLayoutX(78.0);
+        pane0.setLayoutX(340.0);
         pane0.setLayoutY(65.0);
         pane0.setPrefHeight(14.0);
         pane0.setPrefWidth(95.0);
         pane0.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+        
+        //////////////////////////////////////
+        menuText.setLayoutX(10.0);
+        menuText.setLayoutY(40.0);
+        menuText.setPrefHeight(21.0);
+        menuText.setPrefWidth(135.0);
+        menuText.setStyle("-fx-background-color: transparent;");
+        menuText.setText("History");
+        menuText.setTextFill(javafx.scene.paint.Color.WHITE);
+        menuText.setFont(new Font("Gill Sans MT Bold", 18.0));
 
-        menuImageView.setFitHeight(51.0);
-        menuImageView.setFitWidth(43.0);
-        menuImageView.setLayoutX(14.0);
-        menuImageView.setLayoutY(39.0);
-        menuImageView.setPickOnBounds(true);
-        menuImageView.setPreserveRatio(true);
-        menuImageView.setImage(new Image(getClass().getResource("/images/menu.jpg").toExternalForm()));
+        menuPane.setLayoutX(10.0);
+        menuPane.setLayoutY(65.0);
+        menuPane.setPrefHeight(14.0);
+        menuPane.setPrefWidth(45.0);
+        menuPane.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+//////////////////////////////////////////
+
+//        menuImageView.setFitHeight(51.0);
+//        menuImageView.setFitWidth(43.0);
+//        menuImageView.setLayoutX(14.0);
+//        menuImageView.setLayoutY(39.0);
+//        menuImageView.setPickOnBounds(true);
+//        menuImageView.setPreserveRatio(true);
+//        menuImageView.setImage(new Image(getClass().getResource("/images/menu.jpg").toExternalForm()));
 
         closePane.setLayoutX(736.0);
         closePane.setLayoutY(10.0);
@@ -253,7 +275,8 @@ public class MainScreenUI extends AnchorPane {
         localPane.getChildren().add(imageView2);
         pane.getChildren().add(label2);
         pane.getChildren().add(pane0);
-        pane.getChildren().add(menuImageView);
+        pane.getChildren().add(menuText);
+        pane.getChildren().add(menuPane);
         closePane.getChildren().add(label3);
         pane.getChildren().add(closePane);
         pane.getChildren().add(minimizePane);
@@ -299,10 +322,10 @@ public class MainScreenUI extends AnchorPane {
             }
         });
 
-        menuImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        menuText.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Parent root = new ProfileScreenBase(new Player());
+                Parent root = new HistoryScreen();
                 Scene scene = new Scene(root);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -354,13 +377,13 @@ public class MainScreenUI extends AnchorPane {
             }
             if(isConnected){
                 onlinePane.setDisable(false);
-                menuImageView.setDisable(false);
+                ///menuImageView.setDisable(false);
                 connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#00ff00"));
                 connectionLabel.setText("Connected Successfully");
             }
             else{
                 onlinePane.setDisable(true);
-                menuImageView.setDisable(true);
+               // menuImageView.setDisable(true);
                 connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#5b5757"));
                 connectionLabel.setText("Not Connected \nYou Can still play locally");
             }
@@ -376,7 +399,7 @@ public class MainScreenUI extends AnchorPane {
         });
         
         onlinePane.setDisable(!(SharedData.isConnectionStatus()));
-        menuImageView.setDisable(!(SharedData.isConnectionStatus()));
+       // menuImageView.setDisable(!(SharedData.isConnectionStatus()));
         refreshImg.setVisible(!(SharedData.isConnectionStatus()));
     }
 }

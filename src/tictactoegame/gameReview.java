@@ -5,6 +5,7 @@
  */
 package tictactoegame;
 
+import GameHistory.HistoryGameScreen;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import tictactoegame.LocalGame.GameRoomScreen;
@@ -24,29 +26,40 @@ import tictactoegame.dialogs.drawDialogBase;
  * @author ghon
  */
 public class gameReview {
-    private static int currentp1Index;
-    private static int currentp2Index;
-    private static int x;
-    private static int y;
-    private static boolean isX;
+    private  int currentp1Index;
+    private  int currentp2Index;
+    private  int x;
+    private  int y;
+    private  boolean isX;
               
 
-      public static void review(GameRoomScreen gameRoomScreen,Label[][] boxArray ,ArrayList<Integer> player1Moves,ArrayList<Integer> player2Moves) {
+      public void review(HistoryGameScreen historyGameScreen,Button[][] boxArray ,ArrayList<Integer> playerMoves) {
+          
+          ArrayList<Integer> player1Moves = new ArrayList<>();
+                    ArrayList<Integer> player2Moves = new ArrayList<>();
+
+          for(int k=0;k<playerMoves.size();k+=2){
+          player1Moves.add(playerMoves.get(k));
+          }
+          for(int k=1;k<playerMoves.size();k+=2){
+          player2Moves.add(playerMoves.get(k));
+          }
         System.out.println("we are inside review");
         isX = true;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                //boxEnabled[i][j] = true;
-                boxArray[i][j].setText(" ");
-                boxArray[i][j].setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
-            }
-        }
+//        for (int i = 0; i < 3; i++) {
+//            for (int j = 0; j < 3; j++) {
+//                //boxEnabled[i][j] = true;
+//                boxArray[i][j].setText(" ");
+//                boxArray[i][j].setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
+//            }
+//        }
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         // Schedule the task to run every second
         while(true){
         Runnable r = new Runnable() {
             @Override
             public void run() {
+                        System.out.println("we are inside review");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -68,11 +81,11 @@ public class gameReview {
                             } else {
                             }
                         }
-                        if (currentp1Index == player1Moves.size() && currentp2Index == player2Moves.size()) {
+                        if (currentp1Index == playerMoves.size() && currentp2Index == playerMoves.size()) {
                             executor.shutdown();
                             //showDrawDialog('R');
-                            gameRoomScreen.showDialog('X');
-                            gameRoomScreen.resetGame();
+                    //        gameRoomScreen.showDialog('X');
+                      //      gameRoomScreen.resetGame();
                         }
                         isX = !isX;
                     }
