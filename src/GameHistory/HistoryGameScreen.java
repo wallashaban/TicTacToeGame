@@ -1,5 +1,6 @@
-package ClientGame;
+package GameHistory;
 
+import ClientGame.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -7,6 +8,10 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -22,14 +27,19 @@ import javafx.stage.Stage;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
 import tictactoegame.data.Move;
+import tictactoegame.gameReview;
 
-public class ClientGameScreenBase extends AnchorPane {
+public class HistoryGameScreen extends AnchorPane {
+     private  int currentp1Index;
+    private  int currentp2Index;
+    private  int x;
+    private  int y;
+    private  boolean isX;
 
     private final Button[] buttons = new Button[9];
-    Socket clientSocket;
     private char currentPlayerSymbol = 'z';
-    
-     final int col0 = 2;
+    protected final Button[][] boxArray;
+    final int col0 = 2;
     final int col1 = 3;
     final int col2 = 4;
     final int row0 = 5;
@@ -77,9 +87,9 @@ public class ClientGameScreenBase extends AnchorPane {
 
     private boolean isInitialPlayer = false;
     private boolean playerTurn;
-
-    public ClientGameScreenBase() {
-        ClientConnection.listeningThread.suspend();
+  ArrayList<Integer> player1Moves;
+    ArrayList<Integer> player2Moves;
+    public HistoryGameScreen(ArrayList<Integer> playerMoves) {
 
         btnExit = new Button();
         btnMin = new Button();
@@ -100,6 +110,19 @@ public class ClientGameScreenBase extends AnchorPane {
         btn7 = new Button();
         btn8 = new Button();
         btn9 = new Button();
+        boxArray = new Button[3][3];
+         player1Moves = new ArrayList<>();
+          player2Moves = new ArrayList<>();
+
+        boxArray[0][0] = btn1;
+        boxArray[0][1] = btn2;
+        boxArray[0][2] = btn3;
+        boxArray[1][0] = btn4;
+        boxArray[1][1] = btn5;
+        boxArray[1][2] = btn6;
+        boxArray[2][0] = btn7;
+        boxArray[2][1] = btn8;
+        boxArray[2][2] = btn9;
         line = new Line();
         line0 = new Line();
         line1 = new Line();
@@ -388,7 +411,9 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[6] = btn7;
         buttons[7] = btn8;
         buttons[8] = btn9;
-
+        
+       review(playerMoves);
+       
         btnExit.setOnAction((ActionEvent event) -> {
             System.exit(0);
         });
@@ -398,207 +423,65 @@ public class ClientGameScreenBase extends AnchorPane {
             stage.setIconified(true);
         });
 
-        setupButtonClicked();
-
-        startListeningForServerMoves();
     }
-
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    private void setupButtonClicked() {
-        for (int i = 0; i < buttons.length; i++) {
-            int index = i;
-            buttons[i].setOnAction((ActionEvent event) -> handleButtonClick(index));
+     private void review(ArrayList<Integer> playerMoves) {
+        System.out.println("we are inside review");
+        isX = true;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                //boxEnabled[i][j] = true;
+                boxArray[i][j].setText(" ");
+                boxArray[i][j].setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
+            }
         }
-    }
+        
 
-    private void handleButtonClick(int index) {
-        System.out.println("Button clicked: " + index + " symbol is " + currentPlayerSymbol);
-        if (!playerTurn || !isValidMove(index)) {
-            // Ignore clicks if it's not the player's turn or the move is not valid
-            return;
-        }
+          for(int k=0;k<playerMoves.size();k+=2){
+          player1Moves.add(playerMoves.get(k));
+          }
+          for(int k=1;k<playerMoves.size();k+=2){
+          player2Moves.add(playerMoves.get(k));
+          }
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        // Schedule the task to run every second
 
-        sendMoveToServer(index + 1, currentPlayerSymbol);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isX) {
+                            if (currentp1Index < player1Moves.size()) {
+                                x = player1Moves.get(currentp1Index);
+                                boxArray[x / 10][x % 10].setText("X");
+                                currentp1Index++;
+                            } else {
+                                // Stop the executor when the array is fully iterated
+                                //  executor.shutdown();
+                            }
+                        } else {
+                            if (currentp2Index < player2Moves.size()) {
+                                y = player2Moves.get(currentp2Index);
+                                boxArray[y / 10][y % 10].setText("O");
 
-        updateButton(index, String.valueOf(currentPlayerSymbol));
-        System.out.println("After update, symbol on UI should be: " + currentPlayerSymbol);
-        playerTurn = false;
-    }
+                                currentp2Index++;
+                            } else {
+                                // Stop the executor when the array is fully iterated
+                                //   executor.shutdown();
+                            }
+                        }
+                        if (currentp1Index == player1Moves.size() && currentp2Index == player2Moves.size()) {
+                            executor.shutdown();
+                            //showDrawDialog('R');
+                        }
+                        isX = !isX;
+                    }
 
-    private boolean isValidMove(int index) {
-        return buttons[index].getText().equals(" ");
-    }
-
-    private void sendMoveToServer(int index, char symbol) {
-        Move move = new Move(symbol, index);
-        String moveJson = convertMoveToJson(move);
-        System.out.println(moveJson);
-        ClientConnection.out.println(moveJson);
-    }
-
-    private void updateButton(int index, String symbol) {
-        System.out.println("Updating button on UI: " + index + ", " + symbol);
-        buttons[index].setText(symbol);
-        buttons[index].setDisable(true);
-    }
-
-    private String convertMoveToJson(Move move) {
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(move);
-    }
-
-    private void startListeningForServerMoves() {
-        new Thread(() -> {
-            try {
-                //symbol information from the server
-                Gson gson = new GsonBuilder().create();
-                String msg = ClientConnection.in.readLine();
-                System.out.println(msg);
-                if(!msg.startsWith("{")){
-                    msg = "{"+msg;
-                }
-                Move move = gson.fromJson(msg, Move.class);
-                char initialSymbol = move.getSign();
-                System.out.println("Received initial symbol from server: <><><><><><><>" + initialSymbol);
-
-                currentPlayerSymbol = initialSymbol;
-                if (currentPlayerSymbol == 'x') {
-                    playerTurn = true;
-                } else if (currentPlayerSymbol == 'o') {
-                    playerTurn = false;
-                }
-                Platform.runLater(() -> {
-                    txtplayer1Type.setText(String.valueOf(currentPlayerSymbol).toUpperCase());
-                    txtplayer2Type.setText((currentPlayerSymbol == 'x') ? "O" : "X");
                 });
-
-                // Continue listening for moves
-                while (true) {
-                    String receivedData = ClientConnection.in.readLine();
-                    System.out.println("we are here at actual move reception " + receivedData);
-                    if (receivedData != null) {
-                        handleServerMove(receivedData);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }).start();
+        };
+
+        executor.scheduleAtFixedRate(r, 1, 1, TimeUnit.SECONDS); // 0 seconds initial delay, 1 second interval
     }
-
-    private void handleServerMove(String moveJson) {
-        try {
-            Gson gson = new GsonBuilder().create();
-            Move move = gson.fromJson(moveJson, Move.class);
-
-            int boxVal = move.getBox();
-            int gameState = move.getGameState();
-            switch (boxVal) {
-                case 99:
-                    // Handle the case where the move is not valid (box = 99)
-                    System.out.println("Received an invalid move from the server.");
-                    break;
-
-                default:
-                    // Process a valid move
-                    Platform.runLater(() -> {
-                        updateButton(move.getBox() - 1, String.valueOf(move.getSign()));
-                    });
-                    playerTurn = !playerTurn;
-                    break;
-            }
-            switch (gameState) {
-                case 10:
-                    //Handel Winning Case
-                    System.out.println("Player Win");
-                    celebrateWinner(move.getWinningCase());
-                    ClientConnection.listeningThread.resume();
-                    break;
-                case 11:
-                    // handel Draw Case
-                    System.out.println("Player Draw");
-                    ClientConnection.listeningThread.resume();
-                    break;
-                case 12:
-                    // handel Lose Case
-                    System.out.println("Player Lose");
-                    celebrateWinner(move.getWinningCase());
-                    ClientConnection.listeningThread.resume();
-                    break;
-            }
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-    void celebrateWinner(int c) {
-        switch (c) {
-            case diagonalLeft:
-                for (int i = 2; i < 9; i+=2) {
-                            buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                    }
-                break;
-            case diagonalRight:
-                for (int i = 0; i < 9; i+=4) {
-                            buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                }
-                break;
-            case row0:
-                for (int i = 0; i < 3; i++) {
-                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                }
-                break;
-            case row1:
-                for (int i = 3; i < 6; i++) {
-                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                }
-                break;
-            case row2:
-                for (int i = 6; i < 9; i++) {
-                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                }
-                break;
-            case col0:
-                for (int i = 0; i < 9; i=i+3) {
-                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                }
-                break;
-            case col1:
-                for (int i = 1; i < 9; i=i+3) {
-                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                }
-                break;
-            case col2:
-                for (int i = 2; i < 9; i=i+3) {
-                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
-                }
-                break;
-            default:
-                break;
-        }       
-    }
-     void converter(int x){
-        switch(x+1){
-            case 1:i=0; j=0; break;
-            case 2:i=0; j=1; break;
-            case 3:i=0; j=2; break;
-            case 4:i=1; j=0; break;
-            case 5:i=1; j=1; break;
-            case 6:i=1; j=2; break;
-            case 7:i=2; j=0; break;
-            case 8:i=2; j=1; break;
-            case 9:i=2; j=2; break;
-
-        }
-    }
-
-    //            if (move.getBox() == 99) {
-//                // Handle the case where the move is not valid (box = 99)
-//                System.out.println("Received an invalid move from the server.");
-//                // You may want to display a message to the user or take other actions.
-//            } else {
-//                // Process a valid move
-//                Platform.runLater(() -> {updateButton(move.getBox()-1, String.valueOf(move.getSign()));});
-//                playerTurn = !playerTurn;
-//            }
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }

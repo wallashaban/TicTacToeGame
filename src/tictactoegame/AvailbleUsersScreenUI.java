@@ -139,9 +139,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                         .add(availableUsersPane);
                             }
                             scrollPane.setContent(flowPane);
-                            this.stop();
-                            ClientConnection.listeningThread.resume();
-
+                             stop();
+                        ClientConnection.listeningThread.resume();
                         });
                     } catch (IOException ex) {
                         Logger.getLogger(AvailbleUsersScreenUI.class.getName()).log(Level.SEVERE, null, ex);

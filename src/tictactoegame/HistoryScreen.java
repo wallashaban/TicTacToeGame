@@ -1,5 +1,6 @@
 package tictactoegame;
 
+import GameHistory.HistoryGameScreen;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,15 +8,26 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.data.HistoryFile;
 import tictactoegame.data.SharedData;
+import tictactoegame.dialogs.ExceptionDialog;
 
 public class HistoryScreen extends AnchorPane {
 
@@ -29,8 +41,7 @@ public class HistoryScreen extends AnchorPane {
     protected final Label label1;
 
     public HistoryScreen() {
-        readData();
-
+        new HistoryFile().readData();
         historyPane = new FlowPane();
         pane2 = new Pane();
         label = new Label();
@@ -71,7 +82,7 @@ public class HistoryScreen extends AnchorPane {
             nameLabel.setLayoutY(14.0);
             nameLabel.setPrefHeight(21.0);
             nameLabel.setPrefWidth(300.0);
-            nameLabel.setText("You and "+entry.getValue().getKey());
+            nameLabel.setText("You and " + entry.getValue().getKey());
             nameLabel.setTextFill(javafx.scene.paint.Color.WHITE);
             nameLabel.setFont(new Font("Gill Sans MT Bold", 18.0));
 
@@ -82,6 +93,17 @@ public class HistoryScreen extends AnchorPane {
             showLink.setText("Show Game Replay");
             showLink.setFont(new Font("Gill Sans MT", 14.0));
 
+            showLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    Parent root = new HistoryGameScreen(entry.getValue().getValue());
+                    Scene scene = new Scene(root);
+
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            });
             pane.setLayoutX(183.0);
             pane.setLayoutY(9.0);
             pane.setPrefHeight(32.0);
@@ -153,43 +175,6 @@ public class HistoryScreen extends AnchorPane {
         minimisePane.getChildren().add(label1);
         getChildren().add(minimisePane);
 
-    }
-
-    private void readData() {
-        try {
-            String filePath = "E:/java/TicTacToeGame/src/files/ali.txt";
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
-            String line;
-            String name = new String();
-            String date = new String();
-            GameReplay gameReplay;
-            Map<String, Pair<String, ArrayList<Integer>>> allMoves = new TreeMap<>();
-            while ((line = reader.readLine()) != null) {
-                ArrayList<Integer> moves = new ArrayList<>();
-
-                StringTokenizer st = new StringTokenizer(line);
-                while (st.hasMoreTokens()) {
-                    moves.add(Integer.parseInt(st.nextToken()));
-                }
-                line = reader.readLine();
-                date = line;
-
-                line = reader.readLine();
-                name = line;
-                Pair<String, ArrayList<Integer>> pair = new Pair<>(name, moves);
-                allMoves.put(date, pair);
-            }
-            System.out.println("Sorted Map by Key:");
-            for (Map.Entry<String, Pair<String, ArrayList<Integer>>> entry : allMoves.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-            SharedData.gameReplay = new GameReplay(allMoves);
-            //String game=  gameReplay.toString();
-            //System.out.print(game);
-            reader.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 
 }

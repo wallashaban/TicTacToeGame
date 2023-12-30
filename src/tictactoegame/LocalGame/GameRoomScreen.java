@@ -40,6 +40,7 @@ import tictactoegame.data.Player;
 import tictactoegame.dialogs.PlayAgainDialogBase;
 import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.drawDialogBase;
+import tictactoegame.gameReview;
 import tictactoegame.old.MainScreen;
 
 public class GameRoomScreen extends BorderPane {
@@ -62,10 +63,6 @@ public class GameRoomScreen extends BorderPane {
     int player2ScoreCount = 0;
     int movesCount = 0; // sum of moves 
     MessageController message;
-    int currentp1Index;
-    int currentp2Index;
-    int x;
-    int y;
     protected boolean isX = true;
     protected char[][] matrix;  // remove it later
     protected int player1Cases[];
@@ -122,19 +119,13 @@ public class GameRoomScreen extends BorderPane {
         historyFile = new HistoryFile();
         player = new Player("ahmed");
         this.stage = stage;
-        currentp1Index = 0;
-        currentp2Index = 0;
-
-         filePath = "E:/java/TicTacToeGame/src/files/" + player.getUserName() + ".txt";
+       
+         filePath = "src/files/" + player.getUserName() + ".txt";
         File file = new File(filePath);
         if (!file.exists()) {
             historyFile.createFile(filePath);
         }
-//        try {
-//            historyFile.setWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true))));//writer =      
-//        } catch (FileNotFoundException ex) {
-//            Logger.getLogger(GameRoomScreen.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
 
         sb="";
         message = new MessageController();
@@ -699,7 +690,7 @@ public class GameRoomScreen extends BorderPane {
 
     }
 
-    private void showDialog(char winner) {
+    public void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
         Parent parent = new PlayAgainDialogBase(message);
@@ -709,7 +700,7 @@ public class GameRoomScreen extends BorderPane {
         stage.showAndWait();
     }
 
-    private void resetGame() {
+    public void resetGame() {
         switch (message.getResponse()) {
             case 2:
                 movesCount = 0;
@@ -734,9 +725,9 @@ public class GameRoomScreen extends BorderPane {
                 break;
             case 1:
                 isX = true;
-                review();
                 historyFile.saveToFile(filePath,player,sb);
                 sb="";
+               // gameReview.review(this,boxArray,player1Moves,player2Moves);  
                 break;
             case 0:
                 sb="";
@@ -760,58 +751,9 @@ public class GameRoomScreen extends BorderPane {
         resetGame();
     }
 
-    private void review() {
-        System.out.println("we are inside review");
-        isX = true;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                //boxEnabled[i][j] = true;
-                boxArray[i][j].setText(" ");
-                boxArray[i][j].setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
-            }
-        }
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        // Schedule the task to run every second
-
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isX) {
-                            if (currentp1Index < player1Moves.size()) {
-                                x = player1Moves.get(currentp1Index);
-                                boxArray[x / 10][x % 10].setText("X");
-                                currentp1Index++;
-                            } else {
-                                // Stop the executor when the array is fully iterated
-                                //  executor.shutdown();
-                            }
-                        } else {
-                            if (currentp2Index < player2Moves.size()) {
-                                y = player2Moves.get(currentp2Index);
-                                boxArray[y / 10][y % 10].setText("O");
-
-                                currentp2Index++;
-                            } else {
-                                // Stop the executor when the array is fully iterated
+                            // Stop the executor when the array is fully iterated
                                 //   executor.shutdown();
-                            }
-                        }
-                        if (currentp1Index == player1Moves.size() && currentp2Index == player2Moves.size()) {
-                            executor.shutdown();
-                            showDrawDialog('R');
-                        }
-                        isX = !isX;
-                    }
-
-                });
-            }
-        };
-
-        executor.scheduleAtFixedRate(r, 1, 1, TimeUnit.SECONDS); // 0 seconds initial delay, 1 second interval
-    }
+      
 
     private void showDrawDialog(char c) {
         message = new MessageController();

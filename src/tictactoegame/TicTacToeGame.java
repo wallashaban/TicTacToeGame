@@ -4,24 +4,7 @@
  * and open the template in the editor.
  */
 package tictactoegame;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.RandomAccessFile;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import GameHistory.HistoryGameScreen;
 import tictactoegame.data.SharedData;
 import tictactoegame.SplashScreen.SplashScreen;
 import javafx.application.Application;
@@ -32,8 +15,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-
-import tictactoegame.GameVsPC.GameVsPcBaseUI;
 import tictactoegame.connection.ClientConnection;
 /**
  *
@@ -64,14 +45,13 @@ public class TicTacToeGame extends Application {
             }
         });
         
-        
+   
     }
 
     @Override
     public void stop() throws Exception {
     ClientConnection.closeConnection();
     }
-    
 
     /**
      * @param args the command line arguments

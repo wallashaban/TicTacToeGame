@@ -520,6 +520,7 @@ public class GameVsPcBaseUI extends AnchorPane {
             resetBoard();
         }
     }
+    
 
     private boolean checkWin(String player) {
         boolean state = false;
