@@ -265,8 +265,7 @@ public class ClientConnection {
         Platform.runLater(()->{
             Parent root = new GameRoomScreen();
             Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setTitle("Text Editor app");
+            Stage stage = SharedData.getStage();
             stage.setScene(scene);
             stage.show();
         });

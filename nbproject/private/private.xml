@@ -11,5 +11,19 @@
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/connection/Constants.java</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/dialogs/RequestDialogBase.java</file>
         </group>
+<<<<<<< HEAD
+||||||| 80f171a
+        <group name="TicTacToeBestTeam"/>
+=======
+        <group name="TicTacToeBestTeam">
+            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
+        </group>
+<<<<<<< Updated upstream
+=======
+        <group name="TicTacToeBestTeam">
+            <file>file:/D:/javaproject/TicTacToeGame/src/ClientGame/ClientGameScreenBase.java</file>
+        </group>
+>>>>>>> Stashed changes
+>>>>>>> d878b0f4ad0bea6c53bdcf1952cf9f6a75033b77
     </open-files>
 </project-private>
