@@ -21,9 +21,8 @@ public class Constants {
     // ip, port, DB username, DB pass, etc...
     // public static final CAPITAL
     public static final int PORT= 7777;
-    public static final String IP_ADDRESS= "10.143.9.58";
-
-    
+    public static final String IP_ADDRESS= "10.145.9.58";
+    //public static final String IP_ADDRESS= "127.0.0.1";
     public static final int REGISTER = 1;
     public static final int LOGIN = 2;
     
@@ -36,7 +35,7 @@ public class Constants {
         stage.showAndWait();
     }
     
-    public static void showRequestDialog25(String name , Request request) {
+    public static void showRequestDialog(String name , Request request) {
         Parent parent = new RequestDialogBase(name,request);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();

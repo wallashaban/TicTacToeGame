@@ -27,7 +27,7 @@ import tictactoegame.dialogs.PlayAgainDialogBase;
 
 public  class gameRoomScreen1 extends BorderPane {
     
-
+    private char state;
     
     protected final AnchorPane topAncherPane;
     protected final FlowPane Player1View;
@@ -636,7 +636,7 @@ public  class gameRoomScreen1 extends BorderPane {
     private void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message);
+        Parent parent = new PlayAgainDialogBase(message, state);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);

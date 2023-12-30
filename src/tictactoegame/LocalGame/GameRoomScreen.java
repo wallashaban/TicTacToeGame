@@ -47,7 +47,7 @@ public class GameRoomScreen extends BorderPane {
 
     protected final Label[][] boxArray; // array that hold the 9 labels
     protected final boolean[][] boxEnabled; // array that hold enablle or disable to labels
-
+    private char state;
     final int col0 = 2;
     final int col1 = 3;
     final int col2 = 4;
@@ -118,8 +118,7 @@ public class GameRoomScreen extends BorderPane {
     public GameRoomScreen() {
         historyFile = new HistoryFile();
         player = new Player("ahmed");
-        this.stage = stage;
-       
+        this.stage = stage;       
          filePath = "src/files/" + player.getUserName() + ".txt";
         File file = new File(filePath);
         if (!file.exists()) {
@@ -693,7 +692,7 @@ public class GameRoomScreen extends BorderPane {
     public void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message);
+        Parent parent = new PlayAgainDialogBase(message, state);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -747,7 +746,7 @@ public class GameRoomScreen extends BorderPane {
     }
 
     void draw() {
-        showDrawDialog('D');
+        showDialog('T');
         resetGame();
     }
 

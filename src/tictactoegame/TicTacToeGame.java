@@ -5,6 +5,7 @@
  */
 package tictactoegame;
 import GameHistory.HistoryGameScreen;
+
 import tictactoegame.data.SharedData;
 import tictactoegame.SplashScreen.SplashScreen;
 import javafx.application.Application;
@@ -27,7 +28,7 @@ public class TicTacToeGame extends Application {
 
         Parent root = new SplashScreen();
 
-        stage.initStyle(StageStyle.UNDECORATED); 
+//        stage.initStyle(StageStyle.UNDECORATED); 
         SharedData.setStage(stage);
         Scene scene = new Scene(root);
          

@@ -5,6 +5,7 @@
  */
 package tictactoegame.connection;
 
+import ClientGame.ClientGameScreenBase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;
@@ -252,7 +253,7 @@ public class ClientConnection {
         Platform.runLater(()->{
             Request request = new Request();
             response.clear();
-            Constants.showRequestDialog25(name, request);
+            Constants.showRequestDialog(name, request);
             if(request.getResponse()==1)
             {
                 response.add("accept");
@@ -274,7 +275,7 @@ public class ClientConnection {
 
     private static void startGame(ArrayList<String> response) {
         Platform.runLater(()->{
-            Parent root = new GameRoomScreen();
+            Parent root = new ClientGameScreenBase(response.get(1));
             Scene scene = new Scene(root);
             Stage stage = SharedData.getStage();
             stage.setScene(scene);

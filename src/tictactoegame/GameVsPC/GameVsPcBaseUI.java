@@ -23,6 +23,8 @@ import tictactoegame.dialogs.PlayAgainDialogBase;
 public class GameVsPcBaseUI extends AnchorPane {
     
     MessageController message;
+    private char state;
+   
     protected final TextField txtfPlayer;
     protected final Label xAsLogoPlayer;
     protected final Label playerScore;
@@ -479,10 +481,14 @@ public class GameVsPcBaseUI extends AnchorPane {
                 playerTurn = false;
 
                 if (checkWin("X")) {
+                    state = 'W';
+
                     player1Score++;
                     updateScores();
                     resetBoard();
                 } else if (isBoardFull()) {
+                   state = 'T';
+
                     drawScore++;
                     draw();
                     updateScores();
@@ -510,10 +516,12 @@ public class GameVsPcBaseUI extends AnchorPane {
         playerTurn = true;
 
         if (checkWin("O")) {
+            state = 'W';
             player2Score++;
             updateScores();
             resetBoard();
         } else if (isBoardFull()) {
+            state = 'T';
             drawScore++;
             updateScores();
             draw();
@@ -529,7 +537,7 @@ public class GameVsPcBaseUI extends AnchorPane {
             if (board[i][0].equals(player)
                     && board[i][1].equals(player)
                     && board[i][2].equals(player)) {
-
+                
                 highlightWinningCells(player, i * 3 + 0, i * 3 + 1, i * 3 + 2);
                 char playerChar = player.charAt(0);
 
@@ -568,7 +576,7 @@ public class GameVsPcBaseUI extends AnchorPane {
         return state;
     }
 
-    private void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
+    public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
         String style = "-fx-text-fill: ";
 
         if (player.equals("X")) {
@@ -585,7 +593,7 @@ public class GameVsPcBaseUI extends AnchorPane {
     private void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message);
+        Parent parent = new PlayAgainDialogBase(message, state);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
