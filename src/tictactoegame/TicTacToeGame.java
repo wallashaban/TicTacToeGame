@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tictactoegame;
+
 import tictactoegame.data.SharedData;
 import tictactoegame.SplashScreen.SplashScreen;
 import javafx.application.Application;
@@ -15,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import tictactoegame.connection.ClientConnection;
-
 /**
  *
  * @author Dr.Wlaa
@@ -37,13 +37,13 @@ public class TicTacToeGame extends Application {
         
         
         
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    @Override
-                    public void handle(WindowEvent event) {
-                            //ClientConnection.closeConnection();
-                            Platform.exit();
-                    }
-          });
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                    ClientConnection.closeConnection();
+                    Platform.exit();
+            }
+        });
         
         
     }

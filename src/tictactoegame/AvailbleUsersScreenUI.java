@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
 import tictactoegame.data.Player;
@@ -54,8 +55,6 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                 while (true) {
                     try {
                         String response = ClientConnection.in.readLine();
-
-
                         if(!response.startsWith("[")) {
                             response = "["+response;
                         }
@@ -66,30 +65,28 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                         
                         switch (responseList.get(0)) {
                             case ("AvailableUsers"):
-                                
+
                                 java.lang.reflect.Type playerListType = new TypeToken<List<Player>>() {
                                 }.getType();
                                 players = gson.fromJson(responseList.get(1), playerListType);
                                 System.err.println("length " + players.size());
                                 break;
                         }
-                        
-                        
+
                         Platform.runLater(() -> {
                             for (int i = 0; i < players.size(); i++) {
-                                if(players.get(i).getUserName().equals(SharedData.currentPlayer.getUserName()))
-                                {
+                                if (players.get(i).getUserName().equals(SharedData.currentPlayer.getUserName())) {
                                     continue;
                                 }
                                 Pane availableUsersPane = new Pane();
                                 Label nameLabel = new Label();
                                 Label scoreLabel = new Label();
                                 final Hyperlink chalengeNowLink = new Hyperlink();
-                                
+
                                 availableUsersPane.setPrefHeight(105.0);
                                 availableUsersPane.setPrefWidth(221.0);
                                 availableUsersPane.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
-                                
+
                                 nameLabel.setLayoutX(24.0);
                                 nameLabel.setLayoutY(14.0);
                                 nameLabel.setPrefHeight(21.0);
@@ -97,7 +94,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                 nameLabel.setText(players.get(i).getUserName());
                                 nameLabel.setTextFill(javafx.scene.paint.Color.WHITE);
                                 nameLabel.setFont(new Font("Gill Sans MT Bold", 18.0));
-                                
+
                                 scoreLabel.setLayoutX(24.0);
                                 scoreLabel.setLayoutY(38.0);
                                 scoreLabel.setPrefHeight(21.0);
@@ -105,7 +102,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                 scoreLabel.setText("Score : " + players.get(i).getScore());
                                 scoreLabel.setTextFill(javafx.scene.paint.Color.WHITE);
                                 scoreLabel.setFont(new Font("Gill Sans MT Bold", 18.0));
-                                
+
                                 chalengeNowLink.setLayoutX(24.0);
                                 chalengeNowLink.setLayoutY(68.0);
                                 chalengeNowLink.setPrefHeight(23.0);
@@ -118,8 +115,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
 
                                     @Override
                                     public void handle(MouseEvent event) {
-                                       chalengeNowLink.setDisable(true);
 
+                                       chalengeNowLink.setDisable(true);
                                         ArrayList<String> requestMessages = new ArrayList<String>();
                                         requestMessages.add("request");
                                         requestMessages.add(userName);
@@ -127,11 +124,11 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                         String requestJson = gson.toJson(requestMessages);
                                         ClientConnection.sendRequest(requestJson);
                                     }
-                                    
+
                                 });
                                 FlowPane.setMargin(availableUsersPane,
                                         new Insets(30.0, 20.0, 0.0, 20.0));
-                                
+
                                 availableUsersPane.getChildren()
                                         .add(nameLabel);
                                 availableUsersPane.getChildren()
@@ -141,16 +138,15 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                 flowPane.getChildren()
                                         .add(availableUsersPane);
                             }
-                            
                             scrollPane.setContent(flowPane);
-                                                    this.stop();
+                             stop();
                         ClientConnection.listeningThread.resume();
                         });
                     } catch (IOException ex) {
                         Logger.getLogger(AvailbleUsersScreenUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
+                
             }
 
         }
@@ -235,6 +231,22 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         getChildren().add(minimisePane);
 
         getChildren().add(scrollPane);
+
+        closePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Platform.exit();
+            }
+        });
+        minimisePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage) minimisePane.getScene().getWindow();
+                stage.setIconified(true);
+            }
+        });
+
         
+
     }
 }

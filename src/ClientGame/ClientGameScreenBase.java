@@ -37,6 +37,18 @@ public class ClientGameScreenBase extends AnchorPane {
     private final Button[] buttons = new Button[9];
     Socket clientSocket;
     private char currentPlayerSymbol = 'z';
+    
+     final int col0 = 2;
+    final int col1 = 3;
+    final int col2 = 4;
+    final int row0 = 5;
+    final int row1 = 6;
+    final int row2 = 7;
+    final int diagonalLeft = 0;
+    final int diagonalRight = 1;
+    int i;
+    int j;
+
     MessageController message;
     protected MediaView mediaView;
 
@@ -517,6 +529,7 @@ public class ClientGameScreenBase extends AnchorPane {
                     resetBoard();
 
                     System.out.println("Player Win");
+                    celebrateWinner(move.getWinningCase());
                     ClientConnection.listeningThread.resume();
                     break;
                 case 11:
@@ -536,6 +549,7 @@ public class ClientGameScreenBase extends AnchorPane {
                     resetBoard();
                     // handel Lose Case
                     System.out.println("Player Lose");
+                    celebrateWinner(move.getWinningCase());
                     ClientConnection.listeningThread.resume();
                     break;
             }
@@ -543,8 +557,68 @@ public class ClientGameScreenBase extends AnchorPane {
             e.printStackTrace();
         }
     }
-    
-        public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
+    void celebrateWinner(int c) {
+        switch (c) {
+            case diagonalLeft:
+                for (int i = 2; i < 9; i+=2) {
+                            buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                    }
+                break;
+            case diagonalRight:
+                for (int i = 0; i < 9; i+=4) {
+                            buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case row0:
+                for (int i = 0; i < 3; i++) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case row1:
+                for (int i = 3; i < 6; i++) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case row2:
+                for (int i = 6; i < 9; i++) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case col0:
+                for (int i = 0; i < 9; i=i+3) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case col1:
+                for (int i = 1; i < 9; i=i+3) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case col2:
+                for (int i = 2; i < 9; i=i+3) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            default:
+                break;
+        }       
+    }
+     void converter(int x){
+        switch(x+1){
+            case 1:i=0; j=0; break;
+            case 2:i=0; j=1; break;
+            case 3:i=0; j=2; break;
+            case 4:i=1; j=0; break;
+            case 5:i=1; j=1; break;
+            case 6:i=1; j=2; break;
+            case 7:i=2; j=0; break;
+            case 8:i=2; j=1; break;
+            case 9:i=2; j=2; break;
+
+        }
+    }
+     
+             public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
         String style = "-fx-text-fill: ";
 
         if (player.equals("X")) {
@@ -618,5 +692,15 @@ public class ClientGameScreenBase extends AnchorPane {
                 break;
         }
     }
-        
+
+    //            if (move.getBox() == 99) {
+//                // Handle the case where the move is not valid (box = 99)
+//                System.out.println("Received an invalid move from the server.");
+//                // You may want to display a message to the user or take other actions.
+//            } else {
+//                // Process a valid move
+//                Platform.runLater(() -> {updateButton(move.getBox()-1, String.valueOf(move.getSign()));});
+//                playerTurn = !playerTurn;
+//            }
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }

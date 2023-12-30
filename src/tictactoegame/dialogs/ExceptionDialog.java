@@ -6,6 +6,8 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -13,6 +15,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.data.SharedData;
 
 public class ExceptionDialog extends Pane {
 
@@ -22,7 +27,7 @@ public class ExceptionDialog extends Pane {
     protected final Pane exitBtn;
     protected final Label label;
 
-    public ExceptionDialog(String text) {
+    public ExceptionDialog(String text,boolean isServerclosed) {
 
         rectangle = new Rectangle();
         btnAccept = new Button();
@@ -92,7 +97,20 @@ public class ExceptionDialog extends Pane {
             @Override
             public void handle(MouseEvent event) {
                  Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+                 if (isServerclosed) {
+                    Parent root = new MainScreenUI();
+
+//                    stage.initStyle(StageStyle.UNDECORATED);
+                    SharedData.setStage(stage);
+                    Scene scene = new Scene(root);
+
+                    stage.setScene(scene);
+                    stage.show();
+
+                }
+
                 stage.close();
+                
             }
         }
         );
@@ -101,11 +119,23 @@ public class ExceptionDialog extends Pane {
             @Override
             public void handle(MouseEvent event) {
                  Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+                 if (isServerclosed) {
+                    Parent root = new MainScreenUI();
+
+//                    stage.initStyle(StageStyle.UNDECORATED);
+                    Scene scene = new Scene(root);
+
+                    SharedData.stage.setScene(scene);
+                    SharedData.stage.show();
+
+                }
+
                 stage.close();
             }
         }
         );
 
         }
+     
     }
 

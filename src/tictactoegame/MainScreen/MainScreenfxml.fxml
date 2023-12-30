@@ -102,6 +102,22 @@
                </children>
             </Pane>
          </top>
+         <bottom>
+            <Pane prefHeight="68.0" prefWidth="818.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="refreshImg" fitHeight="70.0" fitWidth="82.0" layoutX="22.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/refresh.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="connectionLabel" layoutX="133.0" layoutY="25.0" text="Refresh Connection..." textFill="#5b5757">
+                     <font>
+                        <Font name="Segoe UI Bold" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>
