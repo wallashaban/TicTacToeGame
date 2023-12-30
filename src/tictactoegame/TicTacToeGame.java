@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tictactoegame;
+import GameHistory.HistoryGameScreen;
 
 import tictactoegame.data.SharedData;
 import tictactoegame.SplashScreen.SplashScreen;
@@ -45,7 +46,7 @@ public class TicTacToeGame extends Application {
             }
         });
         
-        
+   
     }
 
     @Override
