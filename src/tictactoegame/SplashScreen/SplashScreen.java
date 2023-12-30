@@ -67,7 +67,7 @@ public class SplashScreen extends AnchorPane {
         imageView.setLayoutY(184.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("/images/Layer_1.png").toExternalForm()));
+        imageView.setImage(new Image(getClass().getResource("/images/images.png").toExternalForm()));
 
         letsPlaybtn.setLayoutX(287.0);
         letsPlaybtn.setLayoutY(417.0);

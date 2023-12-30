@@ -26,8 +26,8 @@ public class Constants {
     public static final int REGISTER = 1;
     public static final int LOGIN = 2;
     
-    public static void showDialog(String message) {
-        Parent parent = new ExceptionDialog(message);
+    public static void showDialog(String message,boolean isServerclosed) {
+        Parent parent = new ExceptionDialog(message,isServerclosed);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
                 stage.initStyle(StageStyle.UNDECORATED); 
