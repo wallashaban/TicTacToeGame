@@ -170,7 +170,7 @@ public class PlayAgainDialogBase extends Pane {
                 case 'W':
                     {
                         int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 4);
-                        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
+                        String path = "src/Videos/Winner" + randomNumWinner + ".mp4";
                         Media media = new Media(new File(path).toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
                         mediaPlayer.setAutoPlay(true);

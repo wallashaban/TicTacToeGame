@@ -154,7 +154,7 @@ public class ClientConnection {
             case "login":
                 login(response);
                 break;
-            case "\"request\"":
+            case "request":
                 System.out.println("in case request");
                 handlePlayRequest(response);
                 break;

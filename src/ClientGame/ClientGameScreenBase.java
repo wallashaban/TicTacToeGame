@@ -668,13 +668,16 @@ public class ClientGameScreenBase extends AnchorPane {
     }
 
     private void showDialog(char winner) {
-        message = new MessageController();
-        message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message, state);
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.showAndWait();
+        Platform.runLater(()->{
+            message = new MessageController();
+            message.setWinner(winner);
+            Parent parent = new PlayAgainDialogBase(message, state);
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.showAndWait();
+        });
+        
     }
 
     private void resetBoard() {
