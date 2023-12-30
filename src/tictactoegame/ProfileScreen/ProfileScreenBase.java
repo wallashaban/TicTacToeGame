@@ -211,10 +211,10 @@ public class ProfileScreenBase extends AnchorPane {
 
         
         // Work
-//        String myScore = String.valueOf(person.score);
-//        
-//        textUsername.setText(person.userName);
-//        textEmail.setText(person.email);
-//        textScore.setText(myScore);
+        String myScore = String.valueOf(person.getScore());
+        
+        textUsername.setText(person.getUserName());
+        textEmail.setText(person.getEmail());
+        textScore.setText(myScore);
     }
 }

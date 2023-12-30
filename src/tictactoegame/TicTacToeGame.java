@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package tictactoegame;
-<<<<<<< Updated upstream
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,8 +22,6 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-=======
->>>>>>> Stashed changes
 import tictactoegame.data.SharedData;
 import tictactoegame.SplashScreen.SplashScreen;
 import javafx.application.Application;
@@ -36,11 +33,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
-<<<<<<< Updated upstream
 import tictactoegame.GameVsPC.GameVsPcBaseUI;
 import tictactoegame.connection.ClientConnection;
-=======
->>>>>>> Stashed changes
 /**
  *
  * @author Dr.Wlaa
@@ -62,13 +56,13 @@ public class TicTacToeGame extends Application {
         
         
         
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    @Override
-                    public void handle(WindowEvent event) {
-                            //ClientConnection.closeConnection();
-                            Platform.exit();
-                    }
-          });
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                    ClientConnection.closeConnection();
+                    Platform.exit();
+            }
+        });
         
         
     }
