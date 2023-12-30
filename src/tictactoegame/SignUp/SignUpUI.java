@@ -49,6 +49,8 @@ public class SignUpUI extends Pane {
     protected final Label letterY;
     protected final Button buttonExit;
     protected final Button buttonMinimize;
+        protected final Button buttonBack;
+
 //    Socket s;
 //    DataInputStream dataInputStream;
 //    PrintStream printStream;
@@ -74,6 +76,8 @@ public class SignUpUI extends Pane {
         letterY = new Label();
         buttonExit = new Button();
         buttonMinimize = new Button();
+                buttonBack = new Button();
+
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -159,7 +163,7 @@ public class SignUpUI extends Pane {
         });
 
         letterX.setLayoutX(23.0);
-        letterX.setLayoutY(19.0);
+        letterX.setLayoutY(43.0);
         letterX.setRotate(10.0);
         letterX.setText("X");
         letterX.setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
@@ -167,7 +171,7 @@ public class SignUpUI extends Pane {
         letterX.setPadding(new Insets(0.0, 0.0, 0.0, 10.0));
 
         letterY.setLayoutX(110.0);
-        letterY.setLayoutY(29.0);
+        letterY.setLayoutY(53.0);
         letterY.setText("O");
         letterY.setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
         letterY.setFont(new Font("Arial Bold", 80.0));
@@ -194,6 +198,23 @@ public class SignUpUI extends Pane {
             Stage stage = (Stage) buttonMinimize.getScene().getWindow();
             stage.setIconified(true);
         });
+         buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+        buttonBack.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
+        buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new LoginDesignUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
 
         getChildren().add(labelSignUp);
         getChildren().add(labelsubtitle);
@@ -207,6 +228,8 @@ public class SignUpUI extends Pane {
         getChildren().add(letterY);
         getChildren().add(buttonExit);
         getChildren().add(buttonMinimize);
+        getChildren().add(buttonBack);
+
 
         btnSignUp.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -219,24 +242,31 @@ public class SignUpUI extends Pane {
 
     private void handleSignupCases() {
         if (txtFFullName.getText().length() < 3) {
-            Constants.showDialog("Please enter your name properly...");
+            Constants.showDialog("Please enter your name properly...",false);
         } else {
+            if(txtFFullName.getText().contains(" "))
+            {
+                Constants.showDialog("Username can not contain spaces...",false);
+            }
+            else
+                {
             if (txtFEmail.getText().length() < 3) {
-                Constants.showDialog("Please enter your email properly...");
+                Constants.showDialog("Please enter your email properly...",false);
             } else {
                 if (!(txtFEmail.getText().contains("@")) || !(txtFEmail.getText().contains("."))) {
-                            Constants.showDialog("You should add (.) and @ in your email");
+                            Constants.showDialog("You should add (.) and @ in your email",false);
                         } else {
                 if (txtFPasword.getText().length() < 3) {
-                    Constants.showDialog("Please enter your password properly...");
+                    Constants.showDialog("Please enter your password properly...",false);
                 } else {
                     
                     if (!(txtFConfirmPassword.getText().equals( txtFPasword.getText()))) {
-                        Constants.showDialog("Your password and confirm password should be the same...");
+                        Constants.showDialog("Your password and confirm password should be the same...",false);
                     } else {
+                        System.out.print("Hola");
                             signUpUser();
                     }}
-                }
+                }}
 
             }
         }

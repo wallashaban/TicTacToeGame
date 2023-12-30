@@ -17,8 +17,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -34,18 +36,20 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.data.HistoryFile;
 import tictactoegame.data.MessageController;
 import tictactoegame.data.Player;
 import tictactoegame.dialogs.PlayAgainDialogBase;
 import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.drawDialogBase;
+import tictactoegame.gameReview;
 import tictactoegame.old.MainScreen;
 
 public class GameRoomScreen extends BorderPane {
 
     protected final Label[][] boxArray; // array that hold the 9 labels
     protected final boolean[][] boxEnabled; // array that hold enablle or disable to labels
-
+    private char state;
     final int col0 = 2;
     final int col1 = 3;
     final int col2 = 4;
@@ -61,10 +65,6 @@ public class GameRoomScreen extends BorderPane {
     int player2ScoreCount = 0;
     int movesCount = 0; // sum of moves 
     MessageController message;
-    int currentp1Index;
-    int currentp2Index;
-    int x;
-    int y;
     protected boolean isX = true;
     protected char[][] matrix;  // remove it later
     protected int player1Cases[];
@@ -112,33 +112,25 @@ public class GameRoomScreen extends BorderPane {
     protected final Label box02;
     protected final Label box12;
     protected final Label box22;
+        protected final Button buttonBack;
+
     String sb;
 
-    BufferedWriter writer;
     Player player;
-
+    HistoryFile historyFile;
+    String filePath;
     public GameRoomScreen() {
-
-        player = new Player("ali");
-        this.stage = stage;
-        currentp1Index = 0;
-        currentp2Index = 0;
-
-        String filePath = "E:/java/TicTacToeGame/src/files/" + player.getUserName() + ".txt";
+        historyFile = new HistoryFile();
+        player = new Player("ahmed");
+        this.stage = stage;       
+         filePath = "src/files/" + player.getUserName() + ".txt";
         File file = new File(filePath);
-        if (!file.exists()
-                
-                ) {
-            createFile(filePath);
-        }
-        try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true)));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GameRoomScreen.class.getName()).log(Level.SEVERE, null, ex);
+        if (!file.exists()) {
+            historyFile.createFile(filePath);
         }
 
-        sb = null;
-        //sb = new StringBuilder();
+
+        sb="";
         message = new MessageController();
         matrix = new char[3][3];
         boxArray = new Label[3][3];
@@ -188,6 +180,8 @@ public class GameRoomScreen extends BorderPane {
         box02 = new Label();
         box12 = new Label();
         box22 = new Label();
+                buttonBack = new Button();
+
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -207,12 +201,29 @@ public class GameRoomScreen extends BorderPane {
         Player1View.setPrefHeight(114.0);
         Player1View.setPrefWidth(310.0);
 
-        menuIcon.setFitHeight(50.0);
-        menuIcon.setFitWidth(50.0);
-        menuIcon.setPickOnBounds(true);
-        menuIcon.setPreserveRatio(true);
-        menuIcon.setImage(new Image(getClass().getResource("/images/menu.png").toExternalForm()));
-        FlowPane.setMargin(menuIcon, new Insets(20.0, 0.0, 0.0, 10.0));
+      //  buttonBack.setFitHeight(50.0);
+      //  buttonBack.setFitWidth(50.0);
+        buttonBack.setPickOnBounds(true);
+       // buttonBack.setPreserveRatio(true);
+        
+        
+        buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+         buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+       // menuIcon.setImage(new Image(getClass().getResource("/images/menu.png").toExternalForm()));
+        FlowPane.setMargin(buttonBack, new Insets(20.0, 0.0, 0.0, 10.0));
 
         player1Image.setFitHeight(60.0);
         player1Image.setFitWidth(60.0);
@@ -470,7 +481,7 @@ public class GameRoomScreen extends BorderPane {
         box22.setFont(new Font("Arial Bold", 80.0));
         setCenter(gameView);
 
-        Player1View.getChildren().add(menuIcon);
+        Player1View.getChildren().add(buttonBack);
         Player1View.getChildren().add(player1Image);
         player1NameAndScoreView.getChildren().add(player1Name);
         scoreAndStarImageView.getChildren().add(Player1Score);
@@ -541,11 +552,7 @@ public class GameRoomScreen extends BorderPane {
                                 player1Moves.add((finalI * 10) + finalJ);
                                 //int res = ((finalI * 10) + finalJ);
                                 sb += ((finalI * 10) + finalJ);
-                                try {
-                                    writer.write(((finalI * 10) + finalJ) + " ");
-                                } catch (IOException ex) {
-                                    Logger.getLogger(GameRoomScreen.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                                
                                 playerMoves.add((finalI * 10) + finalJ);
                                 sb += ' ';
                             } else {
@@ -553,11 +560,7 @@ public class GameRoomScreen extends BorderPane {
                                 player2Moves.add((finalI * 10) + finalJ);
                                 playerMoves.add((finalI * 10) + finalJ);
                                 sb += ((finalI * 10) + finalJ);
-                                try {
-                                    writer.write(((finalI * 10) + finalJ) + " ");
-                                } catch (IOException ex) {
-                                    Logger.getLogger(GameRoomScreen.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                               
                                 sb += ' ';
                             }
                             updateCases(finalI, finalJ);
@@ -566,6 +569,7 @@ public class GameRoomScreen extends BorderPane {
                                 winnerData = checkWinner();
                                 if (winnerData[0] == -1) {
                                     if (movesCount == 9) {
+                                        
                                         draw();
                                     } else {
                                         isX = !isX;
@@ -593,35 +597,6 @@ public class GameRoomScreen extends BorderPane {
             }
         }
 
-    }
-
-      private void createFile(String filePath) {
-        // String filePath = "E:/java/TicTacToeGame/src/files/file.txt";
-
-        try {
-            // Create the file
-            Files.createFile(Paths.get(filePath));
-            System.out.println("File created successfully!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error creating the file: " + e.getMessage());
-        }
-    }
-
-    private void saveToFile() {
-        try {
-            System.out.println("lines");
-            writer.newLine();
-            Date d = new Date();
-            writer.write(d.toString());
-            writer.newLine();
-            writer.write(player.getUserName());
-            writer.newLine();
-            writer.close();
-            System.out.println("Text appended successfully!");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 
     void updateCases(int finalI, int finalJ) {
@@ -725,7 +700,7 @@ public class GameRoomScreen extends BorderPane {
                 break;
         }
         char winner = isX ? 'X' : 'O';
-        showDialog(winner);
+        showDialog('W');
         resetGame();
     }
 
@@ -738,25 +713,25 @@ public class GameRoomScreen extends BorderPane {
 
     }
 
-    private void showDialog(char winner) {
+    public void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message);
+        Parent parent = new PlayAgainDialogBase(message, winner);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
     }
 
-    private void resetGame() {
+    public void resetGame() {
         switch (message.getResponse()) {
             case 2:
                 movesCount = 0;
                 isX = true;
                 player2Moves.clear();
                 player1Moves.clear();
-                sb += "\n";
-                saveToFile();
+                //sb += "\n";
+                sb="";
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
                         boxEnabled[i][j] = true;
@@ -773,12 +748,13 @@ public class GameRoomScreen extends BorderPane {
                 break;
             case 1:
                 isX = true;
-                review();
-                saveToFile();
+                historyFile.saveToFile(filePath,player,sb);
+                sb="";
+               // gameReview.review(this,boxArray,player1Moves,player2Moves);  
                 break;
             case 0:
-                saveToFile();
-                               Parent root = new MainScreenUI();
+                sb="";
+                Parent root = new MainScreenUI();
                 Scene scene = new Scene(root);
 
                 Stage stage = SharedData.getStage();
@@ -787,68 +763,20 @@ public class GameRoomScreen extends BorderPane {
 
                 break;
             default:
-                saveToFile();
+                historyFile.saveToFile(filePath,player,sb);
+                sb="";
                 break;
         }
     }
 
     void draw() {
-        showDrawDialog('D');
+        showDialog('T');
         resetGame();
     }
 
-    private void review() {
-        System.out.println("we are inside review");
-        isX = true;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                //boxEnabled[i][j] = true;
-                boxArray[i][j].setText(" ");
-                boxArray[i][j].setTextFill(javafx.scene.paint.Color.valueOf("#8a559b"));
-            }
-        }
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        // Schedule the task to run every second
-
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isX) {
-                            if (currentp1Index < player1Moves.size()) {
-                                x = player1Moves.get(currentp1Index);
-                                boxArray[x / 10][x % 10].setText("X");
-                                currentp1Index++;
-                            } else {
-                                // Stop the executor when the array is fully iterated
-                                //  executor.shutdown();
-                            }
-                        } else {
-                            if (currentp2Index < player2Moves.size()) {
-                                y = player2Moves.get(currentp2Index);
-                                boxArray[y / 10][y % 10].setText("O");
-
-                                currentp2Index++;
-                            } else {
-                                // Stop the executor when the array is fully iterated
+                            // Stop the executor when the array is fully iterated
                                 //   executor.shutdown();
-                            }
-                        }
-                        if (currentp1Index == player1Moves.size() && currentp2Index == player2Moves.size()) {
-                            executor.shutdown();
-                            showDrawDialog('R');
-                        }
-                        isX = !isX;
-                    }
-
-                });
-            }
-        };
-
-        executor.scheduleAtFixedRate(r, 1, 1, TimeUnit.SECONDS); // 0 seconds initial delay, 1 second interval
-    }
+      
 
     private void showDrawDialog(char c) {
         message = new MessageController();

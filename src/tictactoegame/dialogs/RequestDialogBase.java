@@ -3,6 +3,7 @@ package tictactoegame.dialogs;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -102,12 +103,16 @@ public class RequestDialogBase extends Pane {
             @Override
             public void handle(MouseEvent event) {
                 request.setResponse(1);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
             }
         });
          btnNotNow.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 request.setResponse(0);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
             }
         });
     }

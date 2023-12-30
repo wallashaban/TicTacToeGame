@@ -12,10 +12,18 @@ package tictactoegame.data;
 public class Move {
     private char sign;
     private int box;
+    private int gameState;
+    private int winningCase;
     public Move(){}
     public Move(char sign,int box){
         this.sign=sign;
         this.box=box;
+    }
+     public Move(char sign,int box,int gameState,int winningCase){
+        this.sign=sign;
+        this.box=box;
+        this.gameState=gameState;
+        this.winningCase=winningCase;
     }
 
     public char getSign() {
@@ -32,6 +40,22 @@ public class Move {
 
     public void setBox(int box) {
         this.box = box;
+    }
+
+    public int getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(int gameState) {
+        this.gameState = gameState;
+    }
+
+    public int getWinningCase() {
+        return winningCase;
+    }
+
+    public void setWinningCase(int winningCase) {
+        this.winningCase = winningCase;
     }
     
 }

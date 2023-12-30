@@ -5,6 +5,7 @@
  */
 package tictactoegame.connection;
 
+import ClientGame.ClientGameScreenBase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;
@@ -24,46 +25,76 @@ import tictactoegame.data.SharedData;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
 import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.LocalGame.GameRoomScreen;
+import tictactoegame.Login.LoginDesignUI;
 import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.data.Player;
 import tictactoegame.data.Request;
-import tictactoegame.dialogs.DisconnectedDialogBase;
-import tictactoegame.dialogs.ExceptionDialog;
+
+//import tictactoegame.dialogs.NoConnectionDialogBase;
 import tictactoegame.dialogs.drawDialogBase;
 import tictactoegame.dialogs.AlertDialogBase;
+import tictactoegame.dialogs.DisconnectedDialogBase;
+import tictactoegame.dialogs.ExceptionDialog;
+
+
 /**
  *
  * @author anasn
  */
 public class ClientConnection {
 
-    public static Socket mySocket;
+    private static Thread thread;
+    private static Socket mySocket;
     public static DataInputStream in;
     public static PrintStream out;
-    public static ArrayList responceData;
+    private static ArrayList responceData;
     public static Thread listeningThread;
-    public static void connect() {
+    public static boolean connect(String IPAddress) {
+        boolean isConnected = false;
         try {
-            mySocket = new Socket(Constants.IP_ADDRESS, Constants.PORT);
+            mySocket = new Socket(IPAddress, Constants.PORT);
             in = new DataInputStream(mySocket.getInputStream());
             out = new PrintStream(mySocket.getOutputStream());
+            SharedData.setConnectionStatus(true);
+            isConnected = true;
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
-            showNoConnectionDialog();
+//            showNoConnectionDialog();
+            SharedData.setConnectionStatus(false);
+            isConnected = false;
         }
         startListening();
-        SharedData.setConnectionStatus(true);
+        return isConnected;
     }
 
     public static void closeConnection() {
         try {
-            in.close();
-            out.close();
-            mySocket.close();
+            if(!mySocket.isClosed()){
+            listeningThread.stop();
+            listeningThread.stop();
+            ArrayList<String> requestArray = new ArrayList<String>();
+            requestArray.add("logout");
+            Gson gson = new GsonBuilder().create();
+            String request = gson.toJson(requestArray);
+            sendRequest(request);
+            //out.println("logout");
+           String msgArray = in.readLine();
+//           System.out.println(msgArray);
+//            ArrayList<String> messages = gson.fromJson(msgArray, ArrayList.class);
+//            String msg = messages.get(0);
+            if (msgArray.equals("exit")) {
+                in.close();
+                out.close();
+                mySocket.close();
+            }
+                System.out.println("Done Closing");
+            }
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+
 
     public static void sendRequest(String gson) {
         if (out != null) {
@@ -74,6 +105,7 @@ public class ClientConnection {
     public static void startListening() {
         listeningThread = new Thread(() -> {
             try {
+
                 while (mySocket != null && !(mySocket.isClosed()) && in != null) {
                     String gsonResponse = in.readLine();
                     handleResponse(gsonResponse);
@@ -85,22 +117,36 @@ public class ClientConnection {
                         showDisconnectedDialog();
                     }
                 });
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDisconnectedDialog();
+                    }
+                });
                 Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         listeningThread.start();
+
     }
 
     public static void handleResponse(String gsonResponse) {
         Gson gson = new GsonBuilder().create();
         ArrayList<String> response;
+        if(!(gsonResponse.startsWith("[")))
+            gsonResponse = "[" +gsonResponse;
+        System.out.println(gsonResponse);
+        
         response = gson.fromJson(gsonResponse, ArrayList.class);
         if (response == null) {
             System.out.println("Response is null");
             return;
         }
 
-        String action = response.get(0);
+
+        String action = response.get(0).trim();
+        action = action.replaceAll("\"", "");
+        System.out.println("Action is" + action);
         switch (action) {
             case "signup":
                 System.err.println("signupresponse switch case");
@@ -110,6 +156,7 @@ public class ClientConnection {
                 login(response);
                 break;
             case "request":
+                System.out.println("in case request");
                 handlePlayRequest(response);
                 break;
             case "startGame":
@@ -121,9 +168,9 @@ public class ClientConnection {
             case "refuse":
                 requestRefused(response);
                 break;
-//            case 5:
-//                //TODO updateBoard();
-//                break;
+            case "closed":
+                handleServerClosed();
+                break;
 //            case 6:
 //                //TODO logout();
 //                break;
@@ -142,13 +189,21 @@ public class ClientConnection {
         }
     }
 
+    private static void handleServerClosed()
+    {
+         Platform.runLater(()->{
+             Constants.showDialog("Sorry ... \nThe Server is down", true);
+             SharedData.connectionStatus=false;
+             //listeningThread.stop();
+         });
+    }
     private static void signUp(ArrayList<String> response) {
         System.out.println("signupresponse");
         if (response.get(1).equals("Success")) {
             System.out.print("logined");
             Platform.runLater(() -> {
                 Stage stage = SharedData.getStage();
-                Parent root = new AvailbleUsersScreenUI();
+                Parent root = new LoginDesignUI();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
@@ -180,7 +235,7 @@ public class ClientConnection {
                 SharedData.setCurrentPlayer(player);
                 Platform.runLater(()->{
                     Stage stage = SharedData.getStage();
-                    Parent root = new AvailableUsersScreen();
+                    Parent root = new AvailbleUsersScreenUI();
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
@@ -194,33 +249,40 @@ public class ClientConnection {
     }
 
     private static void handlePlayRequest(ArrayList<String> response) {
+        System.out.println("Inside Handle Play Request");
         String name = response.get(1);
-        Request request = new Request();
-        Constants.showRequestDialog(name, request);
-        if(request.getResponse()==1)
-        {
-            response.add("accept");
-            response.add(name);
-            Gson gson = new GsonBuilder().create();
-            String responseJSon = gson.toJson(response);
-            sendRequest(responseJSon);   
-        }else
-        {
-            response.add("refuse");
-            response.add(name);
-            Gson gson = new GsonBuilder().create();
-            String responseJSon = gson.toJson(response);
-            sendRequest(responseJSon);   
-        }
+        Platform.runLater(()->{
+            Request request = new Request();
+            response.clear();
+            Constants.showRequestDialog(name, request);
+            if(request.getResponse()==1)
+            {
+                response.add("accept");
+                response.add(name);
+                Gson gson = new GsonBuilder().create();
+                String responseJSon = gson.toJson(response);
+                sendRequest(responseJSon);   
+            }else
+            {
+                response.add("refuse");
+                response.add(name);
+                Gson gson = new GsonBuilder().create();
+                String responseJSon = gson.toJson(response);
+                sendRequest(responseJSon);   
+            }
+        });
+        
     }
 
     private static void startGame(ArrayList<String> response) {
-        Parent root = new GameRoomScreen();
-                Scene scene = new Scene(root);
-                Stage stage = new Stage();
-                stage.setTitle("Text Editor app");
-                stage.setScene(scene);
-                stage.show();
+        Platform.runLater(()->{
+            Parent root = new ClientGameScreenBase(response.get(1));
+            Scene scene = new Scene(root);
+            Stage stage = SharedData.getStage();
+            stage.setScene(scene);
+            stage.show();
+        });
+        
     }
 
     private static void showNoConnectionDialog() {

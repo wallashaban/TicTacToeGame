@@ -2,12 +2,10 @@ package ClientGame;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.io.DataInputStream;
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
@@ -17,23 +15,35 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.MediaView;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tictactoegame.connection.ClientConnection;
-import tictactoegame.connection.Constants;
 import tictactoegame.data.MessageController;
-import tictactoegame.dialogs.PlayAgainDialogBase;
 import tictactoegame.data.Move;
+import tictactoegame.dialogs.PlayAgainDialogBase;
 
 public class ClientGameScreenBase extends AnchorPane {
 
     private final Button[] buttons = new Button[9];
-    Socket mySocket;
-    DataInputStream in;
-    PrintStream out;
+    Socket clientSocket;
+    private char currentPlayerSymbol = 'z';
+    private char state;
+    final int col0 = 2;
+    final int col1 = 3;
+    final int col2 = 4;
+    final int row0 = 5;
+    final int row1 = 6;
+    final int row2 = 7;
+    final int diagonalLeft = 0;
+    final int diagonalRight = 1;
+    int i;
+    int j;
+     Thread th;
+
     MessageController message;
-    Move move;
+    protected MediaView mediaView;
 
     protected final Button btnExit;
     protected final Button btnMin;
@@ -69,11 +79,13 @@ public class ClientGameScreenBase extends AnchorPane {
     private int player1Score = 0;
     private int player2Score = 0;
     private int tieScore = 0;
-    private boolean playerTurn = true;
-    private char playerSymbol = ' '; 
 
-    public ClientGameScreenBase() {
+    private boolean isInitialPlayer = false;
+    private boolean playerTurn;
 
+    public ClientGameScreenBase(String opponentName) {
+        ClientConnection.listeningThread.suspend();
+        sendAcknowledgment(opponentName);
         btnExit = new Button();
         btnMin = new Button();
         txtPlay1Name = new Label();
@@ -382,81 +394,263 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[7] = btn8;
         buttons[8] = btn9;
 
-        btnExit.setOnAction((ActionEvent event) -> { System.exit(0); }); // lmbada
+        btnExit.setOnAction((ActionEvent event) -> {
+           // System.exit(0);
+           Platform.exit();
+        });
 
         btnMin.setOnAction((ActionEvent event) -> {
             Stage stage = (Stage) btnMin.getScene().getWindow();
             stage.setIconified(true);
         });
-        // btn bac
-        // box(1 - 12 "10 = win" "11 = draw" "12 = lose")                   <<<<><><>>>>
-        //and sign( X , O) // in case 10,11,12 will send sign (d or w or l) <<<<><><>>>>
-        //I`m independ on input only avilable place
-        ClientConnection connection = new ClientConnection();
-        connection.connect();
-        playGame();
+
+        setupButtonClicked();
+
+        startListeningForServerMoves();
     }
 
-    private void playGame() {
-        // resetBoard();
-        player1Score = 0;
-        player2Score = 0;
-        tieScore = 0;
-        updateScores();
-        playerSymbol = move.getSign();
-        playerTurn = true;
-
-        for (int i = 0; i < 9; i++) {
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private void setupButtonClicked() {
+        for (int i = 0; i < buttons.length; i++) {
             int index = i;
-            buttons[i].setOnAction((ActionEvent event) -> onButtonClick(index));
+            buttons[i].setOnAction((ActionEvent event) -> handleButtonClick(index));
         }
     }
 
-    private void onButtonClick(int index) {
-        if (playerTurn && buttons[index].getText() == " ") {
-            buttons[index].setText("X");
-            playerTurn = false;
-            
-            char myChar = playerSymbol;
-            String symbol = String.valueOf(myChar);
-            buttons[index].setText(symbol);
-            
-            out.write(index);
-            out.flush(); // sent imediately
-            Move movement = receiveFromServerMovementsAndStates();
-            switch (movement.getSign()) {
-                case 'W':
-                    showDialog('W');
-                    break;
-                case 'L':
-                    showDialog('L');
-                    break;
-                case 'D':
-                    showDialog('D');
-                    break;
-                default:
-                    //while (true) {
-                        try {
-                            int move = in.readInt(); 
-                            buttons[move].setText(symbol);
-                            playerTurn = true;
-                        } catch (IOException e) {
-                            e.printStackTrace(); // case of closed the connection
-                        }
-                        break;
-                    //}
+    private void handleButtonClick(int index) {
+        System.out.println("Button clicked: " + index + " symbol is " + currentPlayerSymbol);
+        if (!playerTurn || !isValidMove(index)) {
+            // Ignore clicks if it's not the player's turn or the move is not valid
+            return;
+        }
+
+        sendMoveToServer(index + 1, currentPlayerSymbol);
+
+        updateButton(index, String.valueOf(currentPlayerSymbol));
+        System.out.println("After update, symbol on UI should be: " + currentPlayerSymbol);
+        playerTurn = false;
+    }
+
+    private boolean isValidMove(int index) {
+        return buttons[index].getText().equals(" ");
+    }
+
+    private void sendMoveToServer(int index, char symbol) {
+        Move move = new Move(symbol, index);
+        String moveJson = convertMoveToJson(move);
+        System.out.println(moveJson);
+        ClientConnection.out.println(moveJson);
+    }
+
+    private void updateButton(int index, String symbol) {
+        System.out.println("Updating button on UI: " + index + ", " + symbol);
+        buttons[index].setText(symbol);
+        buttons[index].setDisable(true);
+    }
+
+    private String convertMoveToJson(Move move) {
+        Gson gson = new GsonBuilder().create();
+        return gson.toJson(move);
+    }
+
+    private void startListeningForServerMoves() {
+         th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+ try {
+                //symbol information from the server
+                Gson gson = new GsonBuilder().create();
+                String msg = ClientConnection.in.readLine();
+                System.out.println(msg);
+                if (!msg.startsWith("{")) {
+                    msg = "{" + msg;
+                }
+                Move move = gson.fromJson(msg, Move.class);
+                char initialSymbol = move.getSign();
+                System.out.println("Received initial symbol from server: <><><><><><><>" + initialSymbol);
+
+                currentPlayerSymbol = initialSymbol;
+                if (currentPlayerSymbol == 'x') {
+                    playerTurn = true;
+                } else if (currentPlayerSymbol == 'o') {
+                    playerTurn = false;
+                }
+                Platform.runLater(() -> {
+                    txtplayer1Type.setText(String.valueOf(currentPlayerSymbol).toUpperCase());
+                    txtplayer2Type.setText((currentPlayerSymbol == 'x') ? "O" : "X");
+                });
+
+                // Continue listening for moves
+                while (true) {
+                    String receivedData = ClientConnection.in.readLine();
+                    System.out.println("we are here at actual move reception " + receivedData);
+                    if (receivedData != null) {
+                        handleServerMove(receivedData);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-    }
-        
-    private void updateScores() {
-        txtPlay1Score.setText("" + player1Score);
-        txtPlay2Score.setText(player2Score + "");
-        btn9.setStyle("-fx-background-color: EACCD6; -fx-background-radius: 7;");
-        txtTieScore.setText("" + tieScore);
+        });
+         th.start();
     }
 
-    private void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
+    private void handleServerMove(String moveJson) {
+        try {
+            Gson gson = new GsonBuilder().create();
+            Move move = gson.fromJson(moveJson, Move.class);
+
+            int boxVal = move.getBox();
+            int gameState = move.getGameState();
+            char playeSymbole = move.getSign();
+            switch (boxVal) {
+                case 99:
+                    // Handle the case where the move is not valid (box = 99)
+                    System.out.println("Received an invalid move from the server.");
+                    break;
+
+                default:
+                    // Process a valid move
+                    Platform.runLater(() -> {
+                        updateButton(move.getBox() - 1, String.valueOf(move.getSign()));
+                    });
+                    playerTurn = !playerTurn;
+                    break;
+            }
+            switch (gameState) {
+                case 10:
+                    state = 'W';
+                    //Handel Winning Case
+                    updateScores();
+                    //winnerOrLoserOrTieVideo('W');
+                    showDialog('W');
+                    resetBoard();
+
+                    System.out.println("Player Win");
+                    celebrateWinner(move.getWinningCase());
+                    ClientConnection.listeningThread.resume();
+                    break;
+                case 11:
+                    state = 'T';
+
+                    updateScores();
+                    //winnerOrLoserOrTieVideo('T');
+                    showDialog('T');
+                    // handel Draw Case
+                    System.out.println("Player Draw");
+                    resetBoard();
+
+                    ClientConnection.listeningThread.resume();
+                    break;
+                case 12:
+                    state = 'L';
+
+                    updateScores();
+                    // winnerOrLoserOrTieVideo('L');
+                    showDialog('L');
+                    resetBoard();
+                    // handel Lose Case
+                    System.out.println("Player Lose");
+                    celebrateWinner(move.getWinningCase());
+                    ClientConnection.listeningThread.resume();
+                    break;
+            }
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void celebrateWinner(int c) {
+        switch (c) {
+            case diagonalLeft:
+                for (int i = 2; i < 9; i += 2) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case diagonalRight:
+                for (int i = 0; i < 9; i += 4) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case row0:
+                for (int i = 0; i < 3; i++) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case row1:
+                for (int i = 3; i < 6; i++) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case row2:
+                for (int i = 6; i < 9; i++) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case col0:
+                for (int i = 0; i < 9; i = i + 3) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case col1:
+                for (int i = 1; i < 9; i = i + 3) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            case col2:
+                for (int i = 2; i < 9; i = i + 3) {
+                    buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    void converter(int x) {
+        switch (x + 1) {
+            case 1:
+                i = 0;
+                j = 0;
+                break;
+            case 2:
+                i = 0;
+                j = 1;
+                break;
+            case 3:
+                i = 0;
+                j = 2;
+                break;
+            case 4:
+                i = 1;
+                j = 0;
+                break;
+            case 5:
+                i = 1;
+                j = 1;
+                break;
+            case 6:
+                i = 1;
+                j = 2;
+                break;
+            case 7:
+                i = 2;
+                j = 0;
+                break;
+            case 8:
+                i = 2;
+                j = 1;
+                break;
+            case 9:
+                i = 2;
+                j = 2;
+                break;
+
+        }
+    }
+
+    public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
         String style = "-fx-text-fill: ";
 
         if (player.equals("X")) {
@@ -469,84 +663,88 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[secondButton].setStyle(style);
         buttons[thirdButton].setStyle(style);
     }
-    
-    public int read() {
-        return 0;
-    }
-    // ToDo <<<>>>
-    public void sendToServerMovements() {
-    }
-    // ToDo <<<>>>
-    public Move receiveFromServerMovementsAndStates() {
-        try {
-        int code = in.readInt();
-        char sign = in.readChar();
 
-        return new Move(sign, code);
-
-        } catch (IOException e) {
-            e.printStackTrace(); // case of a closed connection
-            return null;
-        }
-    }
-
-    private void showDialog(int code) {
-        String result;
-        switch (code) {
-            case 10:
-                result = "Winner";
-                break;
-            case 11:
-                result = "Draw";
-                break;
-            case 12:
-                result = "Loser"; // we need to handl dialog for loser <<<>>> TODO Bougs here
-                break;
-            default:
-                result = "Unknown Result";
-                break;
-        }
-
+    private void showDialog(char winner) {
+        System.out.println("the winner is"+winner);
+        Platform.runLater(() -> {
         message = new MessageController();
-        message.setWinner(result.charAt(0)); // Assuming the first character represents the result
-        Parent parent = new PlayAgainDialogBase(message);
+        message.setWinner(winner);
+        Parent parent = new PlayAgainDialogBase(message, winner);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
+        th.stop();
+    });
     }
-    
-    public void connect() {
-        try {
-            mySocket = new Socket(Constants.IP_ADDRESS, Constants.PORT);
-            in = new DataInputStream(mySocket.getInputStream());
-            out = new PrintStream(mySocket.getOutputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
-//            showNoConnectionDialog();
+
+    private void resetBoard() {
+        for (int i = 0; i < 9; i++) {
+            buttons[i].setText(" ");
+            buttons[i].setStyle("-fx-font: bold 36.0 'System';");
+            playerTurn = true;
         }
-        startListening();
     }
+
+    private void updateScores() {
+        txtPlay1Score.setText("" + player1Score);
+        txtPlay2Score.setText(player2Score + "");
+        txtTieScore.setText("" + tieScore);
+    }
+
+//    private void winnerOrLoserOrTieVideo(char state) {
+//        switch (state) {
+//            case 'W':
+//                {
+//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 5);
+//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
+//                    Media media = new Media(new File(path).toURI().toString());
+//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+//                    mediaPlayer.setAutoPlay(true);
+//                    mediaView = new MediaView(mediaPlayer);
+//                    break;
+//                }
+//            case 'L':
+//                {
+//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 8);
+//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Loser" + randomNumWinner + ".mp4";
+//                    Media media = new Media(new File(path).toURI().toString());
+//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+//                    mediaPlayer.setAutoPlay(true);
+//                    mediaView = new MediaView(mediaPlayer);
+//                    break;
+//                }
+//            case 'T':
+//                {
+//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 2);
+//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Tie" + randomNumWinner + ".mp4";
+//                    Media media = new Media(new File(path).toURI().toString());
+//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+//                    mediaPlayer.setAutoPlay(true);
+//                    mediaView = new MediaView(mediaPlayer);
+//                    break;
+//                }
+//            default:
+//                break;
+//        }
+//    }
+    //            if (move.getBox() == 99) {
+//                // Handle the case where the move is not valid (box = 99)
+//                System.out.println("Received an invalid move from the server.");
+//                // You may want to display a message to the user or take other actions.
+//            } else {
+//                // Process a valid move
+//                Platform.runLater(() -> {updateButton(move.getBox()-1, String.valueOf(move.getSign()));});
+//                playerTurn = !playerTurn;
+//            }
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
-    public void startListening() {
-        new Thread(() -> {
-            try {
-                while (mySocket != null && !(mySocket.isClosed()) && in !=null) {
-                    String gsonResponse = in.readLine();
-                    Gson gson = new GsonBuilder().create();
-                    Move move = gson.fromJson(gsonResponse, Move.class);
-//                    handleResponse(gsonResponse);
-                }
-            } catch (IOException ex) {
-                Platform.runLater(new Runnable(){
-                            @Override
-                            public void run(){
-//                                showDisconnectedDialog();
-                            }
-                        });
-                Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }).start();
+    private void sendAcknowledgment(String opponentName){
+        ArrayList<String> requestMessages = new ArrayList<String>();
+        requestMessages.add("startedGame");
+        requestMessages.add(opponentName);
+        Gson gson = new GsonBuilder().create();
+        String requestJson = gson.toJson(requestMessages);
+        ClientConnection.sendRequest(requestJson);
     }
 }
-

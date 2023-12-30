@@ -1,5 +1,6 @@
 package tictactoegame.MainScreen;
 
+import ClientGame.ClientGameScreenBase;
 import tictactoegame.Login.LoginDesignUI;
 import tictactoegame.ProfileScreen.ProfileScreenBase;
 import javafx.application.Platform;
@@ -17,11 +18,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
+import tictactoegame.GameVsPC.GameVsPcBaseUI;
+import tictactoegame.HistoryScreen;
 import tictactoegame.LocalGame.GameRoomScreen;
+import tictactoegame.connection.ClientConnection;
+import tictactoegame.connection.Constants;
+import tictactoegame.data.MessageController;
 import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
+import tictactoegame.dialogs.IPDialogBase;
 
 public class MainScreenUI extends AnchorPane {
 
@@ -39,11 +47,16 @@ public class MainScreenUI extends AnchorPane {
     protected final Pane pane;
     protected final Label label2;
     protected final Pane pane0;
-    protected final ImageView menuImageView;
+     protected final Label menuText;
+    protected final Pane menuPane;
+   // protected final ImageView menuImageView;
     protected final Pane closePane;
     protected final Label label3;
     protected final Pane minimizePane;
     protected final Label label4;
+    protected final Pane pane1;
+    protected final ImageView refreshImg;
+    protected final Label connectionLabel;
 
     public MainScreenUI() {
 
@@ -61,11 +74,16 @@ public class MainScreenUI extends AnchorPane {
         pane = new Pane();
         label2 = new Label();
         pane0 = new Pane();
-        menuImageView = new ImageView();
+        menuText = new Label();
+        menuPane = new Pane();
+       // menuImageView = new ImageView();
         closePane = new Pane();
         label3 = new Label();
         minimizePane = new Pane();
         label4 = new Label();
+        pane1 = new Pane();
+        refreshImg = new ImageView();
+        connectionLabel = new Label();
 
         setId("AnchorPane");
         setPrefHeight(600.0);
@@ -163,7 +181,7 @@ public class MainScreenUI extends AnchorPane {
         pane.setPrefHeight(200.0);
         pane.setPrefWidth(200.0);
 
-        label2.setLayoutX(78.0);
+        label2.setLayoutX(340.0);
         label2.setLayoutY(40.0);
         label2.setPrefHeight(21.0);
         label2.setPrefWidth(135.0);
@@ -172,19 +190,36 @@ public class MainScreenUI extends AnchorPane {
         label2.setTextFill(javafx.scene.paint.Color.WHITE);
         label2.setFont(new Font("Gill Sans MT Bold", 18.0));
 
-        pane0.setLayoutX(78.0);
+        pane0.setLayoutX(340.0);
         pane0.setLayoutY(65.0);
         pane0.setPrefHeight(14.0);
         pane0.setPrefWidth(95.0);
         pane0.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+        
+        //////////////////////////////////////
+        menuText.setLayoutX(10.0);
+        menuText.setLayoutY(40.0);
+        menuText.setPrefHeight(21.0);
+        menuText.setPrefWidth(135.0);
+        menuText.setStyle("-fx-background-color: transparent;");
+        menuText.setText("History");
+        menuText.setTextFill(javafx.scene.paint.Color.WHITE);
+        menuText.setFont(new Font("Gill Sans MT Bold", 18.0));
 
-        menuImageView.setFitHeight(51.0);
-        menuImageView.setFitWidth(43.0);
-        menuImageView.setLayoutX(14.0);
-        menuImageView.setLayoutY(39.0);
-        menuImageView.setPickOnBounds(true);
-        menuImageView.setPreserveRatio(true);
-        menuImageView.setImage(new Image(getClass().getResource("/images/menu.jpg").toExternalForm()));
+        menuPane.setLayoutX(10.0);
+        menuPane.setLayoutY(65.0);
+        menuPane.setPrefHeight(14.0);
+        menuPane.setPrefWidth(45.0);
+        menuPane.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 30;");
+//////////////////////////////////////////
+
+//        menuImageView.setFitHeight(51.0);
+//        menuImageView.setFitWidth(43.0);
+//        menuImageView.setLayoutX(14.0);
+//        menuImageView.setLayoutY(39.0);
+//        menuImageView.setPickOnBounds(true);
+//        menuImageView.setPreserveRatio(true);
+//        menuImageView.setImage(new Image(getClass().getResource("/images/menu.jpg").toExternalForm()));
 
         closePane.setLayoutX(736.0);
         closePane.setLayoutY(10.0);
@@ -211,6 +246,27 @@ public class MainScreenUI extends AnchorPane {
         label4.setFont(new Font("Gill Sans MT Bold", 72.0));
         borderPane.setTop(pane);
 
+        BorderPane.setAlignment(pane1, javafx.geometry.Pos.CENTER);
+        pane1.setPrefHeight(68.0);
+        pane1.setPrefWidth(818.0);
+
+        refreshImg.setFitHeight(70.0);
+        refreshImg.setFitWidth(82.0);
+        refreshImg.setLayoutX(70.0);
+        refreshImg.setLayoutY(-20.0);
+        refreshImg.setPickOnBounds(true);
+        refreshImg.setPreserveRatio(true);
+        refreshImg.setImage(new Image(getClass().getResource("/images/refresh.png").toExternalForm()));
+
+        connectionLabel.setLayoutX(181.0);
+        connectionLabel.setLayoutY(5.0);
+        connectionLabel.setText("Refresh Connection...");
+        connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#5b5757"));
+        connectionLabel.setFont(new Font("Segoe UI Bold", 15.0));
+        borderPane.setBottom(pane1);
+        connectionLabel.setVisible(false);
+        connectionLabel.setTextAlignment(TextAlignment.CENTER);
+
         onlinePane.getChildren().add(imageView);
         onlinePane.getChildren().add(label);
         computerPane.getChildren().add(label0);
@@ -220,18 +276,21 @@ public class MainScreenUI extends AnchorPane {
         localPane.getChildren().add(imageView2);
         pane.getChildren().add(label2);
         pane.getChildren().add(pane0);
-        pane.getChildren().add(menuImageView);
+        pane.getChildren().add(menuText);
+        pane.getChildren().add(menuPane);
         closePane.getChildren().add(label3);
         pane.getChildren().add(closePane);
         pane.getChildren().add(minimizePane);
         pane.getChildren().add(label4);
+        pane1.getChildren().add(refreshImg);
+        pane1.getChildren().add(connectionLabel);
         getChildren().add(borderPane);
-
+        
         computerPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Parent root = new GameRoomScreen();
+                Parent root = new GameVsPcBaseUI();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
@@ -264,10 +323,10 @@ public class MainScreenUI extends AnchorPane {
             }
         });
 
-        menuImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        menuText.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Parent root = new ProfileScreenBase(new Player());
+                Parent root = new HistoryScreen();
                 Scene scene = new Scene(root);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -279,6 +338,7 @@ public class MainScreenUI extends AnchorPane {
         closePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+              //  ClientConnection.closeConnection();
                 Platform.exit();
             }
         });
@@ -289,6 +349,58 @@ public class MainScreenUI extends AnchorPane {
                 stage.setIconified(true);
             }
         });
-
+        
+        refreshImg.setOnMouseClicked((event)->{
+            MessageController message = new MessageController();
+            Parent root = new IPDialogBase(message);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.showAndWait();
+            System.out.println("Response is   " +message.getResponse());
+            boolean isConnected = false;
+            switch(message.getResponse()){
+                case -1:
+                    isConnected = false;
+                    break;
+                case 0:
+                {
+                    String IPAddress = message.getIpAddress();
+                    isConnected = ClientConnection.connect(IPAddress);
+                    break;
+                }
+                case 1:
+                    isConnected = ClientConnection.connect(Constants.IP_ADDRESS);
+                    break;
+                case 2:
+                    isConnected = ClientConnection.connect("127.0.0.1");
+                    break;
+            }
+            if(isConnected){
+                onlinePane.setDisable(false);
+                ///menuImageView.setDisable(false);
+                connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#00ff00"));
+                connectionLabel.setText("Connected Successfully");
+            }
+            else{
+                onlinePane.setDisable(true);
+               // menuImageView.setDisable(true);
+                connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#5b5757"));
+                connectionLabel.setText("Not Connected \nYou Can still play locally");
+            }
+            connectionLabel.setVisible(true);
+        });
+        refreshImg.setOnMouseEntered((event)->{
+            connectionLabel.setTextFill(javafx.scene.paint.Color.valueOf("#5b5757"));
+            connectionLabel.setText("Refresh Connection...");
+            connectionLabel.setVisible(true);
+        });
+        refreshImg.setOnMouseExited((event)->{
+            connectionLabel.setVisible(false);
+        });
+        
+        onlinePane.setDisable(!(SharedData.isConnectionStatus()));
+       // menuImageView.setDisable(!(SharedData.isConnectionStatus()));
+        refreshImg.setVisible(!(SharedData.isConnectionStatus()));
     }
 }
