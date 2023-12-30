@@ -219,25 +219,31 @@ public class SignUpUI extends Pane {
 
     private void handleSignupCases() {
         if (txtFFullName.getText().length() < 3) {
-            Constants.showDialog("Please enter your name properly...");
+            Constants.showDialog("Please enter your name properly...",false);
         } else {
+            if(txtFFullName.getText().contains(" "))
+            {
+                Constants.showDialog("Username can not contain spaces...",false);
+            }
+            else
+                {
             if (txtFEmail.getText().length() < 3) {
-                Constants.showDialog("Please enter your email properly...");
+                Constants.showDialog("Please enter your email properly...",false);
             } else {
                 if (!(txtFEmail.getText().contains("@")) || !(txtFEmail.getText().contains("."))) {
-                            Constants.showDialog("You should add (.) and @ in your email");
+                            Constants.showDialog("You should add (.) and @ in your email",false);
                         } else {
                 if (txtFPasword.getText().length() < 3) {
-                    Constants.showDialog("Please enter your password properly...");
+                    Constants.showDialog("Please enter your password properly...",false);
                 } else {
                     
                     if (!(txtFConfirmPassword.getText().equals( txtFPasword.getText()))) {
-                        Constants.showDialog("Your password and confirm password should be the same...");
+                        Constants.showDialog("Your password and confirm password should be the same...",false);
                     } else {
                         System.out.print("Hola");
                             signUpUser();
                     }}
-                }
+                }}
 
             }
         }

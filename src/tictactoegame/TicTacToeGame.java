@@ -53,13 +53,18 @@ public class TicTacToeGame extends Application {
         stage.setScene(scene);
         //stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    @Override
-                    public void handle(WindowEvent event) {
-                            //ClientConnection.closeConnection();
-                            Platform.exit();
-                    }
-          });
+        
+        
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                    ClientConnection.closeConnection();
+                    Platform.exit();
+            }
+        });
+        
+        
     }
 
     @Override

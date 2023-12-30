@@ -26,17 +26,17 @@ public class PlayAgainDialogBase extends Pane {
 
     public PlayAgainDialogBase(MessageController message) {
 
-        String path = "src/images/cele.mp4";  
+//        String path = "C:/Users/Dr.Wlaa/Desktop/celebration.mp4";  
+//        Media media = new Media(new File(path).toURI().toString());   
+//        MediaPlayer mediaPlayer = new MediaPlayer(media);
+//        mediaPlayer.setAutoPlay(true);
+//        mediaView = new MediaView(mediaPlayer);
+
+        String path = "C:/Users/s/Desktop/celebration.mp4";  
         Media media = new Media(new File(path).toURI().toString());   
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
         mediaView = new MediaView(mediaPlayer);
-
-        //String path = "C:/Users/s/Desktop/celebration.mp4";  
-        //Media media = new Media(new File(path).toURI().toString());   
-        //MediaPlayer mediaPlayer = new MediaPlayer(media);
-       // mediaPlayer.setAutoPlay(true);
-       // mediaView = new MediaView(mediaPlayer);
         btnReplay = new Button();
         btnNotNow = new Button();
         btnPlayAgain = new Button();
