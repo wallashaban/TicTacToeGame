@@ -569,6 +569,7 @@ public class GameRoomScreen extends BorderPane {
                                 winnerData = checkWinner();
                                 if (winnerData[0] == -1) {
                                     if (movesCount == 9) {
+                                        
                                         draw();
                                     } else {
                                         isX = !isX;
@@ -699,7 +700,7 @@ public class GameRoomScreen extends BorderPane {
                 break;
         }
         char winner = isX ? 'X' : 'O';
-        showDialog(winner);
+        showDialog('W');
         resetGame();
     }
 
@@ -715,7 +716,7 @@ public class GameRoomScreen extends BorderPane {
     public void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message, state);
+        Parent parent = new PlayAgainDialogBase(message, winner);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
