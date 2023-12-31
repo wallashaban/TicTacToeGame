@@ -14,9 +14,13 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -39,6 +43,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
     protected final ScrollPane scrollPane;
     protected final FlowPane flowPane;
     ArrayList<Player> players;
+    protected final ImageView refreshImg;
+    Thread thread;
 
     public AvailbleUsersScreenUI() {
         players = new ArrayList<Player>();
@@ -49,16 +55,18 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         //printStream.println(jsonMessage);
         ClientConnection.listeningThread.suspend();
         ClientConnection.sendRequest(jsonMessage);
-        new Thread() {
+        thread = new Thread() {
             @Override
             public void run() {
                 while (true) {
                     try {
                         String response = ClientConnection.in.readLine();
-                        if(!response.startsWith("[")) {
+                        if(!response.startsWith("[") && response.startsWith("\"")) {
                             response = "["+response;
                         }
-
+                        if(!response.startsWith("[") && !response.startsWith("\"")) {
+                            response = "[\""+response;
+                        }
                         ArrayList<String> responseList;
                         System.err.println("list" + response);
                         responseList = gson.fromJson(response, ArrayList.class);
@@ -116,7 +124,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                     @Override
                                     public void handle(MouseEvent event) {
 
-                                     //  chalengeNowLink.setDisable(true);
+                                        chalengeNowLink.setDisable(true);
                                         ArrayList<String> requestMessages = new ArrayList<String>();
                                         requestMessages.add("request");
                                         requestMessages.add(userName);
@@ -139,7 +147,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                         .add(availableUsersPane);
                             }
                             scrollPane.setContent(flowPane);
-                             stop();
+                            stop();
                         ClientConnection.listeningThread.resume();
                         });
                     } catch (IOException ex) {
@@ -149,8 +157,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                 
             }
 
-        }
-                .start();
+        };
+        thread.start();
 
         pane = new Pane();
         label = new Label();
@@ -160,6 +168,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         label1 = new Label();
         scrollPane = new ScrollPane();
         flowPane = new FlowPane();
+        refreshImg = new ImageView();
 
         setId("AnchorPane");
         setMaxHeight(600.0);
@@ -222,6 +231,24 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         flowPane.setPrefWidth(800.0);
         flowPane.getStyleClass().add("backgroundColor");
         flowPane.getStylesheets().add("/css/style.css");
+        
+        refreshImg.setFitHeight(70.0);
+        refreshImg.setFitWidth(82.0);
+        refreshImg.setLayoutX(550.0);
+        refreshImg.setLayoutY(70);
+        refreshImg.setPickOnBounds(true);
+        refreshImg.setPreserveRatio(true);
+        refreshImg.setImage(new Image(getClass().getResource("/images/refresh.png").toExternalForm()));
+        refreshImg.setOnMouseClicked((event)->{
+            Stage stage = SharedData.getStage();
+            Parent root = new AvailbleUsersScreenUI();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+//            thread.stop();
+//            ClientConnection.listeningThread.resume();
+        });
+        getChildren().add(refreshImg);
 
         pane.getChildren().add(label);
         getChildren().add(pane);

@@ -13,6 +13,7 @@ public class MessageController{
     int response;
     char winner;
     String ipAddress;
+    public boolean isComputer;
 
     public void setResponse(int res) {
         this.response = res;

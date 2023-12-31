@@ -395,8 +395,7 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[8] = btn9;
 
         btnExit.setOnAction((ActionEvent event) -> {
-           // System.exit(0);
-           Platform.exit();
+            Platform.exit();
         });
 
         btnMin.setOnAction((ActionEvent event) -> {
@@ -650,7 +649,7 @@ public class ClientGameScreenBase extends AnchorPane {
         }
     }
 
-    public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
+    public void highlightWinningCells(String player, final int firstButton, final int secondButton, final int thirdButton) {
         String style = "-fx-text-fill: ";
 
         if (player.equals("X")) {
@@ -658,10 +657,12 @@ public class ClientGameScreenBase extends AnchorPane {
         } else if (player.equals("O")) {
             style += "red; -fx-font-weight: bold;";
         }
-
-        buttons[firstButton].setStyle(style);
-        buttons[secondButton].setStyle(style);
-        buttons[thirdButton].setStyle(style);
+        final String finalStyle = style;
+        Platform.runLater(()->{
+            buttons[firstButton].setStyle(finalStyle);
+            buttons[secondButton].setStyle(finalStyle);
+            buttons[thirdButton].setStyle(finalStyle);
+        });
     }
 
     private void showDialog(char winner) {
@@ -679,17 +680,21 @@ public class ClientGameScreenBase extends AnchorPane {
     }
 
     private void resetBoard() {
-        for (int i = 0; i < 9; i++) {
-            buttons[i].setText(" ");
-            buttons[i].setStyle("-fx-font: bold 36.0 'System';");
-            playerTurn = true;
-        }
+        Platform.runLater(()->{
+            for (int i = 0; i < 9; i++) {
+                buttons[i].setText(" ");
+                buttons[i].setStyle("-fx-font: bold 36.0 'System';");
+                playerTurn = true;
+            }
+        });
     }
 
     private void updateScores() {
-        txtPlay1Score.setText("" + player1Score);
-        txtPlay2Score.setText(player2Score + "");
-        txtTieScore.setText("" + tieScore);
+        Platform.runLater(()->{
+            txtPlay1Score.setText("" + player1Score);
+            txtPlay2Score.setText(player2Score + "");
+            txtTieScore.setText("" + tieScore);
+        });
     }
 
 //    private void winnerOrLoserOrTieVideo(char state) {

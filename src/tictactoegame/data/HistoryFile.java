@@ -68,7 +68,7 @@ public class HistoryFile {
     
      public void readData() {
         try {
-            String filePath = "E:/java/TicTacToeGame/src/files/ahmed.txt";
+            String filePath = "src/files/ahmed.txt";
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             String line;
             String name = new String();
