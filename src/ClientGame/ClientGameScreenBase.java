@@ -6,6 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
@@ -42,9 +43,14 @@ public class ClientGameScreenBase extends AnchorPane {
     int i;
     int j;
     Thread th;
-    
+    String player1TotalScoree;
+    String player2TotalScoree;
+
     SharedData playerName = new SharedData();
     
+    int playerOneScore = 0;
+    int playerTowScore = 0;
+    int PlayerTieScore = 0;
 
     MessageController message;
     protected MediaView mediaView;
@@ -86,8 +92,9 @@ public class ClientGameScreenBase extends AnchorPane {
 
     private boolean isInitialPlayer = false;
     private boolean playerTurn;
+    
 
-    public ClientGameScreenBase(String opponentName) {
+    public ClientGameScreenBase(String opponentName, long playey2score) {
         ClientConnection.listeningThread.suspend();
         sendAcknowledgment(opponentName);
         btnExit = new Button();
@@ -408,7 +415,16 @@ public class ClientGameScreenBase extends AnchorPane {
             stage.setIconified(true);
         });
 
+        player1TotalScoree = String.valueOf(playerName.currentPlayer.getScore());
+        player2TotalScoree = String.valueOf(playey2score);
         setupButtonClicked();
+        
+        txtPlay1Name.setText(playerName.currentPlayer.getUserName());
+        txtPlay2Name.setText(opponentName);
+        
+        txtPlayr1TotalScore.setText(player1TotalScoree);
+        txtPlayr2TotalScore.setText(player2TotalScoree);
+
 
         startListeningForServerMoves();
     }
@@ -419,6 +435,7 @@ public class ClientGameScreenBase extends AnchorPane {
             int index = i;
             buttons[i].setOnAction((ActionEvent event) -> handleButtonClick(index));
         }
+
     }
 
     private void handleButtonClick(int index) {
@@ -525,6 +542,8 @@ public class ClientGameScreenBase extends AnchorPane {
             switch (gameState) {
                 case 10:
                     state = 'W';
+                    txtPlay1Score.setText(String.valueOf(++playerOneScore));
+
                     disable();
                     celebrateWinner(move.getWinningCase());
 
@@ -540,6 +559,7 @@ public class ClientGameScreenBase extends AnchorPane {
                     ClientConnection.listeningThread.resume();
                     break;
                 case 11:
+                    txtTieScore.setText(String.valueOf(++PlayerTieScore));
                     state = 'T';
                     disable();
                     updateScores();
@@ -552,7 +572,10 @@ public class ClientGameScreenBase extends AnchorPane {
                     ClientConnection.listeningThread.resume();
                     break;
                 case 12:
+                    txtPlay2Score.setText(String.valueOf(++player2Score));
                     state = 'L';
+                    txtPlay1Score.setText(moveJson);
+
                     disable();
                     updateScores();
                     // winnerOrLoserOrTieVideo('L');
