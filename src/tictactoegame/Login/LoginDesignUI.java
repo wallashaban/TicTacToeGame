@@ -24,6 +24,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.SignUp.SignUpUI;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.data.Player;
@@ -47,6 +48,8 @@ public class LoginDesignUI extends BorderPane {
     protected final Pane pane;
     protected final Button buttonMinimize;
     protected final Button buttonExit;
+    protected final Button buttonBack;
+
 
     public LoginDesignUI() {
 
@@ -65,6 +68,8 @@ public class LoginDesignUI extends BorderPane {
         pane = new Pane();
         buttonMinimize = new Button();
         buttonExit = new Button();
+        buttonBack = new Button();
+
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -212,6 +217,23 @@ public class LoginDesignUI extends BorderPane {
                 Platform.exit();
             }
         });
+        buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+        buttonBack.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
+        setTop(pane);
+        buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
 
         contentFlowView.getChildren().add(welcomeLabel);
         contentFlowView.getChildren().add(subTitleLabel);
@@ -225,6 +247,8 @@ public class LoginDesignUI extends BorderPane {
         logoView.getChildren().add(letterY);
         pane.getChildren().add(buttonMinimize);
         pane.getChildren().add(buttonExit);
+        pane.getChildren().add(buttonBack);
+
 
     }
     private void showAlertDialog(String message) {

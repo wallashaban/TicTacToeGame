@@ -116,7 +116,7 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                                     @Override
                                     public void handle(MouseEvent event) {
 
-                                       chalengeNowLink.setDisable(true);
+                                     //  chalengeNowLink.setDisable(true);
                                         ArrayList<String> requestMessages = new ArrayList<String>();
                                         requestMessages.add("request");
                                         requestMessages.add(userName);

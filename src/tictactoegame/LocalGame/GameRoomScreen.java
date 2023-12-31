@@ -17,8 +17,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -111,6 +113,8 @@ public class GameRoomScreen extends BorderPane {
     protected final Label box02;
     protected final Label box12;
     protected final Label box22;
+        protected final Button buttonBack;
+
     String sb;
 
     Player player;
@@ -177,6 +181,8 @@ public class GameRoomScreen extends BorderPane {
         box02 = new Label();
         box12 = new Label();
         box22 = new Label();
+                buttonBack = new Button();
+
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -196,12 +202,29 @@ public class GameRoomScreen extends BorderPane {
         Player1View.setPrefHeight(114.0);
         Player1View.setPrefWidth(310.0);
 
-        menuIcon.setFitHeight(50.0);
-        menuIcon.setFitWidth(50.0);
-        menuIcon.setPickOnBounds(true);
-        menuIcon.setPreserveRatio(true);
-        menuIcon.setImage(new Image(getClass().getResource("/images/menu.png").toExternalForm()));
-        FlowPane.setMargin(menuIcon, new Insets(20.0, 0.0, 0.0, 10.0));
+      //  buttonBack.setFitHeight(50.0);
+      //  buttonBack.setFitWidth(50.0);
+        buttonBack.setPickOnBounds(true);
+       // buttonBack.setPreserveRatio(true);
+        
+        
+        buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+         buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+       // menuIcon.setImage(new Image(getClass().getResource("/images/menu.png").toExternalForm()));
+        FlowPane.setMargin(buttonBack, new Insets(20.0, 0.0, 0.0, 10.0));
 
         player1Image.setFitHeight(60.0);
         player1Image.setFitWidth(60.0);
@@ -459,7 +482,11 @@ public class GameRoomScreen extends BorderPane {
         box22.setFont(new Font("Arial Bold", 80.0));
         setCenter(gameView);
 
+<<<<<<< HEAD
         //Player1View.getChildren().add(menuIcon);
+=======
+        Player1View.getChildren().add(buttonBack);
+>>>>>>> a8f9535325203e28a471384cc078fd9d5f49d0bc
         Player1View.getChildren().add(player1Image);
         player1NameAndScoreView.getChildren().add(player1Name);
         //scoreAndStarImageView.getChildren().add(Player1Score);
@@ -547,6 +574,7 @@ public class GameRoomScreen extends BorderPane {
                                 winnerData = checkWinner();
                                 if (winnerData[0] == -1) {
                                     if (movesCount == 9) {
+                                        
                                         draw();
                                     } else {
                                         isX = !isX;
@@ -677,7 +705,7 @@ public class GameRoomScreen extends BorderPane {
                 break;
         }
         char winner = isX ? 'X' : 'O';
-        showDialog(winner);
+        showDialog('W');
         resetGame();
     }
 
@@ -693,7 +721,7 @@ public class GameRoomScreen extends BorderPane {
     public void showDialog(char winner) {
         message = new MessageController();
         message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message, state);
+        Parent parent = new PlayAgainDialogBase(message, winner);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);

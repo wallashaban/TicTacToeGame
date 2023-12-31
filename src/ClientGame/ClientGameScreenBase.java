@@ -3,15 +3,9 @@ package ClientGame;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
@@ -21,14 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tictactoegame.connection.ClientConnection;
-import tictactoegame.connection.Constants;
 import tictactoegame.data.MessageController;
 import tictactoegame.data.Move;
 import tictactoegame.dialogs.PlayAgainDialogBase;
@@ -49,6 +40,7 @@ public class ClientGameScreenBase extends AnchorPane {
     final int diagonalRight = 1;
     int i;
     int j;
+     Thread th;
 
     MessageController message;
     protected MediaView mediaView;
@@ -403,7 +395,8 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[8] = btn9;
 
         btnExit.setOnAction((ActionEvent event) -> {
-            System.exit(0);
+           // System.exit(0);
+           Platform.exit();
         });
 
         btnMin.setOnAction((ActionEvent event) -> {
@@ -461,8 +454,10 @@ public class ClientGameScreenBase extends AnchorPane {
     }
 
     private void startListeningForServerMoves() {
-        new Thread(() -> {
-            try {
+         th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+ try {
                 //symbol information from the server
                 Gson gson = new GsonBuilder().create();
                 String msg = ClientConnection.in.readLine();
@@ -496,7 +491,9 @@ public class ClientGameScreenBase extends AnchorPane {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }).start();
+        }
+        });
+         th.start();
     }
 
     private void handleServerMove(String moveJson) {
@@ -535,11 +532,11 @@ public class ClientGameScreenBase extends AnchorPane {
                     ClientConnection.listeningThread.resume();
                     break;
                 case 11:
-                    state = 't';
+                    state = 'T';
 
                     updateScores();
                     //winnerOrLoserOrTieVideo('T');
-                    showDialog('D');
+                    showDialog('T');
                     // handel Draw Case
                     System.out.println("Player Draw");
                     resetBoard();
@@ -668,6 +665,8 @@ public class ClientGameScreenBase extends AnchorPane {
     }
 
     private void showDialog(char winner) {
+        System.out.println("the winner is"+winner);
+        Platform.runLater(() -> {
         message = new MessageController();
         message.setWinner(winner);
 //        Parent parent = new PlayAgainDialogBase(message, state);
@@ -675,6 +674,13 @@ public class ClientGameScreenBase extends AnchorPane {
 //        Stage stage = new Stage();
 //        stage.setScene(scene);
 //        stage.showAndWait();
+        Parent parent = new PlayAgainDialogBase(message, winner);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+        th.stop();
+    });
     }
 
     private void resetBoard() {
