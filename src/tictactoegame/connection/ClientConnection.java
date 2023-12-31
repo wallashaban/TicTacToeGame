@@ -78,17 +78,20 @@ public class ClientConnection {
             String request = gson.toJson(requestArray);
             sendRequest(request);
             //out.println("logout");
-           String msgArray = in.readLine();
+                String msgArray = in.readLine();
+                if (msgArray.equals("exit")) {
+                    in.close();
+                    out.close();
+                    mySocket.close();
+                }
+           
+//           if(!msgArray.endsWith("}")){
 //           System.out.println(msgArray);
 //            ArrayList<String> messages = gson.fromJson(msgArray, ArrayList.class);
 //            String msg = messages.get(0);
-            if (msgArray.equals("exit")) {
-                in.close();
-                out.close();
-                mySocket.close();
-            }
+            
                 System.out.println("Done Closing");
-            }
+           }
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -133,7 +136,7 @@ public class ClientConnection {
     public static void handleResponse(String gsonResponse) {
         Gson gson = new GsonBuilder().create();
         ArrayList<String> response;
-        if(!(gsonResponse.startsWith("[")))
+        if(!(gsonResponse.startsWith("[")) && gsonResponse != null && gsonResponse != "")
             gsonResponse = "[" +gsonResponse;
         System.out.println(gsonResponse);
         

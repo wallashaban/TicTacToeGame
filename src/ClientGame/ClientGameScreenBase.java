@@ -3,6 +3,7 @@ package ClientGame;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -20,14 +21,24 @@ import javafx.scene.media.MediaView;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.connection.ClientConnection;
+import tictactoegame.connection.Constants;
+import tictactoegame.data.HistoryFile;
 import tictactoegame.data.MessageController;
 import tictactoegame.data.Move;
+import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.PlayAgainDialogBase;
 
 public class ClientGameScreenBase extends AnchorPane {
 
+    String sb;
+
+    Player player;
+    HistoryFile historyFile;
+    String filePath;
+    
     private final Button[] buttons = new Button[9];
     Socket clientSocket;
     private char currentPlayerSymbol = 'z';
@@ -93,8 +104,19 @@ public class ClientGameScreenBase extends AnchorPane {
     private boolean isInitialPlayer = false;
     private boolean playerTurn;
     
-
+    String oponnentName;
     public ClientGameScreenBase(String opponentName, long playey2score) {
+        
+        historyFile = new HistoryFile();
+        player = new Player("ahmed");
+         filePath = "src/files/" + SharedData.currentPlayer.getUserName() + ".txt";
+        File file = new File(filePath);
+        if (!file.exists()) {
+            historyFile.createFile(filePath);
+        }
+        sb="";
+        oponnentName = opponentName;
+        
         ClientConnection.listeningThread.suspend();
         sendAcknowledgment(opponentName);
         btnExit = new Button();
@@ -406,8 +428,7 @@ public class ClientGameScreenBase extends AnchorPane {
         buttons[8] = btn9;
 
         btnExit.setOnAction((ActionEvent event) -> {
-           // System.exit(0);
-           Platform.exit();
+            Platform.exit();
         });
 
         btnMin.setOnAction((ActionEvent event) -> {
@@ -445,8 +466,10 @@ public class ClientGameScreenBase extends AnchorPane {
             return;
         }
 
-        sendMoveToServer(index + 1, currentPlayerSymbol);
+        sb += ((i * 10) + j);
+        sb += ' ';
 
+        sendMoveToServer(index + 1, currentPlayerSymbol);
         updateButton(index, String.valueOf(currentPlayerSymbol));
         System.out.println("After update, symbol on UI should be: " + currentPlayerSymbol);
         playerTurn = false;
@@ -541,9 +564,17 @@ public class ClientGameScreenBase extends AnchorPane {
             }
             switch (gameState) {
                 case 10:
+                     // th.stop();
+
+
                     state = 'W';
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
                     txtPlay1Score.setText(String.valueOf(++playerOneScore));
 
+                        }
+                    });
                     disable();
                     celebrateWinner(move.getWinningCase());
 
@@ -555,12 +586,19 @@ public class ClientGameScreenBase extends AnchorPane {
                  //   resetBoard();
 
                     System.out.println("Player Win");
-                    celebrateWinner(move.getWinningCase());
                     ClientConnection.listeningThread.resume();
                     break;
                 case 11:
-                    txtTieScore.setText(String.valueOf(++PlayerTieScore));
+                    //th.stop();
+
                     state = 'T';
+                    
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtTieScore.setText(String.valueOf(++PlayerTieScore));
+                        }
+                    });
                     disable();
                     updateScores();
                     //winnerOrLoserOrTieVideo('T');
@@ -568,24 +606,32 @@ public class ClientGameScreenBase extends AnchorPane {
                     // handel Draw Case
                     System.out.println("Player Draw");
                   //  resetBoard();
-
                     ClientConnection.listeningThread.resume();
+
                     break;
                 case 12:
-                    txtPlay2Score.setText(String.valueOf(++player2Score));
+                    //th.stop();
                     state = 'L';
-                    txtPlay1Score.setText(moveJson);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtPlay2Score.setText(String.valueOf(++player2Score));
+                            txtPlay1Score.setText(moveJson);
+                        }
+                    });
+
 
                     disable();
                     updateScores();
                     // winnerOrLoserOrTieVideo('L');
-                    celebrateWinner(move.getWinningCase());
                     showDialog('L');
                    // resetBoard();
                     // handel Lose Case
                     System.out.println("Player Lose");
                     celebrateWinner(move.getWinningCase());
-                    ClientConnection.listeningThread.resume();
+                                        ClientConnection.listeningThread.resume();
+
                     break;
             }
         } catch (JsonSyntaxException e) {
@@ -683,7 +729,7 @@ public class ClientGameScreenBase extends AnchorPane {
         }
     }
 
-    public void highlightWinningCells(String player, int firstButton, int secondButton, int thirdButton) {
+    public void highlightWinningCells(String player, final int firstButton, final int secondButton, final int thirdButton) {
         String style = "-fx-text-fill: ";
 
         if (player.equals("X")) {
@@ -691,24 +737,28 @@ public class ClientGameScreenBase extends AnchorPane {
         } else if (player.equals("O")) {
             style += "red; -fx-font-weight: bold;";
         }
-
-        buttons[firstButton].setStyle(style);
-        buttons[secondButton].setStyle(style);
-        buttons[thirdButton].setStyle(style);
+        final String finalStyle = style;
+        Platform.runLater(()->{
+            buttons[firstButton].setStyle(finalStyle);
+            buttons[secondButton].setStyle(finalStyle);
+            buttons[thirdButton].setStyle(finalStyle);
+        });
     }
 
     private void showDialog(char winner) {
         System.out.println("the winner is"+winner);
         Platform.runLater(() -> {
-        message = new MessageController();
-        message.setWinner(winner);
-        Parent parent = new PlayAgainDialogBase(message, winner);
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.showAndWait();
-        th.stop();
-    });
+            message = new MessageController();
+            message.setWinner(winner);
+            message.isOnline = true;
+            Parent parent = new PlayAgainDialogBase(message, winner);
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.showAndWait();
+            th.stop();
+            resetGame();
+        });
     }
 
 //    private void resetBoard() {
@@ -720,9 +770,11 @@ public class ClientGameScreenBase extends AnchorPane {
 //    }
 
     private void updateScores() {
-        txtPlay1Score.setText("" + player1Score);
-        txtPlay2Score.setText(player2Score + "");
-        txtTieScore.setText("" + tieScore);
+        Platform.runLater(()->{
+            txtPlay1Score.setText("" + player1Score);
+            txtPlay2Score.setText(player2Score + "");
+            txtTieScore.setText("" + tieScore);
+        });
     }
     
     private void sendAcknowledgment(String opponentName){
@@ -739,4 +791,43 @@ public class ClientGameScreenBase extends AnchorPane {
             buttons[i].setDisable(true);
         }
     }
+    
+        public void resetGame() {
+        switch (message.getResponse()) {
+            case 2:
+                // send request 
+                    ArrayList<String> requestMessages = new ArrayList<String>();
+                requestMessages.add("request");
+                requestMessages.add(oponnentName);
+                Gson gson = new GsonBuilder().create();
+                String requestJson = gson.toJson(requestMessages);
+                ClientConnection.sendRequest(requestJson);
+                    sb="";
+                break;
+            case 1:
+                // dont use
+                //isX = true;
+                System.out.println("Before file Path player sb");
+                historyFile.saveToFile(filePath,oponnentName,sb);
+                sb="";
+               // gameReview.review(this,boxArray,player1Moves,player2Moves);  
+                Constants.navigateTo(new AvailbleUsersScreenUI());
+
+                    
+                break;
+            case 0:
+                // return to avilable user 
+                Constants.navigateTo(new AvailbleUsersScreenUI());
+                sb="";
+                //Constants.navigateTo(new MainScreenUI());
+                break;
+            default:
+                System.out.println("Before file Path player sb");
+                historyFile.saveToFile(filePath,oponnentName,sb);
+                sb="";
+                break;
+        }
+    }
+        
+       
 }
