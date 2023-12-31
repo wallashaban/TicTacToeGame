@@ -136,7 +136,7 @@ public class ClientConnection {
     public static void handleResponse(String gsonResponse) {
         Gson gson = new GsonBuilder().create();
         ArrayList<String> response;
-        if(!(gsonResponse.startsWith("[")))
+        if(!(gsonResponse.startsWith("[")) && gsonResponse != null && gsonResponse != "")
             gsonResponse = "[" +gsonResponse;
         System.out.println(gsonResponse);
         
@@ -279,7 +279,8 @@ public class ClientConnection {
 
     private static void startGame(ArrayList<String> response) {
         Platform.runLater(()->{
-            Parent root = new ClientGameScreenBase(response.get(1));
+            long score = Long.parseLong(response.get(2));
+            Parent root = new ClientGameScreenBase(response.get(1), score);
             Scene scene = new Scene(root);
             Stage stage = SharedData.getStage();
             stage.setScene(scene);

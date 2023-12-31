@@ -95,7 +95,7 @@ public class PlayAgainDialogBase extends Pane {
                 }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.close();
-                message.setResponse(2);
+            //    message.setResponse(2);
                 if (mediaView.getMediaPlayer() != null) {
                     mediaView.getMediaPlayer().stop();
                 }
@@ -192,6 +192,10 @@ public class PlayAgainDialogBase extends Pane {
             btnReplay.setVisible(false);
             btnPlayAgain.setLayoutX(73.0);
             btnPlayAgain.setLayoutY(442.0);
+        }
+        
+        if(message.isOnline){
+            btnPlayAgain.setVisible(false);
         }
     }
     

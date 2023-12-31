@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-import tictactoegame.SplashScreen.splashscreenFxmlBase;
 import tictactoegame.connection.ClientConnection;
 /**
  *
