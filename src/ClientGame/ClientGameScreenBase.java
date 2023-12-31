@@ -669,6 +669,11 @@ public class ClientGameScreenBase extends AnchorPane {
         Platform.runLater(() -> {
         message = new MessageController();
         message.setWinner(winner);
+//        Parent parent = new PlayAgainDialogBase(message, state);
+//        Scene scene = new Scene(parent);
+//        Stage stage = new Stage();
+//        stage.setScene(scene);
+//        stage.showAndWait();
         Parent parent = new PlayAgainDialogBase(message, winner);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();

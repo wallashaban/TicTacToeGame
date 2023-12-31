@@ -15,7 +15,11 @@ import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.connection.Constants;
+import tictactoegame.data.HistoryFile;
 import tictactoegame.data.MessageController;
+import tictactoegame.data.Player;
 
 public class PlayAgainDialogBase extends Pane {
 
@@ -33,7 +37,7 @@ public class PlayAgainDialogBase extends Pane {
         
 
 //        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner3.mp4";  
-//        Media media = new Media(new File(path).toURI().toString());   
+//       // Media media = new Media(new File(path).toURI().toString());
 //        MediaPlayer mediaPlayer = new MediaPlayer(media);
 //        mediaPlayer.setAutoPlay(true);
 //        mediaView = new MediaView(mediaPlayer);
@@ -86,11 +90,13 @@ public class PlayAgainDialogBase extends Pane {
             public void handle(ActionEvent event) {
                 message.setResponse(1);
                 message.setResponse(2);
-                if (mediaView.getMediaPlayer() != null) {
-                    mediaView.getMediaPlayer().stop();
-                }
-                Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-                stage.close();
+//                if (mediaView.getMediaPlayer() != null) {
+//                    mediaView.getMediaPlayer().stop();
+//                }
+                       //new HistoryFile().saveToFile(pathFile, player, moves);
+                btnReplay.setText("Saved");
+//                Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+//                stage.close();
                
             }
         });
@@ -114,6 +120,9 @@ public class PlayAgainDialogBase extends Pane {
                     mediaView.getMediaPlayer().stop();
                 }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+                System.err.println("dialog base");
+                Constants.navigateTo(new MainScreenUI());
+
                 stage.close();
             }
         });
@@ -136,7 +145,7 @@ public class PlayAgainDialogBase extends Pane {
                     mediaView.getMediaPlayer().stop();
                 }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-                stage.close();
+                                stage.close();
             }
         });
 
@@ -175,6 +184,7 @@ public class PlayAgainDialogBase extends Pane {
             switch (state) {
                 case 'W':
                     {
+
                         int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 5);
                         String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
                         Media media = new Media(new File(path).toURI().toString());
