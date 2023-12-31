@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.data.MessageController;
 import tictactoegame.data.Move;
+import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.PlayAgainDialogBase;
 
 public class ClientGameScreenBase extends AnchorPane {
@@ -40,7 +41,10 @@ public class ClientGameScreenBase extends AnchorPane {
     final int diagonalRight = 1;
     int i;
     int j;
-     Thread th;
+    Thread th;
+    
+    SharedData playerName = new SharedData();
+    
 
     MessageController message;
     protected MediaView mediaView;
@@ -521,11 +525,15 @@ public class ClientGameScreenBase extends AnchorPane {
             switch (gameState) {
                 case 10:
                     state = 'W';
+                    disable();
+                    celebrateWinner(move.getWinningCase());
+
                     //Handel Winning Case
                     updateScores();
                     //winnerOrLoserOrTieVideo('W');
                     showDialog('W');
-                    resetBoard();
+                    
+                 //   resetBoard();
 
                     System.out.println("Player Win");
                     celebrateWinner(move.getWinningCase());
@@ -533,23 +541,24 @@ public class ClientGameScreenBase extends AnchorPane {
                     break;
                 case 11:
                     state = 'T';
-
+                    disable();
                     updateScores();
                     //winnerOrLoserOrTieVideo('T');
                     showDialog('T');
                     // handel Draw Case
                     System.out.println("Player Draw");
-                    resetBoard();
+                  //  resetBoard();
 
                     ClientConnection.listeningThread.resume();
                     break;
                 case 12:
                     state = 'L';
-
+                    disable();
                     updateScores();
                     // winnerOrLoserOrTieVideo('L');
+                    celebrateWinner(move.getWinningCase());
                     showDialog('L');
-                    resetBoard();
+                   // resetBoard();
                     // handel Lose Case
                     System.out.println("Player Lose");
                     celebrateWinner(move.getWinningCase());
@@ -564,12 +573,13 @@ public class ClientGameScreenBase extends AnchorPane {
     void celebrateWinner(int c) {
         switch (c) {
             case diagonalLeft:
-                for (int i = 2; i < 9; i += 2) {
+               for (int i = 0; i < 9; i += 4) {
                     buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
                 }
                 break;
             case diagonalRight:
-                for (int i = 0; i < 9; i += 4) {
+               
+                  for (int i = 2; i < 7; i += 2) {
                     buttons[i].setTextFill(javafx.scene.paint.Color.valueOf("#db4f7e"));
                 }
                 break;
@@ -678,66 +688,19 @@ public class ClientGameScreenBase extends AnchorPane {
     });
     }
 
-    private void resetBoard() {
-        for (int i = 0; i < 9; i++) {
-            buttons[i].setText(" ");
-            buttons[i].setStyle("-fx-font: bold 36.0 'System';");
-            playerTurn = true;
-        }
-    }
+//    private void resetBoard() {
+//        for (int i = 0; i < 9; i++) {
+//            buttons[i].setText(" ");
+//            buttons[i].setStyle("-fx-font: bold 36.0 'System';");
+//            playerTurn = true;
+//        }
+//    }
 
     private void updateScores() {
         txtPlay1Score.setText("" + player1Score);
         txtPlay2Score.setText(player2Score + "");
         txtTieScore.setText("" + tieScore);
     }
-
-//    private void winnerOrLoserOrTieVideo(char state) {
-//        switch (state) {
-//            case 'W':
-//                {
-//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 5);
-//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
-//                    Media media = new Media(new File(path).toURI().toString());
-//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
-//                    mediaPlayer.setAutoPlay(true);
-//                    mediaView = new MediaView(mediaPlayer);
-//                    break;
-//                }
-//            case 'L':
-//                {
-//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 8);
-//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Loser" + randomNumWinner + ".mp4";
-//                    Media media = new Media(new File(path).toURI().toString());
-//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
-//                    mediaPlayer.setAutoPlay(true);
-//                    mediaView = new MediaView(mediaPlayer);
-//                    break;
-//                }
-//            case 'T':
-//                {
-//                    int randomNumWinner = ThreadLocalRandom.current().nextInt(1, 2);
-//                    String path = "D:/javaproject/TicTacToeGame/src/Videos/Tie" + randomNumWinner + ".mp4";
-//                    Media media = new Media(new File(path).toURI().toString());
-//                    MediaPlayer mediaPlayer = new MediaPlayer(media);
-//                    mediaPlayer.setAutoPlay(true);
-//                    mediaView = new MediaView(mediaPlayer);
-//                    break;
-//                }
-//            default:
-//                break;
-//        }
-//    }
-    //            if (move.getBox() == 99) {
-//                // Handle the case where the move is not valid (box = 99)
-//                System.out.println("Received an invalid move from the server.");
-//                // You may want to display a message to the user or take other actions.
-//            } else {
-//                // Process a valid move
-//                Platform.runLater(() -> {updateButton(move.getBox()-1, String.valueOf(move.getSign()));});
-//                playerTurn = !playerTurn;
-//            }
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Anas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
     private void sendAcknowledgment(String opponentName){
         ArrayList<String> requestMessages = new ArrayList<String>();
@@ -746,5 +709,11 @@ public class ClientGameScreenBase extends AnchorPane {
         Gson gson = new GsonBuilder().create();
         String requestJson = gson.toJson(requestMessages);
         ClientConnection.sendRequest(requestJson);
+    }
+    
+    private void disable() {
+        for(i = 0; i < 9; i ++) {
+            buttons[i].setDisable(true);
+        }
     }
 }
