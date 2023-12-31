@@ -17,8 +17,11 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.data.MessageController;
+import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.PlayAgainDialogBase;
+import tictactoegame.gameReview;
 
 public class GameVsPcBaseUI extends AnchorPane {
     
@@ -591,13 +594,21 @@ public class GameVsPcBaseUI extends AnchorPane {
     }
 
     private void showDialog(char winner) {
+        if(winner == 'X')
+            state = 'W';
+        else if (winner == 'O')
+            state = 'L';
+        else if(winner == 'D')
+            state = 'T';
         message = new MessageController();
         message.setWinner(winner);
+        message.isComputer = true;
         Parent parent = new PlayAgainDialogBase(message, state);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
+        resetGame();
     }
 
     void draw() {
@@ -618,7 +629,7 @@ public class GameVsPcBaseUI extends AnchorPane {
     private void updateScores() {
         playerScore.setText("" + player1Score);
         pcScore.setText(player2Score + "");
-        tie.setText("" + drawScore);
+        tieScore.setText("" + drawScore);
     }
 
     private void resetBoard() {
@@ -631,7 +642,26 @@ public class GameVsPcBaseUI extends AnchorPane {
             board[row][col] = "-";
         }
     }  
-    
+    public void resetGame() {
+        
+        switch (message.getResponse()) {
+            case 2:
+                break;
+            case 1:
+//                gameReview.review(this,boxArray,player1Moves,player2Moves);  
+                break;
+            case 0:
+                System.out.println("Going To main");
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                Stage stage = SharedData.getStage();
+                stage.setScene(scene);
+                stage.show();
+                break;
+            default:
+                break;
+        }
+    }
     
     
     private void replay() {

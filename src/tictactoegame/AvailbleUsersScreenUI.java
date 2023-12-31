@@ -61,10 +61,12 @@ public class AvailbleUsersScreenUI extends AnchorPane {
                 while (true) {
                     try {
                         String response = ClientConnection.in.readLine();
-                        if(!response.startsWith("[")) {
+                        if(!response.startsWith("[") && response.startsWith("\"")) {
                             response = "["+response;
                         }
-
+                        if(!response.startsWith("[") && !response.startsWith("\"")) {
+                            response = "[\""+response;
+                        }
                         ArrayList<String> responseList;
                         System.err.println("list" + response);
                         responseList = gson.fromJson(response, ArrayList.class);
@@ -232,8 +234,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         
         refreshImg.setFitHeight(70.0);
         refreshImg.setFitWidth(82.0);
-        refreshImg.setLayoutX(400.0);
-        refreshImg.setLayoutY(100);
+        refreshImg.setLayoutX(550.0);
+        refreshImg.setLayoutY(70);
         refreshImg.setPickOnBounds(true);
         refreshImg.setPreserveRatio(true);
         refreshImg.setImage(new Image(getClass().getResource("/images/refresh.png").toExternalForm()));
@@ -243,8 +245,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-            thread.stop();
-            ClientConnection.listeningThread.resume();
+//            thread.stop();
+//            ClientConnection.listeningThread.resume();
         });
         getChildren().add(refreshImg);
 

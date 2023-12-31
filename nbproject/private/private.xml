@@ -9,28 +9,26 @@
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/old/gameRoomScreen1.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/GameVsPC/GameVsPcBaseUI.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/ClientGame/ClientGameScreenBase.java</file>
+            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/connection/ClientConnection.java</file>
         </group>
         <group name="TicTacToeBestTeam">
+            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/LocalGame/GameRoomScreen.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/dialogs/PlayAgainDialogBase.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/old/GameRoomDesignBase.java</file>
+            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/AvailbleUsersScreenUI.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
+            <file>file:/D:/javaproject/TicTacToeGame/nbproject/build-impl.xml</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/old/gameRoomScreen1.java</file>
+            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/MainScreen/MainScreenUI.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/GameVsPC/GameVsPcBaseUI.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/ClientGame/ClientGameScreenBase.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/connection/ClientConnection.java</file>
         </group>
         <group>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/AvailbleUsersScreenUI.java</file>
+            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/data/SharedData.java</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/ClientGame/ClientGameScreenBase.java</file>
-            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/dialogs/PlayAgainDialogBase.java</file>
-            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/old/LoginDesignBase.java</file>
-            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/connection/ClientConnection.java</file>
-            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/Login/LoginDesignUI.java</file>
             <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
-            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/MainScreen/MainScreenUI.java</file>
-            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/GameHistory/HistoryGameScreen.java</file>
-            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/data/HistoryFile.java</file>
-            <file>file:/D:/ITI/Java/Java%20Final%20Project/Project/TicTacToeGame/src/tictactoegame/GameVsPC/GameVsPcBaseUI.java</file>
         </group>
     </open-files>
 </project-private>

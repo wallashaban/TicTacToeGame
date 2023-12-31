@@ -28,6 +28,8 @@ public class PlayAgainDialogBase extends Pane {
 
     public PlayAgainDialogBase(MessageController message, char state) {
         
+        System.out.println("hello state"+ state);
+        
         
 
 //        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner3.mp4";  
@@ -83,7 +85,7 @@ public class PlayAgainDialogBase extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(1);
-                message.setResponse(2);
+//                message.setResponse(2);
                 if (mediaView.getMediaPlayer() != null) {
                     mediaView.getMediaPlayer().stop();
                 }
@@ -107,7 +109,7 @@ public class PlayAgainDialogBase extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(0);
-                message.setResponse(2);
+//                message.setResponse(2);
                 if (mediaView.getMediaPlayer() != null) {
                     mediaView.getMediaPlayer().stop();
                 }
@@ -165,16 +167,21 @@ public class PlayAgainDialogBase extends Pane {
         getChildren().add(btnPlayAgain);
         getChildren().add(buttonMinimize);
         getChildren().add(text);
-        
-        winnerOrLoserOrTieVideo(state = 'W');
 
+        winnerOrLoserOrTieVideo(state);
+        
+        if(message.isComputer){
+            btnReplay.setVisible(false);
+            btnPlayAgain.setLayoutX(73.0);
+            btnPlayAgain.setLayoutY(442.0);
+        }
     }
     
             public void winnerOrLoserOrTieVideo(char state) {
             switch (state) {
                 case 'W':
                     {
-                        int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 4);
+                        int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 5);
                         String path = "src/Videos/Winner" + randomNumWinner + ".mp4";
                         Media media = new Media(new File(path).toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -198,12 +205,12 @@ public class PlayAgainDialogBase extends Pane {
                 case 'T':
                     {
                         int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 1);
-                        String path = "src/Videos/Tie" + randomNumWinner + ".mp4";
+                        String path = "src/Videos/Loser0.mp4";
                         Media media = new Media(new File(path).toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
                         mediaPlayer.setAutoPlay(true);
                         mediaView.setMediaPlayer(mediaPlayer);
-                            text.setText(" rly -_-!!");
+                        text.setText(" rly -_-!!");
 
                         break;
                     }
