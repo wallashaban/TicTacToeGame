@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tictactoegame;
+
 import GameHistory.HistoryGameScreen;
 
 import tictactoegame.data.SharedData;
@@ -17,19 +18,21 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import tictactoegame.connection.ClientConnection;
+
 import tictactoegame.data.DragScreen;
 /**
  *
  * @author Dr.Wlaa
  */
 public class TicTacToeGame extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
 
         Parent root = new SplashScreen();
  
         SharedData.setStage(stage);
+
         stage.initStyle(StageStyle.UNDECORATED);
         DragScreen.displayScreen(stage,root);
         
@@ -39,25 +42,24 @@ public class TicTacToeGame extends Application {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                    ClientConnection.closeConnection();
-                    Platform.exit();
+                ClientConnection.closeConnection();
+                Platform.exit();
             }
         });
-        
-   
+
     }
 
     @Override
     public void stop() throws Exception {
-    ClientConnection.closeConnection();
+        ClientConnection.closeConnection();
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {    
-        
+    public static void main(String[] args) {
+
         launch(args);
     }
-    
+
 }

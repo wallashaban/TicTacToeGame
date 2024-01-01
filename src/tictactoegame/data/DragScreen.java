@@ -1,3 +1,4 @@
+
 package tictactoegame.data;
 
 import javafx.application.Platform;

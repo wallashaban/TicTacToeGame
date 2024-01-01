@@ -9,11 +9,13 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +42,8 @@ public class HistoryScreen extends AnchorPane {
     protected final Label label0;
     protected final Pane minimisePane;
     protected final Label label1;
+        protected final Button buttonBack;
+
 
     public HistoryScreen() {
         new HistoryFile().readData();
@@ -50,6 +54,8 @@ public class HistoryScreen extends AnchorPane {
         label0 = new Label();
         minimisePane = new Pane();
         label1 = new Label();
+                buttonBack = new Button();
+
         for (Map.Entry<String, Pair<String, ArrayList<Integer>>> entry : SharedData.gameReplay.allMoves.entrySet()) {
             Pane availableUsersPane;
             Label nameLabel;
@@ -160,6 +166,24 @@ public class HistoryScreen extends AnchorPane {
         minimisePane.setPrefHeight(50.0);
         minimisePane.setPrefWidth(50.0);
         minimisePane.setStyle("-fx-background-color: #EACCD6; -fx-background-radius: 30;");
+        
+        buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+        buttonBack.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
+        //setTop(pane);
+        buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
 
         label1.setLayoutX(13.0);
         label1.setLayoutY(-28.0);
@@ -176,6 +200,7 @@ public class HistoryScreen extends AnchorPane {
         getChildren().add(closePane);
         minimisePane.getChildren().add(label1);
         getChildren().add(minimisePane);
+        getChildren().add(buttonBack);
 
     }
 
