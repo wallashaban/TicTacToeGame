@@ -17,7 +17,9 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.MessageController;
 import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.PlayAgainDialogBase;
@@ -608,6 +610,8 @@ public class GameVsPcBaseUI extends AnchorPane {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
+        //stage.initStyle(StageStyle.UNDECORATED); 
+              //  DragScreen.displayScreen(stage,parent);
         resetGame();
     }
 
@@ -653,10 +657,12 @@ public class GameVsPcBaseUI extends AnchorPane {
             case 0:
                 System.out.println("Going To main");
                 Parent root = new MainScreenUI();
-                Scene scene = new Scene(root);
+                //Scene scene = new Scene(root);
                 Stage stage = SharedData.getStage();
-                stage.setScene(scene);
-                stage.show();
+               // stage.setScene(scene);
+                //stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+                //stage.show();
                 break;
             default:
                 break;

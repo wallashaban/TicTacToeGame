@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.HistoryFile;
 import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.ExceptionDialog;
@@ -97,11 +98,12 @@ public class HistoryScreen extends AnchorPane {
                 @Override
                 public void handle(MouseEvent event) {
                     Parent root = new HistoryGameScreen(entry.getValue().getValue());
-                    Scene scene = new Scene(root);
+                    //Scene scene = new Scene(root);
 
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    stage.setScene(scene);
-                    stage.show();
+                    //stage.setScene(scene);
+                    //stage.show();
+                    DragScreen.displayScreen(stage,root);
                 }
             });
             pane.setLayoutX(183.0);

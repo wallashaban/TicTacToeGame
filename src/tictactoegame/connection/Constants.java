@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.Request;
 import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.ExceptionDialog;
@@ -33,8 +34,10 @@ public class Constants {
         Parent parent = new ExceptionDialog(message,isServerclosed);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
-                stage.initStyle(StageStyle.UNDECORATED); 
+                //stage.initStyle(StageStyle.UNDECORATED); 
         stage.setScene(scene);
+        //DragScreen.displayScreen(stage,parent);
+
         stage.showAndWait();
     }
     
@@ -42,12 +45,13 @@ public class Constants {
     {
         System.err.println("dialog ");
         Parent root = pane;
-                Scene scene = new Scene(root);
+               // Scene scene = new Scene(root);
 
                 //Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                SharedData.
-                stage.setScene(scene);
-                SharedData.stage.show();
+                //SharedData.
+               // stage.setScene(scene);
+                DragScreen.displayScreen(SharedData.stage,root);
+                //SharedData.stage.show();
     }
     public static void showRequestDialog(String name , Request request) {
         Parent parent = new RequestDialogBase(name,request);

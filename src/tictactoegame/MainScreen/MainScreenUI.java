@@ -20,12 +20,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
+import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.GameVsPC.GameVsPcBaseUI;
 import tictactoegame.HistoryScreen;
 import tictactoegame.LocalGame.GameRoomScreen;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.MessageController;
 import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
@@ -291,9 +294,11 @@ public class MainScreenUI extends AnchorPane {
             public void handle(MouseEvent event) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Parent root = new GameVsPcBaseUI();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                //Scene scene = new Scene(root);
+                //stage.setScene(scene);
+                //stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+                //stage.show();
             }
         });
         localPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -301,9 +306,11 @@ public class MainScreenUI extends AnchorPane {
             public void handle(MouseEvent event) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Parent root = new GameRoomScreen();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                //Scene scene = new Scene(root);
+                //stage.setScene(scene);
+                //stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+                //stage.show();
             }
         });
         onlinePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -315,11 +322,13 @@ public class MainScreenUI extends AnchorPane {
                     root = new LoginDesignUI();
                 }
                 else{
-                    root = new AvailableUsersScreen();
+                    root = new AvailbleUsersScreenUI();
                 }
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                //Scene scene = new Scene(root);
+                //stage.setScene(scene);
+                //stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+                //stage.show();
             }
         });
 
@@ -327,11 +336,13 @@ public class MainScreenUI extends AnchorPane {
             @Override
             public void handle(MouseEvent event) {
                 Parent root = new HistoryScreen();
-                Scene scene = new Scene(root);
+                //Scene scene = new Scene(root);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
+                //stage.setScene(scene);
+                //stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+                //stage.show();
             }
         });
 
