@@ -16,6 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -24,6 +28,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.HistoryScreen;
+import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
 import tictactoegame.data.Move;
@@ -80,6 +86,8 @@ public class HistoryGameScreen extends AnchorPane {
     protected final Label txtPlayr2TotalScore;
     protected final ImageView imgPlayer2;
     protected final ImageView imgPlayer1;
+        protected final Button buttonBack;
+
 
     private int player1Score = 0;
     private int player2Score = 0;
@@ -134,6 +142,7 @@ public class HistoryGameScreen extends AnchorPane {
         txtPlayr2TotalScore = new Label();
         imgPlayer2 = new ImageView();
         imgPlayer1 = new ImageView();
+                buttonBack = new Button();
 
         setId("AnchorPane");
         setPrefHeight(600.0);
@@ -154,6 +163,24 @@ public class HistoryGameScreen extends AnchorPane {
         btnMin.setStyle("-fx-background-color: EACCD6; -fx-background-radius: 20;");
         btnMin.setText("-");
         btnMin.setFont(new Font("System Bold", 18.0));
+        
+         buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+        buttonBack.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
+       // setTop(pane);
+        buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new HistoryScreen();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
 
         txtPlay1Name.setLayoutX(648.0);
         txtPlay1Name.setLayoutY(91.0);
@@ -394,13 +421,14 @@ public class HistoryGameScreen extends AnchorPane {
         getChildren().add(line0);
         getChildren().add(line1);
         getChildren().add(line2);
-        getChildren().add(backImgae);
+    //    getChildren().add(backImgae);
         getChildren().add(backImgae1);
         getChildren().add(backImgae11);
         getChildren().add(txtPlayr1TotalScore);
         getChildren().add(txtPlayr2TotalScore);
         getChildren().add(imgPlayer2);
         getChildren().add(imgPlayer1);
+        getChildren().add(buttonBack);
 
         buttons[0] = btn1;
         buttons[1] = btn2;

@@ -12,10 +12,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -27,6 +30,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
 import tictactoegame.data.Player;
@@ -42,6 +46,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
     protected final Label label1;
     protected final ScrollPane scrollPane;
     protected final FlowPane flowPane;
+        protected final Button buttonBack;
+
     ArrayList<Player> players;
     protected final ImageView refreshImg;
     Thread thread;
@@ -169,6 +175,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         scrollPane = new ScrollPane();
         flowPane = new FlowPane();
         refreshImg = new ImageView();
+                buttonBack = new Button();
+
 
         setId("AnchorPane");
         setMaxHeight(600.0);
@@ -258,6 +266,8 @@ public class AvailbleUsersScreenUI extends AnchorPane {
         getChildren().add(minimisePane);
 
         getChildren().add(scrollPane);
+                getChildren().add(buttonBack);
+
 
         closePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -273,7 +283,24 @@ public class AvailbleUsersScreenUI extends AnchorPane {
             }
         });
 
-        
+         buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+        buttonBack.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
+        //setTop(pane);
+        buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
 
     }
 }
