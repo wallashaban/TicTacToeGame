@@ -138,7 +138,7 @@ public class ClientConnection {
         ArrayList<String> response;
         if(!(gsonResponse.startsWith("[")) && gsonResponse != null && gsonResponse != "")
             gsonResponse = "[" +gsonResponse;
-while(gsonResponse.charAt(1)!= '"'){
+        while(gsonResponse.charAt(1)!= '"'){
             System.out.println("Fixing bad character");
             gsonResponse = gsonResponse.substring(0, 1) + gsonResponse.substring(2);
         }
