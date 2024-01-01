@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.SharedData;
 
 public class ExceptionDialog extends Pane {
@@ -27,7 +28,7 @@ public class ExceptionDialog extends Pane {
     protected final Pane exitBtn;
     protected final Label label;
 
-    public ExceptionDialog(String text,boolean isServerclosed) {
+    public ExceptionDialog(String text, boolean isServerclosed) {
 
         rectangle = new Rectangle();
         btnAccept = new Button();
@@ -92,41 +93,42 @@ public class ExceptionDialog extends Pane {
         getChildren().add(labelRequestMessage);
         exitBtn.getChildren().add(label);
         getChildren().add(exitBtn);
-        
+
         exitBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-                 if (isServerclosed) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                if (isServerclosed) {
                     Parent root = new MainScreenUI();
 
 //                    stage.initStyle(StageStyle.UNDECORATED);
                     SharedData.setStage(stage);
-                    Scene scene = new Scene(root);
+                    //Scene scene = new Scene(root);
 
-                    stage.setScene(scene);
-                    stage.show();
+                    //stage.setScene(scene);
+                    //stage.show();
+                    DragScreen.displayScreen(stage, root);
 
                 }
 
                 stage.close();
-                
+
             }
         }
         );
-        
-         btnAccept.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+        btnAccept.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-                 if (isServerclosed) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                if (isServerclosed) {
                     Parent root = new MainScreenUI();
 
 //                    stage.initStyle(StageStyle.UNDECORATED);
-                    Scene scene = new Scene(root);
-
-                    SharedData.stage.setScene(scene);
-                    SharedData.stage.show();
+                    //Scene scene = new Scene(root);
+                    DragScreen.displayScreen(stage, root);
+                    // SharedData.stage.setScene(scene);
+                    //SharedData.stage.show();
 
                 }
 
@@ -135,7 +137,6 @@ public class ExceptionDialog extends Pane {
         }
         );
 
-        }
-     
     }
 
+}

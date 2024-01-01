@@ -28,6 +28,7 @@ import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.Login.LoginDesignUI;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
 
@@ -156,10 +157,8 @@ public class SignUpUI extends Pane {
         alreadyHaveAccLabel.setFont(new Font("Segoe UI", 20.0));
         alreadyHaveAccLabel.setOnMouseClicked((e) -> {
             Parent root = new LoginDesignUI();
-            Scene scene = new Scene(root);
             Stage stage = SharedData.getStage();
-            stage.setScene(scene);
-            stage.show();
+            DragScreen.displayScreen(stage,root);
         });
 
         letterX.setLayoutX(23.0);
@@ -209,9 +208,10 @@ public class SignUpUI extends Pane {
             public void handle(ActionEvent event) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Parent root = new LoginDesignUI();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                //Scene scene = new Scene(root);
+                //stage.setScene(scene);
+               // stage.show();
+               DragScreen.displayScreen(stage,root);
             }
         });
 

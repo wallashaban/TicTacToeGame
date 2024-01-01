@@ -16,9 +16,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.connection.ClientConnection;
 import tictactoegame.connection.Constants;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.MessageController;
 import tictactoegame.dialogs.IPDialogBase;
 
@@ -68,10 +70,10 @@ public class SplashScreen extends AnchorPane {
         label.setTextFill(javafx.scene.paint.Color.WHITE);
         label.setFont(new Font("Gill Sans MT Bold Italic", 48.0));
 
-        imageView.setFitHeight(188.0);
-        imageView.setFitWidth(112.0);
-        imageView.setLayoutX(301.0);
-        imageView.setLayoutY(184.0);
+        imageView.setFitHeight(241.0);
+        imageView.setFitWidth(358.0);
+        imageView.setLayoutX(194.0);
+        imageView.setLayoutY(155.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
         imageView.setImage(new Image(getClass().getResource("/images/images.png").toExternalForm()));
@@ -141,7 +143,7 @@ public class SplashScreen extends AnchorPane {
         pane.getChildren().add(label);
         pane.getChildren().add(imageView);
         pane.getChildren().add(letsPlaybtn);
-        pane.getChildren().add(button);
+        //pane.getChildren().add(button);
         pane.getChildren().add(connectImg);
         pane.getChildren().add(connectionLabel);
         getChildren().add(pane);
@@ -154,11 +156,9 @@ public class SplashScreen extends AnchorPane {
             @Override
             public void handle(MouseEvent event) { 
                 Parent root = new MainScreenUI();
-                Scene scene = new Scene(root);
-
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
+                DragScreen.displayScreen(stage,root);
+
             }
         });
 

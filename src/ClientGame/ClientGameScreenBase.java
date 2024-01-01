@@ -386,8 +386,8 @@ public class ClientGameScreenBase extends AnchorPane {
         imgPlayer1.setPreserveRatio(true);
         imgPlayer1.setImage(new Image(getClass().getResource("/images/Tom.png").toExternalForm()));
 
-        getChildren().add(btnExit);
-        getChildren().add(btnMin);
+       // getChildren().add(btnExit);
+       // getChildren().add(btnMin);
         getChildren().add(txtPlay1Name);
         getChildren().add(txtPlay2Name);
         getChildren().add(txtplayer2Type);
@@ -409,7 +409,7 @@ public class ClientGameScreenBase extends AnchorPane {
         getChildren().add(line0);
         getChildren().add(line1);
         getChildren().add(line2);
-        getChildren().add(backImgae);
+        //getChildren().add(backImgae);
         getChildren().add(backImgae1);
         getChildren().add(backImgae11);
         getChildren().add(txtPlayr1TotalScore);

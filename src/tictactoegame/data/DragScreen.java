@@ -1,40 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package tictactoegame.data;
 
+import javafx.application.Platform;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-/**
- *
- * @author anasn
- */
 public class DragScreen {
-    
-    
-//        public void start(Stage stage) throws Exception {
-//        
-//        root = new ServerScreenBase();
-//        //to can move the screen  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-//        root.setOnMousePressed(event -> {
-//            xOffset = event.getSceneX();
-//            yOffset = event.getSceneY();
-//        });
-//
-//        root.setOnMouseDragged(event -> {
-//            stage.setX(event.getScreenX() - xOffset);
-//            stage.setY(event.getScreenY() - yOffset);
-//        });
-//        //to can move the screen  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-//
-//        Scene scene = new Scene(root);
-//        stage.initStyle(StageStyle.UNDECORATED);
-//        stage.setScene(scene);
-//        stage.show();
-//    }
-    
+
+    public static void displayScreen(Stage stage, Parent root) {
+        final double[] xOffset = {0};
+        final double[] yOffset = {0};
+
+        Scene scene = new Scene(root);
+
+        Platform.runLater(() -> {
+            stage.setScene(scene);
+            stage.show();
+
+            root.setOnMousePressed(event -> {
+                xOffset[0] = event.getSceneX();
+                yOffset[0] = event.getSceneY();
+            });
+
+            root.setOnMouseDragged(event -> {
+                stage.setX(event.getScreenX() - xOffset[0]);
+                stage.setY(event.getScreenY() - yOffset[0]);
+            });
+        });
+    }
 }
