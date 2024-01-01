@@ -7,6 +7,7 @@ package tictactoegame.data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import javafx.util.Pair;
 import tictactoegame.GameReplay;
+import tictactoegame.connection.Constants;
 
 /**
  *
@@ -34,8 +36,9 @@ public class HistoryFile {
     public void setWriter(BufferedWriter writer) {
         this.writer = writer;
     }
-   private BufferedWriter writer;
-     public void createFile(String filePath) {
+    private BufferedWriter writer;
+
+    public void createFile(String filePath) {
         // String filePath = "E:/java/TicTacToeGame/src/files/file.txt";
 
         try {
@@ -48,7 +51,7 @@ public class HistoryFile {
         }
     }
 
-    public void saveToFile(String filePath,Player player,String moves) {
+    public void saveToFile(String filePath, String player, String moves) {
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true)));
             System.out.println("lines");
@@ -57,7 +60,7 @@ public class HistoryFile {
             Date d = new Date();
             writer.write(d.toString());
             writer.newLine();
-            writer.write(player.getUserName());
+            writer.write(player);
             writer.newLine();
             writer.close();
             System.out.println("Text appended successfully!");
@@ -65,10 +68,20 @@ public class HistoryFile {
             ex.printStackTrace();
         }
     }
-    
-     public void readData() {
+
+    public void readData() {
         try {
-            String filePath = "E:/java/TicTacToeGame/src/files/ahmed.txt";
+            String userName;
+            if (SharedData.currentPlayer == null) {
+                userName = System.getProperty("user.name");
+            } else {
+                userName = SharedData.currentPlayer.getUserName();
+            }
+            String filePath = "src/files/" + userName + ".txt";
+            File file = new File(filePath);
+            if (!file.exists()) {
+                Constants.showDialog("there is not history yet", false);
+            }
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             String line;
             String name = new String();
@@ -103,5 +116,4 @@ public class HistoryFile {
         }
     }
 
-    
 }

@@ -5,11 +5,14 @@
  */
 package tictactoegame.connection;
 
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tictactoegame.data.Request;
+import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.ExceptionDialog;
 import tictactoegame.dialogs.RequestDialogBase;
 
@@ -35,6 +38,17 @@ public class Constants {
         stage.showAndWait();
     }
     
+    public static void navigateTo(Pane pane)
+    {
+        System.err.println("dialog ");
+        Parent root = pane;
+                Scene scene = new Scene(root);
+
+                //Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                SharedData.
+                stage.setScene(scene);
+                SharedData.stage.show();
+    }
     public static void showRequestDialog(String name , Request request) {
         Parent parent = new RequestDialogBase(name,request);
         Scene scene = new Scene(parent);

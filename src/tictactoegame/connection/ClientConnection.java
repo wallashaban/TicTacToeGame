@@ -78,17 +78,20 @@ public class ClientConnection {
             String request = gson.toJson(requestArray);
             sendRequest(request);
             //out.println("logout");
-           String msgArray = in.readLine();
+                String msgArray = in.readLine();
+                if (msgArray.equals("exit")) {
+                    in.close();
+                    out.close();
+                    mySocket.close();
+                }
+           
+//           if(!msgArray.endsWith("}")){
 //           System.out.println(msgArray);
 //            ArrayList<String> messages = gson.fromJson(msgArray, ArrayList.class);
 //            String msg = messages.get(0);
-            if (msgArray.equals("exit")) {
-                in.close();
-                out.close();
-                mySocket.close();
-            }
+            
                 System.out.println("Done Closing");
-            }
+           }
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -133,8 +136,12 @@ public class ClientConnection {
     public static void handleResponse(String gsonResponse) {
         Gson gson = new GsonBuilder().create();
         ArrayList<String> response;
-        if(!(gsonResponse.startsWith("[")))
+        if(!(gsonResponse.startsWith("[")) && gsonResponse != null && gsonResponse != "")
             gsonResponse = "[" +gsonResponse;
+        while(gsonResponse.charAt(1)!= '"'){
+            System.out.println("Fixing bad character");
+            gsonResponse = gsonResponse.substring(0, 1) + gsonResponse.substring(2);
+        }
         System.out.println(gsonResponse);
         
         response = gson.fromJson(gsonResponse, ArrayList.class);
@@ -276,7 +283,8 @@ public class ClientConnection {
 
     private static void startGame(ArrayList<String> response) {
         Platform.runLater(()->{
-            Parent root = new ClientGameScreenBase(response.get(1));
+            long score = Long.parseLong(response.get(2));
+            Parent root = new ClientGameScreenBase(response.get(1), score);
             Scene scene = new Scene(root);
             Stage stage = SharedData.getStage();
             stage.setScene(scene);

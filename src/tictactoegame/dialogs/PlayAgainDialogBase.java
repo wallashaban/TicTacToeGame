@@ -15,7 +15,11 @@ import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.connection.Constants;
+import tictactoegame.data.HistoryFile;
 import tictactoegame.data.MessageController;
+import tictactoegame.data.Player;
 
 public class PlayAgainDialogBase extends Pane {
 
@@ -33,16 +37,16 @@ public class PlayAgainDialogBase extends Pane {
         
 
 //        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner3.mp4";  
-//        Media media = new Media(new File(path).toURI().toString());   
+//       // Media media = new Media(new File(path).toURI().toString());
 //        MediaPlayer mediaPlayer = new MediaPlayer(media);
 //        mediaPlayer.setAutoPlay(true);
 //        mediaView = new MediaView(mediaPlayer);
 
-        String path = "C:/Users/Dr.Wlaa/Desktop/celebration.mp4";  
-        Media media = new Media(new File(path).toURI().toString());   
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
-        mediaView = new MediaView(mediaPlayer);
+//        String path = "C:/Users/Dr.Wlaa/Desktop/celebration.mp4";  
+//        Media media = new Media(new File(path).toURI().toString());   
+//        MediaPlayer mediaPlayer = new MediaPlayer(media);
+//        mediaPlayer.setAutoPlay(true);
+//        mediaView = new MediaView(mediaPlayer);
         // Assuming primaryStage is your primary Stage
         
         //String path = "C:/Users/s/Desktop/celebration.mp4";  
@@ -85,12 +89,23 @@ public class PlayAgainDialogBase extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(1);
-                message.setResponse(2);
+//                message.setResponse(2);
                 if (mediaView.getMediaPlayer() != null) {
                     mediaView.getMediaPlayer().stop();
                 }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.close();
+            //    message.setResponse(2);
+                if (mediaView.getMediaPlayer() != null) {
+                    mediaView.getMediaPlayer().stop();
+                }
+//                if (mediaView.getMediaPlayer() != null) {
+//                    mediaView.getMediaPlayer().stop();
+//                }
+                       //new HistoryFile().saveToFile(pathFile, player, moves);
+                btnReplay.setText("Saved");
+//                Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+//                stage.close();
                
             }
         });
@@ -109,11 +124,14 @@ public class PlayAgainDialogBase extends Pane {
             @Override
             public void handle(ActionEvent event) {
                 message.setResponse(0);
-                message.setResponse(2);
+//                message.setResponse(2);
                 if (mediaView.getMediaPlayer() != null) {
                     mediaView.getMediaPlayer().stop();
                 }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+                System.err.println("dialog base");
+                Constants.navigateTo(new MainScreenUI());
+
                 stage.close();
             }
         });
@@ -136,7 +154,7 @@ public class PlayAgainDialogBase extends Pane {
                     mediaView.getMediaPlayer().stop();
                 }
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-                stage.close();
+                                stage.close();
             }
         });
 
@@ -169,14 +187,25 @@ public class PlayAgainDialogBase extends Pane {
         getChildren().add(text);
 
         winnerOrLoserOrTieVideo(state);
+        
+        if(message.isComputer){
+            btnReplay.setVisible(false);
+            btnPlayAgain.setLayoutX(73.0);
+            btnPlayAgain.setLayoutY(442.0);
+        }
+        
+        if(message.isOnline){
+            btnPlayAgain.setVisible(false);
+        }
     }
     
             public void winnerOrLoserOrTieVideo(char state) {
             switch (state) {
                 case 'W':
                     {
+
                         int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 5);
-                        String path = "D:/javaproject/TicTacToeGame/src/Videos/Winner" + randomNumWinner + ".mp4";
+                        String path = "src/Videos/Winner" + randomNumWinner + ".mp4";
                         Media media = new Media(new File(path).toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
                         mediaPlayer.setAutoPlay(true);
@@ -199,12 +228,12 @@ public class PlayAgainDialogBase extends Pane {
                 case 'T':
                     {
                         int randomNumWinner = ThreadLocalRandom.current().nextInt(0, 1);
-                        String path = "src/Videos/Tie" + randomNumWinner + ".mp4";
+                        String path = "src/Videos/Loser0.mp4";
                         Media media = new Media(new File(path).toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
                         mediaPlayer.setAutoPlay(true);
                         mediaView.setMediaPlayer(mediaPlayer);
-                            text.setText(" rly -_-!!");
+                        text.setText(" rly -_-!!");
 
                         break;
                     }

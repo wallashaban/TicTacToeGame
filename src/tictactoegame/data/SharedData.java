@@ -8,6 +8,7 @@ package tictactoegame.data;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 import javafx.stage.Stage;
 import tictactoegame.GameReplay;
 
@@ -24,7 +25,7 @@ public class SharedData {
     public static GameReplay gameReplay;
     HashMap<String, String> StringData;
     HashMap<String, Integer> IntData;
-
+    
     public SharedData() {
         StringData = new HashMap<String, String>();
         IntData = new HashMap<String, Integer>();

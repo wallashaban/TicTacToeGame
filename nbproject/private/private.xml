@@ -16,24 +16,16 @@
             <file>file:/C:/Users/ghoneim/OneDrive/Desktop/tic%20tac%20toe/TicTacToeGame/src/tictactoegame/SplashScreen/SplashScreen.java</file>
         </group>
         <group name="TicTacToeBestTeam">
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/dialogs/PlayAgainDialogBase.java</file>
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/old/GameRoomDesignBase.java</file>
+            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/data/DragScreen.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/old/gameRoomScreen1.java</file>
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/GameVsPC/GameVsPcBaseUI.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/ClientGame/ClientGameScreenBase.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/connection/ClientConnection.java</file>
         </group>
         <group name="TicTacToeBestTeam">
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/LocalGame/GameRoomScreen.java</file>
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/dialogs/PlayAgainDialogBase.java</file>
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/old/GameRoomDesignBase.java</file>
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/AvailbleUsersScreenUI.java</file>
+            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/data/DragScreen.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/TicTacToeGame.java</file>
-            <file>file:/D:/javaproject/TicTacToeGame/nbproject/build-impl.xml</file>
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/old/gameRoomScreen1.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/MainScreen/MainScreenUI.java</file>
-            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/GameVsPC/GameVsPcBaseUI.java</file>
+            <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/dialogs/ExceptionDialog.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/ClientGame/ClientGameScreenBase.java</file>
             <file>file:/D:/javaproject/TicTacToeGame/src/tictactoegame/connection/ClientConnection.java</file>
         </group>

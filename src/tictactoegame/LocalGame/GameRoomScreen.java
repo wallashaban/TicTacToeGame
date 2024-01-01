@@ -36,6 +36,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.connection.Constants;
 import tictactoegame.data.HistoryFile;
 import tictactoegame.data.MessageController;
 import tictactoegame.data.Player;
@@ -112,25 +113,28 @@ public class GameRoomScreen extends BorderPane {
     protected final Label box02;
     protected final Label box12;
     protected final Label box22;
-        protected final Button buttonBack;
+    protected final Button buttonBack;
 
     String sb;
 
     Player player;
     HistoryFile historyFile;
     String filePath;
+
     public GameRoomScreen() {
         historyFile = new HistoryFile();
         player = new Player("ahmed");
-        this.stage = stage;       
-         filePath = "src/files/" + player.getUserName() + ".txt";
+        this.stage = stage;
+
+        String userName;
+        userName = System.getProperty("user.name");
+        filePath = "src/files/" + userName + ".txt";
         File file = new File(filePath);
         if (!file.exists()) {
             historyFile.createFile(filePath);
         }
 
-
-        sb="";
+        sb = "";
         message = new MessageController();
         matrix = new char[3][3];
         boxArray = new Label[3][3];
@@ -180,8 +184,7 @@ public class GameRoomScreen extends BorderPane {
         box02 = new Label();
         box12 = new Label();
         box22 = new Label();
-                buttonBack = new Button();
-
+        buttonBack = new Button();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -201,18 +204,17 @@ public class GameRoomScreen extends BorderPane {
         Player1View.setPrefHeight(114.0);
         Player1View.setPrefWidth(310.0);
 
-      //  buttonBack.setFitHeight(50.0);
-      //  buttonBack.setFitWidth(50.0);
+        //  buttonBack.setFitHeight(50.0);
+        //  buttonBack.setFitWidth(50.0);
         buttonBack.setPickOnBounds(true);
-       // buttonBack.setPreserveRatio(true);
-        
-        
+        // buttonBack.setPreserveRatio(true);
+
         buttonBack.setLayoutX(15.0);
         buttonBack.setLayoutY(7.0);
         buttonBack.setMnemonicParsing(false);
         buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
         buttonBack.setText("<");
-         buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+        buttonBack.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -222,14 +224,14 @@ public class GameRoomScreen extends BorderPane {
                 stage.show();
             }
         });
-       // menuIcon.setImage(new Image(getClass().getResource("/images/menu.png").toExternalForm()));
+        // menuIcon.setImage(new Image(getClass().getResource("/images/menu.png").toExternalForm()));
         FlowPane.setMargin(buttonBack, new Insets(20.0, 0.0, 0.0, 10.0));
 
         player1Image.setFitHeight(60.0);
         player1Image.setFitWidth(60.0);
         player1Image.setPickOnBounds(true);
         player1Image.setPreserveRatio(true);
-        player1Image.setImage(new Image(getClass().getResource("/images/332116278_1280755552796980_7935683117072368396_n.jpg").toExternalForm()));
+        player1Image.setImage(new Image(getClass().getResource("/images/klipartz.com.png").toExternalForm()));
         FlowPane.setMargin(player1Image, new Insets(15.0, 0.0, 0.0, 10.0));
 
         player1NameAndScoreView.setMaxHeight(100.0);
@@ -241,7 +243,7 @@ public class GameRoomScreen extends BorderPane {
         player1Name.setMinHeight(38.0);
         player1Name.setPrefHeight(38.0);
         player1Name.setPrefWidth(145.0);
-        player1Name.setText("Ahmed Ghoneim");
+        player1Name.setText("Player X");
         player1Name.setTextFill(javafx.scene.paint.Color.WHITE);
         player1Name.setFont(new Font("SansSerif Bold", 18.0));
         FlowPane.setMargin(player1Name, new Insets(20.0, 0.0, 0.0, 0.0));
@@ -316,7 +318,7 @@ public class GameRoomScreen extends BorderPane {
         player2NameAndScoreView0.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         player2NameAndScoreView0.setPrefHeight(44.0);
         player2NameAndScoreView0.setPrefWidth(154.0);
-        player2NameAndScoreView0.setText("Mohamed Ghoneim");
+        player2NameAndScoreView0.setText("Player O");
         player2NameAndScoreView0.setTextFill(javafx.scene.paint.Color.WHITE);
         player2NameAndScoreView0.setFont(new Font("SansSerif Bold", 16.0));
         FlowPane.setMargin(player2NameAndScoreView0, new Insets(15.0, 0.0, 0.0, 0.0));
@@ -329,7 +331,7 @@ public class GameRoomScreen extends BorderPane {
         Star2Image.setFitWidth(25.0);
         Star2Image.setPickOnBounds(true);
         Star2Image.setPreserveRatio(true);
-        Star2Image.setImage(new Image(getClass().getResource("/images/1840745.png").toExternalForm()));
+        Star2Image.setImage(new Image(getClass().getResource("/images/Tom.png").toExternalForm()));
 
         player2Score.setText("690");
         player2Score.setTextFill(javafx.scene.paint.Color.WHITE);
@@ -341,7 +343,7 @@ public class GameRoomScreen extends BorderPane {
         imageView.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("/images/39467269_2158747357747944_2865808226652258304_n.jpg").toExternalForm()));
+        imageView.setImage(new Image(getClass().getResource("/images/Tom.png").toExternalForm()));
         FlowPane.setMargin(imageView, new Insets(10.0, 0.0, 0.0, 0.0));
 
         button.setMnemonicParsing(false);
@@ -481,11 +483,13 @@ public class GameRoomScreen extends BorderPane {
         box22.setFont(new Font("Arial Bold", 80.0));
         setCenter(gameView);
 
+        //Player1View.getChildren().add(menuIcon);
         Player1View.getChildren().add(buttonBack);
+
         Player1View.getChildren().add(player1Image);
         player1NameAndScoreView.getChildren().add(player1Name);
-        scoreAndStarImageView.getChildren().add(Player1Score);
-        scoreAndStarImageView.getChildren().add(starImage);
+        //scoreAndStarImageView.getChildren().add(Player1Score);
+        //scoreAndStarImageView.getChildren().add(starImage);
         player1NameAndScoreView.getChildren().add(scoreAndStarImageView);
         Player1View.getChildren().add(player1NameAndScoreView);
         Player1View.getChildren().add(player1Sign);
@@ -496,9 +500,9 @@ public class GameRoomScreen extends BorderPane {
         topAncherPane.getChildren().add(sessionScore);
         Player2View.getChildren().add(player2Sign);
         player2NameAndScoreView.getChildren().add(player2NameAndScoreView0);
-        player2ScoreAndStarView.getChildren().add(Star2Image);
-        player2ScoreAndStarView.getChildren().add(player2Score);
-        player2NameAndScoreView.getChildren().add(player2ScoreAndStarView);
+        //player2ScoreAndStarView.getChildren().add(Star2Image);
+        //player2ScoreAndStarView.getChildren().add(player2Score);
+        //player2NameAndScoreView.getChildren().add(player2ScoreAndStarView);
         Player2View.getChildren().add(player2NameAndScoreView);
         Player2View.getChildren().add(imageView);
         //Player2View.getChildren().add(button);
@@ -552,7 +556,7 @@ public class GameRoomScreen extends BorderPane {
                                 player1Moves.add((finalI * 10) + finalJ);
                                 //int res = ((finalI * 10) + finalJ);
                                 sb += ((finalI * 10) + finalJ);
-                                
+
                                 playerMoves.add((finalI * 10) + finalJ);
                                 sb += ' ';
                             } else {
@@ -560,7 +564,7 @@ public class GameRoomScreen extends BorderPane {
                                 player2Moves.add((finalI * 10) + finalJ);
                                 playerMoves.add((finalI * 10) + finalJ);
                                 sb += ((finalI * 10) + finalJ);
-                               
+
                                 sb += ' ';
                             }
                             updateCases(finalI, finalJ);
@@ -569,7 +573,7 @@ public class GameRoomScreen extends BorderPane {
                                 winnerData = checkWinner();
                                 if (winnerData[0] == -1) {
                                     if (movesCount == 9) {
-                                        
+
                                         draw();
                                     } else {
                                         isX = !isX;
@@ -731,7 +735,7 @@ public class GameRoomScreen extends BorderPane {
                 player2Moves.clear();
                 player1Moves.clear();
                 //sb += "\n";
-                sb="";
+                sb = "";
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
                         boxEnabled[i][j] = true;
@@ -748,23 +752,17 @@ public class GameRoomScreen extends BorderPane {
                 break;
             case 1:
                 isX = true;
-                historyFile.saveToFile(filePath,player,sb);
-                sb="";
-               // gameReview.review(this,boxArray,player1Moves,player2Moves);  
+                historyFile.saveToFile(filePath, "tom", sb);
+                sb = "";
+                // gameReview.review(this,boxArray,player1Moves,player2Moves);  
                 break;
             case 0:
-                sb="";
-                Parent root = new MainScreenUI();
-                Scene scene = new Scene(root);
-
-                Stage stage = SharedData.getStage();
-                stage.setScene(scene);
-                stage.show();
-
+                sb = "";
+                //Constants.navigateTo(new MainScreenUI());
                 break;
             default:
-                historyFile.saveToFile(filePath,player,sb);
-                sb="";
+                historyFile.saveToFile(filePath, "tom", sb);
+                sb = "";
                 break;
         }
     }
@@ -774,10 +772,8 @@ public class GameRoomScreen extends BorderPane {
         resetGame();
     }
 
-                            // Stop the executor when the array is fully iterated
-                                //   executor.shutdown();
-      
-
+    // Stop the executor when the array is fully iterated
+    //   executor.shutdown();
     private void showDrawDialog(char c) {
         message = new MessageController();
         message.setWinner(c);

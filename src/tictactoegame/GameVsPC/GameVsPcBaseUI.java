@@ -5,6 +5,7 @@ import tictactoegame.GameVsPC.*;
 import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.Lighting;
@@ -17,8 +18,11 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tictactoegame.MainScreen.MainScreenUI;
 import tictactoegame.data.MessageController;
+import tictactoegame.data.SharedData;
 import tictactoegame.dialogs.PlayAgainDialogBase;
+import tictactoegame.gameReview;
 
 public class GameVsPcBaseUI extends AnchorPane {
     
@@ -63,6 +67,8 @@ public class GameVsPcBaseUI extends AnchorPane {
     protected final Lighting lighting9;
     protected final Button btnMin;
     protected final Lighting lighting10;
+        protected final Button buttonBack;
+
     
     
     private final String[][] board = {{"-", "-", "-"},
@@ -75,6 +81,7 @@ public class GameVsPcBaseUI extends AnchorPane {
     private int player2Score = 0;
     private int drawScore = 0;
     private boolean playerTurn = true;
+    
 
     public GameVsPcBaseUI() {
 
@@ -116,6 +123,8 @@ public class GameVsPcBaseUI extends AnchorPane {
         lighting9 = new Lighting();
         btnMin = new Button();
         lighting10 = new Lighting();
+                buttonBack = new Button();
+
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -397,6 +406,25 @@ public class GameVsPcBaseUI extends AnchorPane {
         btnMin.setPrefWidth(36.0);
         btnMin.setStyle("-fx-background-radius: 30;");
         btnMin.setText("-");
+        
+        
+         buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+        buttonBack.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
+       // setTop(pane);
+        buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
 
         lighting10.setDiffuseConstant(1.53);
         lighting10.setSpecularConstant(2.0);
@@ -431,6 +459,7 @@ public class GameVsPcBaseUI extends AnchorPane {
         getChildren().add(line2);
         getChildren().add(btnExit);
         getChildren().add(btnMin);
+        getChildren().add(buttonBack);
         
         buttons[0] = btn0;
         buttons[1] = btn1;
@@ -591,13 +620,21 @@ public class GameVsPcBaseUI extends AnchorPane {
     }
 
     private void showDialog(char winner) {
+        if(winner == 'X')
+            state = 'W';
+        else if (winner == 'O')
+            state = 'L';
+        else if(winner == 'D')
+            state = 'T';
         message = new MessageController();
         message.setWinner(winner);
+        message.isComputer = true;
         Parent parent = new PlayAgainDialogBase(message, state);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.showAndWait();
+        resetGame();
     }
 
     void draw() {
@@ -618,7 +655,7 @@ public class GameVsPcBaseUI extends AnchorPane {
     private void updateScores() {
         playerScore.setText("" + player1Score);
         pcScore.setText(player2Score + "");
-        tie.setText("" + drawScore);
+        tieScore.setText("" + drawScore);
     }
 
     private void resetBoard() {
@@ -631,7 +668,26 @@ public class GameVsPcBaseUI extends AnchorPane {
             board[row][col] = "-";
         }
     }  
-    
+    public void resetGame() {
+        
+        switch (message.getResponse()) {
+            case 2:
+                break;
+            case 1:
+//                gameReview.review(this,boxArray,player1Moves,player2Moves);  
+                break;
+            case 0:
+                System.out.println("Going To main");
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                Stage stage = SharedData.getStage();
+                stage.setScene(scene);
+                stage.show();
+                break;
+            default:
+                break;
+        }
+    }
     
     
     private void replay() {

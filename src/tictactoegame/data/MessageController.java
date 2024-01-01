@@ -10,9 +10,11 @@ package tictactoegame.data;
  * @author s
  */
 public class MessageController{
+    public boolean isOnline;
     int response;
     char winner;
     String ipAddress;
+    public boolean isComputer;
 
     public void setResponse(int res) {
         this.response = res;
