@@ -465,7 +465,7 @@ public class ClientGameScreenBase extends AnchorPane {
             // Ignore clicks if it's not the player's turn or the move is not valid
             return;
         }
-
+        converter(index);
         sb += ((i * 10) + j);
         sb += ' ';
 
@@ -544,7 +544,9 @@ public class ClientGameScreenBase extends AnchorPane {
         try {
             Gson gson = new GsonBuilder().create();
             Move move = gson.fromJson(moveJson, Move.class);
-
+        converter(move.getBox() - 1);
+        sb += ((i * 10) + j);
+        sb += ' ';
             int boxVal = move.getBox();
             int gameState = move.getGameState();
             char playeSymbole = move.getSign();

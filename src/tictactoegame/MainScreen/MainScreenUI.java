@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
+import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.GameVsPC.GameVsPcBaseUI;
 import tictactoegame.HistoryScreen;
 import tictactoegame.LocalGame.GameRoomScreen;
@@ -106,11 +107,11 @@ public class MainScreenUI extends AnchorPane {
 
         imageView.setFitHeight(150.0);
         imageView.setFitWidth(200.0);
-        imageView.setLayoutX(23.0);
-        imageView.setLayoutY(14.0);
+        imageView.setLayoutX(30.0);
+        imageView.setLayoutY(30.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("/images/avatar.jpg").toExternalForm()));
+        imageView.setImage(new Image(getClass().getResource("/images/download.png").toExternalForm()));
 
         label.setLayoutX(75.0);
         label.setLayoutY(208.0);
@@ -140,10 +141,10 @@ public class MainScreenUI extends AnchorPane {
         imageView0.setFitHeight(150.0);
         imageView0.setFitWidth(200.0);
         imageView0.setLayoutX(37.0);
-        imageView0.setLayoutY(28.0);
+        imageView0.setLayoutY(30.0);
         imageView0.setPickOnBounds(true);
         imageView0.setPreserveRatio(true);
-        imageView0.setImage(new Image(getClass().getResource("/images/avatar.jpg").toExternalForm()));
+        imageView0.setImage(new Image(getClass().getResource("/images/playervspc.jpg").toExternalForm()));
         borderPane.setCenter(computerPane);
 
         BorderPane.setAlignment(localPane, javafx.geometry.Pos.CENTER);
@@ -173,7 +174,7 @@ public class MainScreenUI extends AnchorPane {
         imageView2.setLayoutY(30.0);
         imageView2.setPickOnBounds(true);
         imageView2.setPreserveRatio(true);
-        imageView2.setImage(new Image(getClass().getResource("/images/avatar.jpg").toExternalForm()));
+        imageView2.setImage(new Image(getClass().getResource("/images/playervsplayer.jpg").toExternalForm()));
         borderPane.setRight(localPane);
 
         BorderPane.setAlignment(pane, javafx.geometry.Pos.CENTER);
@@ -315,7 +316,7 @@ public class MainScreenUI extends AnchorPane {
                     root = new LoginDesignUI();
                 }
                 else{
-                    root = new AvailableUsersScreen();
+                    root = new AvailbleUsersScreenUI();
                 }
                 Scene scene = new Scene(root);
                 stage.setScene(scene);

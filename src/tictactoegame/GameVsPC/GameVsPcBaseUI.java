@@ -5,6 +5,7 @@ import tictactoegame.GameVsPC.*;
 import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.Lighting;
@@ -66,6 +67,8 @@ public class GameVsPcBaseUI extends AnchorPane {
     protected final Lighting lighting9;
     protected final Button btnMin;
     protected final Lighting lighting10;
+        protected final Button buttonBack;
+
     
     
     private final String[][] board = {{"-", "-", "-"},
@@ -78,6 +81,7 @@ public class GameVsPcBaseUI extends AnchorPane {
     private int player2Score = 0;
     private int drawScore = 0;
     private boolean playerTurn = true;
+    
 
     public GameVsPcBaseUI() {
 
@@ -119,6 +123,8 @@ public class GameVsPcBaseUI extends AnchorPane {
         lighting9 = new Lighting();
         btnMin = new Button();
         lighting10 = new Lighting();
+                buttonBack = new Button();
+
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -400,6 +406,25 @@ public class GameVsPcBaseUI extends AnchorPane {
         btnMin.setPrefWidth(36.0);
         btnMin.setStyle("-fx-background-radius: 30;");
         btnMin.setText("-");
+        
+        
+         buttonBack.setLayoutX(15.0);
+        buttonBack.setLayoutY(7.0);
+        buttonBack.setMnemonicParsing(false);
+        buttonBack.setStyle("-fx-background-color: e8ccd5; -fx-background-radius: 30;");
+        buttonBack.setText("<");
+        buttonBack.setFont(new Font("Gill Sans MT Bold Italic", 19.0));
+       // setTop(pane);
+        buttonBack.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = new MainScreenUI();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
 
         lighting10.setDiffuseConstant(1.53);
         lighting10.setSpecularConstant(2.0);
@@ -434,6 +459,7 @@ public class GameVsPcBaseUI extends AnchorPane {
         getChildren().add(line2);
         getChildren().add(btnExit);
         getChildren().add(btnMin);
+        getChildren().add(buttonBack);
         
         buttons[0] = btn0;
         buttons[1] = btn1;

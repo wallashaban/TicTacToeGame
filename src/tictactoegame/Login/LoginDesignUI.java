@@ -50,7 +50,6 @@ public class LoginDesignUI extends BorderPane {
     protected final Button buttonExit;
     protected final Button buttonBack;
 
-
     public LoginDesignUI() {
 
         contentFlowView = new FlowPane();
