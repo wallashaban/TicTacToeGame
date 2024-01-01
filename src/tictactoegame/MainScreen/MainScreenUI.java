@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import tictactoegame.AvailableUsersScreen.AvailableUsersScreen;
+import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.GameVsPC.GameVsPcBaseUI;
 import tictactoegame.HistoryScreen;
 import tictactoegame.LocalGame.GameRoomScreen;
@@ -315,7 +316,7 @@ public class MainScreenUI extends AnchorPane {
                     root = new LoginDesignUI();
                 }
                 else{
-                    root = new AvailableUsersScreen();
+                    root = new AvailbleUsersScreenUI();
                 }
                 Scene scene = new Scene(root);
                 stage.setScene(scene);

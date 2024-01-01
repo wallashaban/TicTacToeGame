@@ -549,6 +549,14 @@ public class ClientGameScreenBase extends AnchorPane {
             int gameState = move.getGameState();
             char playeSymbole = move.getSign();
             switch (boxVal) {
+                case 404:
+                    Platform.runLater(() -> {
+                        Stage stage = SharedData.getStage();
+                        Parent root = new AvailbleUsersScreenUI();
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                });
                 case 99:
                     // Handle the case where the move is not valid (box = 99)
                     System.out.println("Received an invalid move from the server.");
