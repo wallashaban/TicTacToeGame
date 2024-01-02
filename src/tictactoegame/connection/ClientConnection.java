@@ -27,6 +27,7 @@ import tictactoegame.AvailbleUsersScreenUI;
 import tictactoegame.LocalGame.GameRoomScreen;
 import tictactoegame.Login.LoginDesignUI;
 import tictactoegame.MainScreen.MainScreenUI;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.Player;
 import tictactoegame.data.Request;
 
@@ -211,9 +212,11 @@ public class ClientConnection {
             Platform.runLater(() -> {
                 Stage stage = SharedData.getStage();
                 Parent root = new LoginDesignUI();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+              //  Scene scene = new Scene(root);
+                //stage.setScene(scene);
+               //// stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+                //stage.show();
             });
         } else if(response.get(1).equals("Duplicate Username")) {
             Platform.runLater(()->{
@@ -243,9 +246,11 @@ public class ClientConnection {
                 Platform.runLater(()->{
                     Stage stage = SharedData.getStage();
                     Parent root = new AvailbleUsersScreenUI();
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
+                   // Scene scene = new Scene(root);
+                   // stage.setScene(scene);
+                   // stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+                   // stage.show();
                 });
             }
         } else {
@@ -285,10 +290,11 @@ public class ClientConnection {
         Platform.runLater(()->{
             long score = Long.parseLong(response.get(2));
             Parent root = new ClientGameScreenBase(response.get(1), score);
-            Scene scene = new Scene(root);
+            //Scene scene = new Scene(root);
             Stage stage = SharedData.getStage();
-            stage.setScene(scene);
-            stage.show();
+           // stage.setScene(scene);
+            //stage.show();
+            DragScreen.displayScreen(stage,root);
         });
         
     }
@@ -299,6 +305,8 @@ public class ClientConnection {
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
+        //stage.initStyle(StageStyle.UNDECORATED); 
+                //DragScreen.displayScreen(stage,parent);
         stage.showAndWait();
     }
 
@@ -308,6 +316,8 @@ public class ClientConnection {
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
+        //stage.initStyle(StageStyle.UNDECORATED); 
+               // DragScreen.displayScreen(stage,parent);
         stage.showAndWait();
     }
     private static void updateAvailableUsers(ArrayList<String> response){

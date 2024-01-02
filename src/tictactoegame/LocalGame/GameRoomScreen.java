@@ -36,7 +36,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import tictactoegame.connection.Constants;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.HistoryFile;
 import tictactoegame.data.MessageController;
 import tictactoegame.data.Player;
@@ -219,9 +221,11 @@ public class GameRoomScreen extends BorderPane {
             public void handle(ActionEvent event) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Parent root = new MainScreenUI();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+               // Scene scene = new Scene(root);
+               // stage.setScene(scene);
+               // stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+               // stage.show();
             }
         });
         // menuIcon.setImage(new Image(getClass().getResource("/images/menu.png").toExternalForm()));
@@ -724,6 +728,8 @@ public class GameRoomScreen extends BorderPane {
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
+        //stage.initStyle(StageStyle.UNDECORATED); 
+          //      DragScreen.displayScreen(stage,parent);
         stage.showAndWait();
     }
 
@@ -781,6 +787,8 @@ public class GameRoomScreen extends BorderPane {
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
+       // stage.initStyle(StageStyle.UNDECORATED); 
+              //  DragScreen.displayScreen(stage,parent);
         stage.showAndWait();
     }
 }

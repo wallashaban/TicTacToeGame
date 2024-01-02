@@ -19,6 +19,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import tictactoegame.connection.ClientConnection;
 
+import tictactoegame.data.DragScreen;
 /**
  *
  * @author Dr.Wlaa
@@ -29,15 +30,15 @@ public class TicTacToeGame extends Application {
     public void start(Stage stage) throws Exception {
 
         Parent root = new SplashScreen();
-
-//        stage.initStyle(StageStyle.UNDECORATED); 
+ 
         SharedData.setStage(stage);
-        Scene scene = new Scene(root);
 
-        stage.setScene(scene);
-        //stage.initStyle(StageStyle.UNDECORATED);
-        stage.show();
-
+        stage.initStyle(StageStyle.UNDECORATED);
+        DragScreen.displayScreen(stage,root);
+        
+        
+        
+        
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {

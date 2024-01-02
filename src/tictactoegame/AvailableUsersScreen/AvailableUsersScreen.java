@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tictactoegame.LocalGame.GameRoomScreen;
+import tictactoegame.data.DragScreen;
 import tictactoegame.data.Player;
 import tictactoegame.data.SharedData;
 
@@ -244,11 +245,13 @@ public class AvailableUsersScreen extends AnchorPane {
                     @Override
                     public void handle(MouseEvent event) {
                         Parent root = new GameRoomScreen();
-                        Scene scene = new Scene(root);
+                        //Scene scene = new Scene(root);
          
                         Stage stage = SharedData.getStage();
-                        stage.setScene(scene);
-                        stage.show();
+                       // stage.setScene(scene);
+                        //stage.initStyle(StageStyle.UNDECORATED); 
+                DragScreen.displayScreen(stage,root);
+                       // stage.show();
                     }});
         
     }
