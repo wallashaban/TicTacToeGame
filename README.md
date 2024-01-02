@@ -20,7 +20,6 @@ Welcome to the Tic Tac Toe game! This project allows you to play Tic Tac Toe aga
 - Simple and intuitive user interface.
 - Save your games and view them when you want.
 - ب
-
 ## Installation
 
 1. Clone the repository:
