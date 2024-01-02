@@ -9,8 +9,9 @@ Welcome to the Tic Tac Toe game! This project allows you to play Tic Tac Toe aga
 - [Usage](#usage)
 - [Online Mode](#online-mode)
 - [Contributing](#contributing)
+- [video](#video)
 - [License](#license)
-- [Team Members](#Team-Members). 
+- [Team Members](#Team-Members).
 
 ## Features
 
@@ -63,6 +64,10 @@ Contributions are welcome! If you'd like to contribute to the project, please fo
 3. Commit your changes: `git commit -m 'Add a new feature'`.
 4. Push to the branch: `git push origin feature-name`.
 5. Submit a pull request.
+
+## video
+https://github.com/wallashaban/TicTacToeGame/assets/120333186/e7ed8e52-9fac-4fea-bf22-69adf1104330
+
 
 ## License
 
